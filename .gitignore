@@ -1,0 +1,28 @@
+node_modules/
+.next/
+out/
+build/
+dist/
+coverage/
+.turbo/
+
+# env
+.env
+.env.local
+.env.*.local
+
+# supabase
+supabase/.branches
+supabase/.temp
+supabase/.env
+
+# tests
+test-results/
+playwright-report/
+blob-report/
+.playwright/
+
+# misc
+*.tsbuildinfo
+.DS_Store
+npm-debug.log*

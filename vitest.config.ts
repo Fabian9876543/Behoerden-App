@@ -1,0 +1,17 @@
+import { defineConfig } from "vitest/config";
+import { fileURLToPath } from "node:url";
+
+export default defineConfig({
+  test: {
+    environment: "node",
+    include: ["tests/unit/**/*.test.ts", "tests/integration/**/*.test.ts"],
+    globals: false,
+  },
+  resolve: {
+    alias: {
+      "@": fileURLToPath(new URL("./", import.meta.url)),
+      // `server-only` wirft beim Import ausserhalb von React Server Components.
+      "server-only": fileURLToPath(new URL("./tests/stubs/server-only.ts", import.meta.url)),
+    },
+  },
+});

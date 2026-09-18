@@ -1,0 +1,116 @@
+@import "tailwindcss";
+
+/*
+ * BehoerdenBuddy Designsystem
+ *
+ * Ruhig, vertrauenswuerdig, wenig visuelles Rauschen.
+ * Basis: Weiss / Hellgrau / Dunkelblau-Anthrazit.
+ * Statusfarben sind dezent und werden nie flaechig eingesetzt.
+ */
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --color-status-critical: var(--status-critical);
+  --color-status-warning: var(--status-warning);
+  --color-status-info: var(--status-info);
+  --color-status-success: var(--status-success);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  --font-sans: var(--font-sans);
+}
+
+:root {
+  --radius: 0.75rem;
+
+  --background: oklch(0.99 0.002 250);
+  --foreground: oklch(0.24 0.03 255);
+
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.24 0.03 255);
+
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.24 0.03 255);
+
+  /* Dunkelblau / Anthrazit */
+  --primary: oklch(0.32 0.055 258);
+  --primary-foreground: oklch(0.985 0.002 250);
+
+  --secondary: oklch(0.965 0.004 250);
+  --secondary-foreground: oklch(0.32 0.055 258);
+
+  --muted: oklch(0.965 0.004 250);
+  --muted-foreground: oklch(0.52 0.02 255);
+
+  --accent: oklch(0.955 0.008 250);
+  --accent-foreground: oklch(0.32 0.055 258);
+
+  --destructive: oklch(0.52 0.18 25);
+  --destructive-foreground: oklch(0.985 0.002 250);
+
+  --border: oklch(0.915 0.006 250);
+  --input: oklch(0.915 0.006 250);
+  --ring: oklch(0.55 0.06 258);
+
+  /* Dezente Statusfarben */
+  --status-critical: oklch(0.52 0.17 25);
+  --status-warning: oklch(0.62 0.13 70);
+  --status-info: oklch(0.52 0.1 245);
+  --status-success: oklch(0.52 0.11 155);
+
+  --font-sans:
+    ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial,
+    "Noto Sans", sans-serif;
+}
+
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    -webkit-font-smoothing: antialiased;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+
+  /* Gedruckte Antwortschreiben sollen ohne Navigation ausgegeben werden. */
+  @media print {
+    .print\:hidden {
+      display: none !important;
+    }
+  }
+}
