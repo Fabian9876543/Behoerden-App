@@ -7,19 +7,23 @@ import { z } from "zod";
  * niemals direkt aus FormData oder JSON lesen.
  */
 
-const uuid = z.string().uuid("Ungueltige ID.");
+const uuid = z.uuid("Ungueltige ID.");
 const isoDate = z
   .string()
   .regex(/^\d{4}-\d{2}-\d{2}$/, "Bitte ein gueltiges Datum angeben.");
 
 export const credentialsSchema = z.object({
-  email: z.string().trim().min(1, "Bitte E-Mail-Adresse angeben.").email("Ungueltige E-Mail-Adresse."),
+  email: z
+    .string()
+    .trim()
+    .min(1, "Bitte E-Mail-Adresse angeben.")
+    .pipe(z.email("Ungueltige E-Mail-Adresse.")),
   password: z.string().min(8, "Das Passwort muss mindestens 8 Zeichen lang sein."),
 });
 
 export const onboardingSchema = z.object({
   householdMode: z.enum(["personal", "family"], {
-    errorMap: () => ({ message: "Bitte eine Option waehlen." }),
+    error: "Bitte eine Option waehlen.",
   }),
 });
 

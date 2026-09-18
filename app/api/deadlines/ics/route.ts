@@ -4,6 +4,13 @@ import { listDeadlines } from "@/lib/db/deadlines";
 import { buildIcsCalendar } from "@/lib/calendar/ics";
 import { AppError, toUserMessage } from "@/lib/errors";
 
+/**
+ * Diese Route liest Cookies bzw. Nutzerdaten und darf nie statisch
+ * vorgerendert werden - sonst braeuchte schon der Build die Supabase-Keys.
+ */
+export const dynamic = "force-dynamic";
+
+
 /** Exportiert alle offenen Fristen als .ics-Datei. */
 export async function GET() {
   try {

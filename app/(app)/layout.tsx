@@ -6,6 +6,13 @@ import { ensureProfile } from "@/lib/db/profiles";
 import { BottomNav, SidebarNav } from "@/components/layout/nav";
 import { UserMenu } from "@/components/layout/user-menu";
 
+/**
+ * Diese Route liest Cookies bzw. Nutzerdaten und darf nie statisch
+ * vorgerendert werden - sonst braeuchte schon der Build die Supabase-Keys.
+ */
+export const dynamic = "force-dynamic";
+
+
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const user = await requireUserOrRedirect();
   await ensureProfile(user.id, user.email);

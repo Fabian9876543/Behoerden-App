@@ -4,6 +4,13 @@ import { requireCase } from "@/lib/db/cases";
 import { getCaseTimeline } from "@/lib/db/events";
 import { AppError, toUserMessage } from "@/lib/errors";
 
+/**
+ * Diese Route liest Cookies bzw. Nutzerdaten und darf nie statisch
+ * vorgerendert werden - sonst braeuchte schon der Build die Supabase-Keys.
+ */
+export const dynamic = "force-dynamic";
+
+
 /** Liefert die Timeline eines Vorgangs als JSON. */
 export async function GET(
   _request: Request,

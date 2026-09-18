@@ -5,6 +5,13 @@ import { createSignedUrl } from "@/lib/storage/documents";
 import { AppError, toUserMessage } from "@/lib/errors";
 
 /**
+ * Diese Route liest Cookies bzw. Nutzerdaten und darf nie statisch
+ * vorgerendert werden - sonst braeuchte schon der Build die Supabase-Keys.
+ */
+export const dynamic = "force-dynamic";
+
+
+/**
  * Leitet auf eine kurzlebige signierte URL um.
  *
  * Der Bucket ist privat; ohne Session und Eigentuemerschaft gibt es keinen

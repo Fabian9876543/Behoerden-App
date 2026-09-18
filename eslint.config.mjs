@@ -10,7 +10,15 @@ const compat = new FlatCompat({ baseDirectory: __dirname });
 const eslintConfig = [
   ...compat.extends("next/core-web-vitals", "next/typescript"),
   {
-    ignores: [".next/**", "node_modules/**", "coverage/**", "playwright-report/**"],
+    // next-env.d.ts wird von Next.js generiert und darf nicht angefasst werden.
+    ignores: [
+      ".next/**",
+      "node_modules/**",
+      "coverage/**",
+      "playwright-report/**",
+      "test-results/**",
+      "next-env.d.ts",
+    ],
   },
 ];
 

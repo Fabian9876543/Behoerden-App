@@ -5,6 +5,7 @@ import { ensureProfile } from "@/lib/db/profiles";
 import { OnboardingForm } from "@/components/onboarding/onboarding-form";
 
 export const metadata: Metadata = { title: "Willkommen" };
+export const dynamic = "force-dynamic";
 
 /**
  * Onboarding: genau eine Frage. Danach direkt ins Dashboard.

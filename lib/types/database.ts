@@ -187,10 +187,21 @@ export interface CaseEventRow {
   created_at: string;
 }
 
+/**
+ * Wandelt einen Interface-Typ in einen anonymen Objekttyp um.
+ *
+ * Hintergrund: supabase-js verlangt, dass jede Tabelle `GenericSchema`
+ * erfuellt - also `Record<string, unknown>`. Type-Aliase und Mapped Types
+ * bekommen dafuer eine implizite Index-Signatur, Interfaces nicht. Ohne
+ * diese Umwandlung faellt der Client stillschweigend auf `never` zurueck
+ * und jede Query verliert ihre Typen.
+ */
+type AsRecord<T> = { [K in keyof T]: T[K] };
+
 type Table<Row, Insert = Partial<Row>, Update = Partial<Row>> = {
-  Row: Row;
-  Insert: Insert;
-  Update: Update;
+  Row: AsRecord<Row>;
+  Insert: AsRecord<Insert>;
+  Update: AsRecord<Update>;
   Relationships: [];
 };
 
