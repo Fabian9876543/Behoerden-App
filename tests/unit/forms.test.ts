@@ -1,7 +1,8 @@
 import { describe, expect, it } from "vitest";
 import { findForm, FORM_CATALOG } from "@/lib/forms/catalog";
-import { resolveForms } from "@/lib/ai/form-assistance";
+import { prefillFieldsFromProfile, resolveForms } from "@/lib/ai/form-assistance";
 import { isOfficialAuthorityUrl } from "@/lib/authorities/registry";
+import type { Profile } from "@/lib/types/database";
 
 describe("findForm", () => {
   it("findet ein Katalogformular und weist es als offiziell aus", () => {
@@ -60,5 +61,51 @@ describe("FORM_CATALOG", () => {
     for (const form of FORM_CATALOG) {
       expect(isOfficialAuthorityUrl(form.officialUrl), form.name).toBe(true);
     }
+  });
+});
+
+describe("prefillFieldsFromProfile", () => {
+  const profile = (overrides: Partial<Profile> = {}): Profile => ({
+    id: "11111111-1111-4111-8111-111111111111",
+    first_name: "Anna",
+    last_name: "Muster",
+    email: "anna@example.de",
+    phone: null,
+    street: "Hauptstr. 1",
+    postal_code: "12345",
+    city: "Musterstadt",
+    household_mode: "personal",
+    onboarding_completed_at: null,
+    created_at: "2026-09-18T10:00:00Z",
+    updated_at: "2026-09-18T10:00:00Z",
+    ...overrides,
+  });
+
+  it("liefert die ausgefüllten Felder in stabiler Reihenfolge", () => {
+    const fields = prefillFieldsFromProfile(profile());
+    expect(fields.map((field) => field.label)).toEqual([
+      "Vorname",
+      "Nachname",
+      "Straße und Hausnummer",
+      "Postleitzahl",
+      "Ort",
+      "E-Mail",
+    ]);
+  });
+
+  it("lässt leere und nur aus Leerzeichen bestehende Felder aus", () => {
+    const fields = prefillFieldsFromProfile(profile({ last_name: "", city: "   " }));
+    const labels = fields.map((field) => field.label);
+    expect(labels).not.toContain("Nachname");
+    expect(labels).not.toContain("Ort");
+  });
+
+  it("schneidet Leerzeichen an den Rändern ab", () => {
+    const fields = prefillFieldsFromProfile(profile({ first_name: "  Anna  " }));
+    expect(fields.find((field) => field.label === "Vorname")?.value).toBe("Anna");
+  });
+
+  it("gibt ohne Profil nichts zurück", () => {
+    expect(prefillFieldsFromProfile(null)).toEqual([]);
   });
 });

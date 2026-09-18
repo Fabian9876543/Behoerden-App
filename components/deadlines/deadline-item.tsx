@@ -9,6 +9,7 @@ import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { DeadlineStatusBadge } from "@/components/shared/status";
 import { EvidenceNote } from "@/components/shared/evidence";
+import { DeadlineEditDialog } from "@/components/deadlines/deadline-edit-dialog";
 import { formatDate } from "@/lib/dates";
 import type { DeadlineRow } from "@/lib/types/database";
 
@@ -62,6 +63,7 @@ export function DeadlineItem({
         </div>
 
         <div className="flex shrink-0 items-center gap-1">
+          <DeadlineEditDialog deadline={deadline} />
           {!resolved ? (
             <Button
               variant="ghost"

@@ -1,5 +1,6 @@
-import { ExternalLink, FileWarning } from "lucide-react";
+import { ClipboardList, ExternalLink, FileWarning } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import type { PrefillField } from "@/lib/ai/form-assistance";
 import type { FormRow } from "@/lib/types/database";
 
 const SOURCE_LABELS: Record<FormRow["source_kind"], string> = {
@@ -15,7 +16,14 @@ const SOURCE_LABELS: Record<FormRow["source_kind"], string> = {
  * hinterlegten Katalog stammt. Alles andere wird sichtbar als ungeprüft
  * gekennzeichnet - niemals als Tatsache dargestellt.
  */
-export function FormsList({ forms }: { forms: FormRow[] }) {
+export function FormsList({
+  forms,
+  prefill = [],
+}: {
+  forms: FormRow[];
+  /** Werte aus dem Profil, die beim Ausfüllen helfen. */
+  prefill?: PrefillField[];
+}) {
   if (forms.length === 0) {
     return (
       <p className="text-sm text-muted-foreground">
@@ -25,6 +33,7 @@ export function FormsList({ forms }: { forms: FormRow[] }) {
   }
 
   return (
+    <div className="space-y-4">
     <ul className="space-y-2">
       {forms.map((form) => (
         <li key={form.id} className="rounded-lg border bg-card px-4 py-3">
@@ -60,5 +69,27 @@ export function FormsList({ forms }: { forms: FormRow[] }) {
         </li>
       ))}
     </ul>
+
+    {prefill.length > 0 ? (
+      <details className="rounded-lg border bg-muted/40 px-4 py-3">
+        <summary className="flex cursor-pointer list-none items-center gap-2 text-sm font-medium">
+          <ClipboardList className="size-4 text-muted-foreground" aria-hidden />
+          Angaben aus deinem Profil
+        </summary>
+        <p className="mt-2 text-xs text-muted-foreground">
+          Diese Werte brauchst du in fast jedem Formular. Die Anwendung füllt nichts
+          automatisch aus - du übernimmst sie selbst.
+        </p>
+        <dl className="mt-3 space-y-1.5">
+          {prefill.map((field) => (
+            <div key={field.label} className="flex flex-wrap gap-x-2 text-sm">
+              <dt className="text-muted-foreground">{field.label}:</dt>
+              <dd className="font-medium">{field.value}</dd>
+            </div>
+          ))}
+        </dl>
+      </details>
+    ) : null}
+    </div>
   );
 }

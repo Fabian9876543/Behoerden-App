@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { EvidenceNote } from "@/components/shared/evidence";
+import { TaskEditDialog } from "@/components/tasks/task-edit-dialog";
 import { describeDueDate, formatDate } from "@/lib/dates";
 import { cn } from "@/lib/utils";
 import type { TaskRow } from "@/lib/types/database";
@@ -94,24 +95,27 @@ export function TaskItem({ task, sourceDocumentName, caseInfo, onError }: TaskIt
         />
       </div>
 
-      <Button
-        variant="ghost"
-        size="icon"
-        aria-label={`Aufgabe "${task.title}" löschen`}
-        disabled={pending}
-        onClick={() =>
-          startTransition(async () => {
-            const result = await deleteTaskAction(task.id);
-            if (!result.ok) {
-              onError?.(result.error?.message ?? "Die Aufgabe konnte nicht gelöscht werden.");
-              return;
-            }
-            router.refresh();
-          })
-        }
-      >
-        <Trash2 className="size-4 text-muted-foreground" aria-hidden />
-      </Button>
+      <div className="flex shrink-0 items-center">
+        <TaskEditDialog task={task} />
+        <Button
+          variant="ghost"
+          size="icon"
+          aria-label={`Aufgabe "${task.title}" löschen`}
+          disabled={pending}
+          onClick={() =>
+            startTransition(async () => {
+              const result = await deleteTaskAction(task.id);
+              if (!result.ok) {
+                onError?.(result.error?.message ?? "Die Aufgabe konnte nicht gelöscht werden.");
+                return;
+              }
+              router.refresh();
+            })
+          }
+        >
+          <Trash2 className="size-4 text-muted-foreground" aria-hidden />
+        </Button>
+      </div>
     </li>
   );
 }

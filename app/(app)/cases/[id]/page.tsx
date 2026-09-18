@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { AlertTriangle } from "lucide-react";
-import { requireUserOrRedirect } from "@/lib/auth";
+import { getProfile, requireUserOrRedirect } from "@/lib/auth";
 import { getCaseDetail, type CaseDetail } from "@/lib/db/cases";
 import { getCaseTimeline } from "@/lib/db/events";
+import { listAnalysesForCase } from "@/lib/db/analysis";
+import { prefillFieldsFromProfile } from "@/lib/ai/form-assistance";
 import { AppError } from "@/lib/errors";
 import { formatDate } from "@/lib/dates";
 import { Alert, AlertTitle } from "@/components/ui/alert";
@@ -12,6 +14,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CaseStatusBadge, PriorityBadge } from "@/components/shared/status";
 import { LegalNotice } from "@/components/shared/legal-notice";
 import { NextSteps } from "@/components/cases/next-steps";
+import { AnalysisSummary } from "@/components/cases/analysis-summary";
+import { CaseEditDialog } from "@/components/cases/case-edit-dialog";
 import { CaseActions } from "@/components/cases/case-actions";
 import { CaseTimeline } from "@/components/cases/case-timeline";
 import { AddTaskForm } from "@/components/cases/add-task-form";
@@ -42,7 +46,11 @@ export default async function CaseDetailPage({
     throw error;
   }
 
-  const timeline = await getCaseTimeline(id);
+  const [timeline, analyses, profile] = await Promise.all([
+    getCaseTimeline(id),
+    listAnalysesForCase(id),
+    getProfile(user.id),
+  ]);
   const { caseRow, tasks, deadlines, documents, requiredDocuments, forms, letters } = detail;
 
   const documentNames = new Map(documents.map((doc) => [doc.id, doc.file_name]));
@@ -70,9 +78,12 @@ export default async function CaseDetailPage({
           ) : null}
         </div>
 
-        <p className="text-xs text-muted-foreground">
-          Angelegt am {formatDate(caseRow.created_at)}
-        </p>
+        <div className="flex flex-wrap items-center justify-between gap-3 pt-1">
+          <p className="text-xs text-muted-foreground">
+            Angelegt am {formatDate(caseRow.created_at)}
+          </p>
+          <CaseEditDialog caseRow={caseRow} />
+        </div>
       </header>
 
       {failedDocuments.length > 0 ? (
@@ -89,6 +100,8 @@ export default async function CaseDetailPage({
       ) : null}
 
       <NextSteps tasks={tasks} deadlines={deadlines} summary={caseRow.summary} />
+
+      <AnalysisSummary analyses={analyses} />
 
       <section aria-labelledby="tasks-heading" className="space-y-4">
         <h2 id="tasks-heading" className="text-lg font-semibold tracking-tight">
@@ -140,7 +153,7 @@ export default async function CaseDetailPage({
             <CardTitle>Benötigte Unterlagen</CardTitle>
           </CardHeader>
           <CardContent>
-            <RequiredDocumentsList items={requiredDocuments} />
+            <RequiredDocumentsList items={requiredDocuments} documents={documents} />
           </CardContent>
         </Card>
 
@@ -149,7 +162,7 @@ export default async function CaseDetailPage({
             <CardTitle>Formulare</CardTitle>
           </CardHeader>
           <CardContent>
-            <FormsList forms={forms} />
+            <FormsList forms={forms} prefill={prefillFieldsFromProfile(profile)} />
           </CardContent>
         </Card>
       </div>
