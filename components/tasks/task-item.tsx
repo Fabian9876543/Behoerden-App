@@ -91,7 +91,13 @@ export function TaskItem({ task, sourceDocumentName, caseInfo, onError }: TaskIt
           documentName={sourceDocumentName}
           page={task.source_page}
           sourceText={task.source_text}
-          confidence={task.generated_by === "ai" ? task.confidence : null}
+          // Selbst angelegte und bereits erledigte Aufgaben brauchen keinen
+          // Hinweis auf eine unsichere Erkennung.
+          confidence={
+            task.generated_by === "ai" && !isDone && task.status !== "dismissed"
+              ? task.confidence
+              : null
+          }
         />
       </div>
 

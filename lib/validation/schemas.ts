@@ -114,8 +114,6 @@ export const updateLetterSchema = z.object({
   body: z.string().trim().min(1).max(6000),
 });
 
-export const idSchema = z.object({ id: uuid });
-
 /**
  * Bestätigung für "Alle meine Daten löschen".
  *

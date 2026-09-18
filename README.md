@@ -134,6 +134,20 @@ Behördenpost ist hochsensibel. Entsprechend:
   Storage-Dateien, alle Fachdaten (`delete_my_data()`, `security invoker`, läuft
   unter RLS) und auf Wunsch das Konto.
 
+### Bekannte Meldung aus `npm audit`
+
+`npm audit` meldet PostCSS-Schwachstellen. Sie stecken nicht in einer direkten
+Abhängigkeit, sondern in dem PostCSS, das Next.js mitbringt; die neueste
+Next-15-Version (15.5.25, hier verwendet) enthält sie noch, behoben ist es erst
+in Next 16 — einem Major-Upgrade.
+
+Die Lücken betreffen die Verarbeitung von CSS zur **Buildzeit** (Pfad-Traversal
+über `sourceMappingURL`, XSS beim Stringify). In diesem Projekt wird
+ausschließlich selbst geschriebenes CSS gebaut; es gibt keinen Pfad, über den
+fremdes CSS in den Build gelangt. Das Risiko ist damit praktisch nicht
+vorhanden — die Meldung sollte aber beim nächsten geplanten Next-Upgrade
+mit erledigt werden.
+
 ### Umgang mit KI-Ergebnissen
 
 - Die App tritt **nie als Rechtsberatung** auf; der Hinweis steht auf jeder

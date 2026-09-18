@@ -8,6 +8,7 @@ import {
   parseIsoDate,
   toIsoDate,
 } from "@/lib/dates";
+import { deadlineBadgeText } from "@/components/shared/status";
 
 const NOW = new Date("2026-09-18T10:00:00Z");
 
@@ -83,5 +84,27 @@ describe("greeting", () => {
     expect(greeting(new Date(2026, 8, 18, 8))).toBe("Guten Morgen");
     expect(greeting(new Date(2026, 8, 18, 14))).toBe("Guten Tag");
     expect(greeting(new Date(2026, 8, 18, 21))).toBe("Guten Abend");
+  });
+});
+
+describe("deadlineBadgeText", () => {
+  it("wiederholt bei überfälligen Fristen nicht das Wort", () => {
+    // "Überfällig - seit 8 Tagen überfällig" wäre doppelt gemoppelt.
+    expect(deadlineBadgeText("overdue", "2026-09-10")).toBe("Seit 8 Tagen überfällig");
+    expect(deadlineBadgeText("overdue", "2026-09-17")).toBe("Seit gestern überfällig");
+  });
+
+  it("ergänzt sonst die relative Angabe", () => {
+    expect(deadlineBadgeText("due_soon", "2026-09-22")).toBe("Bald fällig - in 4 Tagen");
+    expect(deadlineBadgeText("upcoming", "2026-12-01")).toBe("Anstehend - in 74 Tagen");
+  });
+
+  it("zeigt bei erledigten Fristen nur den Status", () => {
+    expect(deadlineBadgeText("met", "2026-09-10")).toBe("Erledigt");
+    expect(deadlineBadgeText("dismissed", "2026-09-10")).toBe("Verworfen");
+  });
+
+  it("kommt ohne Datum aus", () => {
+    expect(deadlineBadgeText("upcoming")).toBe("Anstehend");
   });
 });

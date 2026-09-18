@@ -58,7 +58,10 @@ export function DeadlineItem({
             documentName={sourceDocumentName}
             page={deadline.source_page}
             sourceText={deadline.source_text}
-            confidence={deadline.source_document_id ? deadline.confidence : null}
+            // Selbst angelegte und abgehakte Fristen brauchen keinen Hinweis.
+            confidence={
+              deadline.source_document_id && !resolved ? deadline.confidence : null
+            }
           />
         </div>
 

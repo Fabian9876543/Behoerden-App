@@ -19,11 +19,16 @@ export function EvidenceNote({
   documentName?: string | null;
   page?: number | null;
   sourceText?: string | null;
+  /**
+   * Konfidenz der KI-Erkennung. null oder undefined bedeutet: Für diesen
+   * Eintrag gibt es gar keine KI-Angabe (z.B. selbst angelegt) - dann darf
+   * auch kein Unsicherheitshinweis erscheinen.
+   */
   confidence?: number | null;
   className?: string;
 }) {
   const hasSource = Boolean(documentName || page || sourceText);
-  const uncertain = isLowConfidence(confidence);
+  const uncertain = typeof confidence === "number" && isLowConfidence(confidence);
 
   if (!hasSource && !uncertain) return null;
 

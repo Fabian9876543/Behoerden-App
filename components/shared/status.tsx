@@ -55,6 +55,24 @@ const DEADLINE_STATUS_VARIANT: Record<
   dismissed: "muted",
 };
 
+/**
+ * Beschriftung eines Fristen-Badges.
+ *
+ * Bei "überfällig" enthält die relative Angabe das Wort bereits ("seit 8
+ * Tagen überfällig") - dann wird sie allein verwendet, sonst stünde
+ * "Überfällig - seit 8 Tagen überfällig" im Badge.
+ */
+export function deadlineBadgeText(status: DeadlineStatus, dueDate?: string): string {
+  const label = DEADLINE_STATUS_LABELS[status];
+  const resolved = status === "met" || status === "dismissed";
+  if (!dueDate || resolved) return label;
+
+  const relative = describeDueDate(dueDate);
+  if (!relative) return label;
+  if (status === "overdue") return relative.charAt(0).toUpperCase() + relative.slice(1);
+  return `${label} - ${relative}`;
+}
+
 export function DeadlineStatusBadge({
   status,
   dueDate,
@@ -62,13 +80,8 @@ export function DeadlineStatusBadge({
   status: DeadlineStatus;
   dueDate?: string;
 }) {
-  const suffix =
-    dueDate && status !== "met" && status !== "dismissed" ? ` - ${describeDueDate(dueDate)}` : "";
   return (
-    <Badge variant={DEADLINE_STATUS_VARIANT[status]}>
-      {DEADLINE_STATUS_LABELS[status]}
-      {suffix}
-    </Badge>
+    <Badge variant={DEADLINE_STATUS_VARIANT[status]}>{deadlineBadgeText(status, dueDate)}</Badge>
   );
 }
 

@@ -78,14 +78,6 @@ export function capNullable(value: string | null, max: number): string | null {
  */
 const nonBlank = z.string().regex(/\S/, "Darf nicht leer sein.");
 
-export const evidenceSchema = z.object({
-  /** Wörtliches Zitat aus dem Dokument. Leer, wenn nicht belegbar. */
-  sourceText: z.string().nullable(),
-  /** 1-basierte Seitenzahl, falls bekannt. */
-  page: z.number().int().positive().nullable(),
-  confidence,
-});
-
 export const deadlineSchema = z.object({
   date: isoDate,
   title: nonBlank,

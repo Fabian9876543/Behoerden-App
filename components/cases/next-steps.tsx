@@ -1,6 +1,7 @@
-import { ArrowRight, CheckCircle2 } from "lucide-react";
+import { AlertTriangle, ArrowRight, CheckCircle2 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { formatDate } from "@/lib/dates";
+import { describeDueDate, formatDate } from "@/lib/dates";
+import { cn } from "@/lib/utils";
 import type { DeadlineRow, TaskRow } from "@/lib/types/database";
 
 /**
@@ -73,10 +74,25 @@ export function NextSteps({
         </ol>
 
         {nextDeadline ? (
-          <p className="flex items-center gap-2 rounded-lg bg-muted px-3 py-2 text-sm">
-            <ArrowRight className="size-4 shrink-0 text-muted-foreground" aria-hidden />
+          <p
+            className={cn(
+              "flex items-start gap-2 rounded-lg px-3 py-2 text-sm",
+              // Eine bereits verstrichene Frist darf nicht aussehen wie eine,
+              // für die noch Zeit bleibt.
+              nextDeadline.status === "overdue"
+                ? "bg-status-critical/10 text-status-critical"
+                : "bg-muted",
+            )}
+          >
+            {nextDeadline.status === "overdue" ? (
+              <AlertTriangle className="mt-0.5 size-4 shrink-0" aria-hidden />
+            ) : (
+              <ArrowRight className="mt-0.5 size-4 shrink-0 text-muted-foreground" aria-hidden />
+            )}
             <span>
-              Frist: <strong className="font-medium">{formatDate(nextDeadline.due_date)}</strong>
+              {nextDeadline.title}:{" "}
+              <strong className="font-medium">{formatDate(nextDeadline.due_date)}</strong>{" "}
+              ({describeDueDate(nextDeadline.due_date)})
             </span>
           </p>
         ) : null}
