@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { documentAnalysisSchema, isLowConfidence } from "@/lib/ai/schemas";
-import { sanitizeAnalysis } from "@/lib/ai/document-analysis";
+import { sanitizeAnalysis } from "@/lib/ai/analysis-sanitizer";
 import { makeAnalysis } from "../fixtures/analysis";
 
 describe("documentAnalysisSchema", () => {

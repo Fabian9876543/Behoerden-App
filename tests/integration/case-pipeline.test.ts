@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { generateCaseShape } from "@/lib/ai/task-generation";
-import { sanitizeAnalysis } from "@/lib/ai/document-analysis";
+import { sanitizeAnalysis } from "@/lib/ai/analysis-sanitizer";
 import { resolveForms } from "@/lib/ai/form-assistance";
 import { matchAuthorityKey } from "@/lib/authorities/registry";
 import { deriveDeadlineStatus } from "@/lib/dates";
@@ -25,7 +25,8 @@ describe("Analyse zu Vorgang", () => {
 
     expect(authorityKey).toBe("jobcenter");
     expect(shape.status).toBe("action_required");
-    expect(shape.priority).toBe("high");
+    // 27 Tage bis zur Frist -> noch nicht dringend, aber Handlungsbedarf.
+    expect(shape.priority).toBe("normal");
     expect(shape.deadlines).toHaveLength(1);
     expect(shape.tasks).toHaveLength(3);
     expect(forms).toHaveLength(1);
