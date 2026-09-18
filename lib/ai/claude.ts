@@ -106,6 +106,15 @@ export async function requestStructured<TSchema extends z.ZodType>(
       );
     }
 
+    // Abgeschnittene Antwort: Ein erneuter Versuch bringt dasselbe Ergebnis,
+    // darum bekommt die Person hier einen Hinweis, der weiterhilft.
+    if (response.stop_reason === "max_tokens") {
+      throw new AppError(
+        "ai_invalid_output",
+        "Das Dokument ist zu umfangreich für eine Analyse am Stück. Bitte lade die Seiten einzeln hoch.",
+      );
+    }
+
     const parsed: unknown = response.parsed_output;
     if (parsed === null || parsed === undefined) {
       log.warn("claude_output_schema_mismatch", {
@@ -137,6 +146,17 @@ export async function requestStructured<TSchema extends z.ZodType>(
       errorName: error instanceof Error ? error.name : "unknown",
       status: error instanceof Anthropic.APIError ? error.status : null,
     });
+
+    // Ein AnthropicError, der kein APIError ist, entsteht clientseitig - vor
+    // allem, wenn die Antwort nicht gegen das Schema parst. Das ist kein
+    // Ausfall: Die Person soll die Analyse erneut starten, nicht auf einen
+    // Dienst warten, der gar nicht gestört ist.
+    if (
+      error instanceof Anthropic.AnthropicError &&
+      !(error instanceof Anthropic.APIError)
+    ) {
+      throw new AppError("ai_invalid_output", undefined, { cause: error });
+    }
 
     if (error instanceof Anthropic.AuthenticationError) {
       throw new AppError(
