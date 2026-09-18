@@ -14,7 +14,7 @@ export interface AnalysisStep {
 }
 
 /**
- * Nachvollziehbarer Fortschritt waehrend Upload und Analyse.
+ * Nachvollziehbarer Fortschritt während Upload und Analyse.
  * Der Nutzer soll jederzeit sehen, was gerade passiert.
  */
 export function UploadProgress({ steps }: { steps: AnalysisStep[] }) {
@@ -58,7 +58,7 @@ function StepIcon({ state }: { state: StepState }) {
       return <Check className={cn(className, "text-status-success")} aria-label="Erledigt" />;
     case "running":
       return (
-        <Loader2 className={cn(className, "animate-spin text-primary")} aria-label="Laeuft" />
+        <Loader2 className={cn(className, "animate-spin text-primary")} aria-label="Läuft" />
       );
     case "failed":
       return <X className={cn(className, "text-status-critical")} aria-label="Fehlgeschlagen" />;

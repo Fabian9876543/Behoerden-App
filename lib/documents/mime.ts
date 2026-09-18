@@ -14,9 +14,9 @@ export function isImageMimeType(value: string): value is "image/jpeg" | "image/p
 }
 
 /**
- * Prueft Dateityp und -groesse, bevor irgendetwas gespeichert wird.
- * Vertraut dem vom Browser gemeldeten MIME-Typ nicht allein, sondern prueft
- * zusaetzlich die Magic Bytes.
+ * Prüft Dateityp und -größe, bevor irgendetwas gespeichert wird.
+ * Vertraut dem vom Browser gemeldeten MIME-Typ nicht allein, sondern prüft
+ * zusätzlich die Magic Bytes.
  */
 export function assertUploadable(params: {
   mimeType: string;
@@ -32,13 +32,13 @@ export function assertUploadable(params: {
   }
   if (params.sizeBytes > maxBytes) {
     const mb = Math.floor(maxBytes / (1024 * 1024));
-    throw new AppError("file_too_large", `Die Datei ist zu gross. Erlaubt sind maximal ${mb} MB.`);
+    throw new AppError("file_too_large", `Die Datei ist zu groß. Erlaubt sind maximal ${mb} MB.`);
   }
 }
 
 /**
  * Erkennt den echten Dateityp anhand der Magic Bytes.
- * Liefert null, wenn der Typ nicht zu den unterstuetzten gehoert.
+ * Liefert null, wenn der Typ nicht zu den unterstützten gehört.
  */
 export function sniffMimeType(bytes: Uint8Array): SupportedMimeType | null {
   if (bytes.length < 8) return null;
@@ -59,12 +59,12 @@ export function sniffMimeType(bytes: Uint8Array): SupportedMimeType | null {
   return null;
 }
 
-/** Wirft, wenn der gemeldete Typ nicht zum tatsaechlichen Dateiinhalt passt. */
+/** Wirft, wenn der gemeldete Typ nicht zum tatsächlichen Dateiinhalt passt. */
 export function assertMimeMatchesContent(reported: string, bytes: Uint8Array): SupportedMimeType {
   const actual = sniffMimeType(bytes);
   if (!actual) throw new AppError("unsupported_file_type");
   if (actual !== reported) {
-    // Der Browser meldet fuer manche Scans image/jpg o.ae. - der echte Typ gewinnt.
+    // Der Browser meldet für manche Scans image/jpg o.ae. - der echte Typ gewinnt.
     return actual;
   }
   return actual;

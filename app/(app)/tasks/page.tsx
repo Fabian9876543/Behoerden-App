@@ -39,7 +39,7 @@ export default async function TasksPage() {
         <EmptyState
           icon={<ListTodo className="size-8" />}
           title="Noch keine Aufgaben"
-          description="Aufgaben entstehen automatisch, sobald du einen Behoerdenbrief hochlaedst."
+          description="Aufgaben entstehen automatisch, sobald du einen Behördenbrief hochlädst."
         />
       ) : null}
 
@@ -59,7 +59,7 @@ export default async function TasksPage() {
 
       {dismissed.length > 0 ? (
         <section className="space-y-4">
-          <h2 className="text-lg font-semibold tracking-tight">Nicht noetig</h2>
+          <h2 className="text-lg font-semibold tracking-tight">Nicht nötig</h2>
           <TaskList entries={dismissed.map(toEntry)} />
         </section>
       ) : null}

@@ -50,10 +50,10 @@ export async function saveProfileAction(
 }
 
 /**
- * DSGVO: Loescht alle Fachdaten des Nutzers - Dateien im Storage, alle
+ * DSGVO: Löscht alle Fachdaten des Nutzers - Dateien im Storage, alle
  * Datenbankzeilen und, wenn der Service-Role-Key vorhanden ist, das Konto.
  *
- * Der Nutzer muss zur Bestaetigung das Wort LOESCHEN eingeben.
+ * Der Nutzer muss zur Bestätigung das Wort LOESCHEN eingeben.
  */
 export async function deleteAllDataAction(formData: FormData): Promise<ActionResult> {
   try {
@@ -63,7 +63,7 @@ export async function deleteAllDataAction(formData: FormData): Promise<ActionRes
     if (confirmation !== "LOESCHEN") {
       throw new AppError(
         "validation_failed",
-        'Bitte gib zur Bestaetigung "LOESCHEN" ein.',
+        'Bitte gib zur Bestätigung "LOESCHEN" ein.',
       );
     }
 
@@ -72,7 +72,7 @@ export async function deleteAllDataAction(formData: FormData): Promise<ActionRes
     // 1. Dateien zuerst - solange die Storage-Policy den Nutzer noch kennt.
     const removedFiles = await deleteAllUserFiles(user.id);
 
-    // 2. Alle Fachdaten. Die Funktion laeuft als der Nutzer, RLS greift.
+    // 2. Alle Fachdaten. Die Funktion läuft als der Nutzer, RLS greift.
     const supabase = await createSupabaseServerClient();
     const { error } = await supabase.rpc("delete_my_data");
     if (error) {
@@ -87,7 +87,7 @@ export async function deleteAllDataAction(formData: FormData): Promise<ActionRes
       if (!isAdminClientConfigured()) {
         throw new AppError(
           "not_configured",
-          "Deine Daten wurden geloescht. Die Loeschung des Kontos benoetigt zusaetzlich SUPABASE_SERVICE_ROLE_KEY.",
+          "Deine Daten wurden gelöscht. Die Löschung des Kontos benötigt zusätzlich SUPABASE_SERVICE_ROLE_KEY.",
         );
       }
       const admin = createSupabaseAdminClient();
@@ -96,7 +96,7 @@ export async function deleteAllDataAction(formData: FormData): Promise<ActionRes
         log.error("account_delete_failed", { message: deleteError.message });
         throw new AppError(
           "database_failed",
-          "Deine Daten wurden geloescht, das Konto konnte aber nicht entfernt werden.",
+          "Deine Daten wurden gelöscht, das Konto konnte aber nicht entfernt werden.",
         );
       }
       await supabase.auth.signOut();

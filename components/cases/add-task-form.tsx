@@ -20,7 +20,7 @@ export function AddTaskForm({ caseId }: { caseId: string }) {
     return (
       <Button variant="outline" size="sm" onClick={() => setOpen(true)}>
         <Plus className="size-4" aria-hidden />
-        Eigene Aufgabe hinzufuegen
+        Eigene Aufgabe hinzufügen
       </Button>
     );
   }
@@ -52,12 +52,12 @@ export function AddTaskForm({ caseId }: { caseId: string }) {
           required
           minLength={3}
           maxLength={160}
-          placeholder="z.B. Termin im Buergeramt vereinbaren"
+          placeholder="z.B. Termin im Bürgeramt vereinbaren"
         />
       </div>
 
       <div className="space-y-1.5">
-        <Label htmlFor="new-task-due">Faellig bis (optional)</Label>
+        <Label htmlFor="new-task-due">Fällig bis (optional)</Label>
         <Input id="new-task-due" name="dueDate" type="date" />
       </div>
 
@@ -65,7 +65,7 @@ export function AddTaskForm({ caseId }: { caseId: string }) {
 
       <div className="flex gap-2">
         <Button type="submit" size="sm" disabled={pending}>
-          {pending ? "Wird gespeichert..." : "Hinzufuegen"}
+          {pending ? "Wird gespeichert..." : "Hinzufügen"}
         </Button>
         <Button type="button" size="sm" variant="ghost" onClick={() => setOpen(false)}>
           Abbrechen

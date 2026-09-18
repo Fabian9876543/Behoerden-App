@@ -103,7 +103,7 @@ export async function updateCaseAction(formData: FormData): Promise<ActionResult
         title:
           parsed.data.status === "completed"
             ? "Vorgang abgeschlossen"
-            : `Status geaendert: ${parsed.data.status}`,
+            : `Status geändert: ${parsed.data.status}`,
         metadata: { from: existing.status, to: parsed.data.status },
       });
     }
@@ -153,7 +153,7 @@ export async function reopenCaseAction(caseId: string): Promise<ActionResult> {
       userId: user.id,
       caseId: caseRow.id,
       type: "case_status_changed",
-      title: "Vorgang wieder geoeffnet",
+      title: "Vorgang wieder geöffnet",
     });
 
     revalidatePath("/dashboard");
@@ -164,7 +164,7 @@ export async function reopenCaseAction(caseId: string): Promise<ActionResult> {
   }
 }
 
-/** Loescht den Vorgang samt aller Dokumente - in der Datenbank und im Storage. */
+/** Löscht den Vorgang samt aller Dokumente - in der Datenbank und im Storage. */
 export async function deleteCaseAction(caseId: string): Promise<ActionResult> {
   try {
     const user = await requireUser();

@@ -1,24 +1,24 @@
 /**
- * Behoerden-Registry.
+ * Behörden-Registry.
  *
- * Bewusst datengetrieben: Neue Behoerden werden hier ergaenzt, ohne dass
+ * Bewusst datengetrieben: Neue Behörden werden hier ergänzt, ohne dass
  * Business-Logik angefasst werden muss. Die KI erkennt den Namen frei aus
  * dem Dokument - diese Liste dient nur der Normalisierung, dem Matching auf
- * einen stabilen Schluessel und der Zuordnung offizieller Quellen.
+ * einen stabilen Schlüssel und der Zuordnung offizieller Quellen.
  *
- * Wichtig: Eine nicht gelistete Behoerde ist kein Fehler. Der erkannte Name
- * wird dann unveraendert uebernommen und `authorityKey` bleibt null.
+ * Wichtig: Eine nicht gelistete Behörde ist kein Fehler. Der erkannte Name
+ * wird dann unverändert übernommen und `authorityKey` bleibt null.
  */
 
 export interface AuthorityDefinition {
   key: string;
   /** Anzeigename */
   name: string;
-  /** Ebene - bestimmt die Vertrauenswuerdigkeit einer Quelle. */
-  level: "bund" | "land" | "kommune" | "koerperschaft";
+  /** Ebene - bestimmt die Vertrauenswürdigkeit einer Quelle. */
+  level: "bund" | "land" | "kommune" | "körperschaft";
   /** Offizielle Website, falls bundesweit eindeutig. */
   officialUrl?: string;
-  /** Begriffe, die im Dokument auf diese Behoerde hindeuten. */
+  /** Begriffe, die im Dokument auf diese Behörde hindeuten. */
   aliases: string[];
   /** Typische Vorgangsarten - dienen als Vorschlag, nicht als Zwang. */
   commonCaseTypes: string[];
@@ -29,16 +29,16 @@ export const AUTHORITIES: readonly AuthorityDefinition[] = [
     key: "jobcenter",
     name: "Jobcenter",
     level: "kommune",
-    officialUrl: "https://www.arbeitsagentur.de/arbeitslos-arbeit-finden/buergergeld",
-    aliases: ["jobcenter", "job-center", "buergergeld", "bürgergeld", "sgb ii", "sgb 2", "grundsicherung fuer arbeitsuchende"],
+    officialUrl: "https://www.arbeitsagentur.de/arbeitslos-arbeit-finden/bürgergeld",
+    aliases: ["jobcenter", "job-center", "bürgergeld", "bürgergeld", "sgb ii", "sgb 2", "grundsicherung für arbeitsuchende"],
     commonCaseTypes: ["weiterbewilligung", "erstantrag", "bescheid", "mitwirkungsaufforderung", "eingliederungsvereinbarung"],
   },
   {
-    key: "agentur_fuer_arbeit",
-    name: "Agentur fuer Arbeit",
+    key: "agentur_für_arbeit",
+    name: "Agentur für Arbeit",
     level: "bund",
     officialUrl: "https://www.arbeitsagentur.de",
-    aliases: ["agentur fuer arbeit", "agentur für arbeit", "arbeitsagentur", "arbeitslosengeld i", "alg i"],
+    aliases: ["agentur für arbeit", "agentur für arbeit", "arbeitsagentur", "arbeitslosengeld i", "alg i"],
     commonCaseTypes: ["arbeitslosengeld", "bescheid", "meldeaufforderung"],
   },
   {
@@ -47,7 +47,7 @@ export const AUTHORITIES: readonly AuthorityDefinition[] = [
     level: "land",
     officialUrl: "https://www.elster.de",
     aliases: ["finanzamt", "steuerbescheid", "einkommensteuer", "steuernummer", "elster"],
-    commonCaseTypes: ["steuerbescheid", "steuererklaerung", "einspruch", "vorauszahlung"],
+    commonCaseTypes: ["steuerbescheid", "steuererklärung", "einspruch", "vorauszahlung"],
   },
   {
     key: "familienkasse",
@@ -65,16 +65,16 @@ export const AUTHORITIES: readonly AuthorityDefinition[] = [
     commonCaseTypes: ["wohngeld", "weiterbewilligung", "bescheid"],
   },
   {
-    key: "buergeramt",
-    name: "Buergeramt",
+    key: "bürgeramt",
+    name: "Bürgeramt",
     level: "kommune",
-    aliases: ["buergeramt", "bürgeramt", "buergerbuero", "einwohnermeldeamt", "meldebehoerde", "anmeldung wohnsitz"],
-    commonCaseTypes: ["anmeldung", "ummeldung", "ausweis", "fuehrungszeugnis"],
+    aliases: ["bürgeramt", "bürgeramt", "bürgerbüro", "einwohnermeldeamt", "meldebehörde", "anmeldung wohnsitz"],
+    commonCaseTypes: ["anmeldung", "ummeldung", "ausweis", "führungszeugnis"],
   },
   {
     key: "krankenkasse",
     name: "Krankenkasse",
-    level: "koerperschaft",
+    level: "körperschaft",
     aliases: ["krankenkasse", "aok", "barmer", "tk", "techniker krankenkasse", "dak", "ikk", "beitragsbescheid krankenversicherung"],
     commonCaseTypes: ["beitragsbescheid", "leistungsantrag", "widerspruch", "mitgliedschaft"],
   },
@@ -83,22 +83,22 @@ export const AUTHORITIES: readonly AuthorityDefinition[] = [
     name: "Deutsche Rentenversicherung",
     level: "bund",
     officialUrl: "https://www.deutsche-rentenversicherung.de",
-    aliases: ["deutsche rentenversicherung", "rentenversicherung", "drv", "rentenbescheid", "kontenklaerung"],
-    commonCaseTypes: ["rentenbescheid", "kontenklaerung", "reha-antrag", "erwerbsminderung"],
+    aliases: ["deutsche rentenversicherung", "rentenversicherung", "drv", "rentenbescheid", "kontenklärung"],
+    commonCaseTypes: ["rentenbescheid", "kontenklärung", "reha-antrag", "erwerbsminderung"],
   },
   {
-    key: "auslaenderbehoerde",
-    name: "Auslaenderbehoerde",
+    key: "ausländerbehörde",
+    name: "Ausländerbehörde",
     level: "kommune",
-    aliases: ["auslaenderbehoerde", "ausländerbehörde", "aufenthaltstitel", "aufenthaltserlaubnis", "niederlassungserlaubnis"],
-    commonCaseTypes: ["aufenthaltstitel", "verlaengerung", "einbuergerung"],
+    aliases: ["ausländerbehörde", "ausländerbehörde", "aufenthaltstitel", "aufenthaltserlaubnis", "niederlassungserlaubnis"],
+    commonCaseTypes: ["aufenthaltstitel", "verlängerung", "einbürgerung"],
   },
   {
-    key: "fuehrerscheinstelle",
-    name: "Fuehrerscheinstelle",
+    key: "führerscheinstelle",
+    name: "Führerscheinstelle",
     level: "kommune",
-    aliases: ["fuehrerscheinstelle", "führerscheinstelle", "fahrerlaubnisbehoerde", "fuehrerschein"],
-    commonCaseTypes: ["fahrerlaubnis", "umtausch", "eignungsueberpruefung"],
+    aliases: ["führerscheinstelle", "führerscheinstelle", "fahrerlaubnisbehörde", "führerschein"],
+    commonCaseTypes: ["fahrerlaubnis", "umtausch", "eignungsüberprüfung"],
   },
   {
     key: "kfz_zulassungsstelle",
@@ -110,25 +110,25 @@ export const AUTHORITIES: readonly AuthorityDefinition[] = [
   {
     key: "rundfunkbeitrag",
     name: "ARD ZDF Deutschlandradio Beitragsservice",
-    level: "koerperschaft",
+    level: "körperschaft",
     officialUrl: "https://www.rundfunkbeitrag.de",
     aliases: ["beitragsservice", "rundfunkbeitrag", "gez", "ard zdf deutschlandradio"],
     commonCaseTypes: ["beitragsbescheid", "befreiung", "anmeldung", "widerspruch"],
   },
   {
-    key: "bafoeg_amt",
-    name: "BAfoeG-Amt",
+    key: "bafög_amt",
+    name: "BAföG-Amt",
     level: "land",
-    officialUrl: "https://www.bafoeg-digital.de",
-    aliases: ["bafoeg", "bafög", "amt fuer ausbildungsfoerderung", "studierendenwerk"],
-    commonCaseTypes: ["bafoeg-antrag", "weiterfoerderung", "bescheid"],
+    officialUrl: "https://www.bafög-digital.de",
+    aliases: ["bafög", "bafög", "amt für ausbildungsförderung", "studierendenwerk"],
+    commonCaseTypes: ["bafög-antrag", "weiterförderung", "bescheid"],
   },
   {
     key: "elterngeldstelle",
     name: "Elterngeldstelle",
     level: "land",
     aliases: ["elterngeld", "elterngeldstelle", "elterngeldplus"],
-    commonCaseTypes: ["elterngeld", "bescheid", "aenderungsmitteilung"],
+    commonCaseTypes: ["elterngeld", "bescheid", "änderungsmitteilung"],
   },
   {
     key: "sozialamt",
@@ -159,9 +159,9 @@ function normalize(value: string): string {
 }
 
 /**
- * Ordnet einen von der KI erkannten Behoerdennamen einem stabilen Schluessel
+ * Ordnet einen von der KI erkannten Behördennamen einem stabilen Schlüssel
  * zu. Liefert null, wenn kein Eintrag sicher passt - dann wird der erkannte
- * Name unveraendert weiterverwendet.
+ * Name unverändert weiterverwendet.
  */
 export function matchAuthorityKey(authorityName: string | null | undefined): string | null {
   if (!authorityName) return null;
@@ -183,23 +183,23 @@ export function matchAuthorityKey(authorityName: string | null | undefined): str
   return null;
 }
 
-/** Bevorzugte offizielle Quellen, absteigend nach Vertrauenswuerdigkeit. */
+/** Bevorzugte offizielle Quellen, absteigend nach Vertrauenswürdigkeit. */
 export const OFFICIAL_SOURCE_PRIORITY = [
   "bund.de",
   "arbeitsagentur.de",
   "deutsche-rentenversicherung.de",
   "elster.de",
   "rundfunkbeitrag.de",
-  "bafoeg-digital.de",
+  "bafög-digital.de",
   "service.bund.de",
 ] as const;
 
 /**
- * Prueft, ob eine URL zu einer offiziellen deutschen Behoerdenquelle gehoert.
+ * Prüft, ob eine URL zu einer offiziellen deutschen Behördenquelle gehört.
  *
  * Bewusst konservativ: Im Zweifel `false`. Eine Quelle, die hier nicht
- * durchkommt, wird in der UI als "ungeprueft" gekennzeichnet und niemals als
- * offizielle Behoerdenquelle dargestellt.
+ * durchkommt, wird in der UI als "ungeprüft" gekennzeichnet und niemals als
+ * offizielle Behördenquelle dargestellt.
  */
 export function isOfficialAuthorityUrl(url: string): boolean {
   let host: string;
@@ -213,7 +213,7 @@ export function isOfficialAuthorityUrl(url: string): boolean {
 
   const isOn = (domain: string) => host === domain || host.endsWith(`.${domain}`);
 
-  // 1. Explizit hinterlegte Bundes- und Traegerportale.
+  // 1. Explizit hinterlegte Bundes- und Trägerportale.
   if (OFFICIAL_SOURCE_PRIORITY.some(isOn)) return true;
 
   // 2. Weitere in der Registry hinterlegte offizielle URLs.

@@ -14,7 +14,7 @@ import { cn } from "@/lib/utils";
 
 export const NAV_ITEMS = [
   { href: "/dashboard", label: "Dashboard", Icon: LayoutDashboard },
-  { href: "/cases", label: "Vorgaenge", Icon: FolderKanban },
+  { href: "/cases", label: "Vorgänge", Icon: FolderKanban },
   { href: "/documents", label: "Dokumente", Icon: FileText },
   { href: "/tasks", label: "Aufgaben", Icon: ListTodo },
   { href: "/deadlines", label: "Fristen", Icon: CalendarClock },

@@ -2,7 +2,7 @@ import { formatDate, formatDateTime } from "@/lib/dates";
 import type { CaseEventRow } from "@/lib/types/database";
 
 /**
- * Timeline eines Vorgangs. Zeigt ausschliesslich die gespeicherten
+ * Timeline eines Vorgangs. Zeigt ausschließlich die gespeicherten
  * Ereignistitel - keine Dokumentinhalte.
  */
 export function CaseTimeline({ events }: { events: CaseEventRow[] }) {

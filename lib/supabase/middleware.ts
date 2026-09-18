@@ -10,14 +10,14 @@ function isPublicPath(pathname: string): boolean {
 }
 
 /**
- * Refresht die Supabase-Session und schuetzt alle App-Routen.
+ * Refresht die Supabase-Session und schützt alle App-Routen.
  */
 export async function updateSession(request: NextRequest): Promise<NextResponse> {
   let response = NextResponse.next({ request });
 
   if (!publicEnv.supabaseUrl || !publicEnv.supabaseAnonKey) {
-    // Ohne Konfiguration kann keine Session geprueft werden; die Seiten
-    // zeigen dann einen verstaendlichen Setup-Hinweis.
+    // Ohne Konfiguration kann keine Session geprüft werden; die Seiten
+    // zeigen dann einen verständlichen Setup-Hinweis.
     return response;
   }
 

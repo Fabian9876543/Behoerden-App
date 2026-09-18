@@ -33,11 +33,11 @@ describe("formatDate", () => {
 });
 
 describe("daysUntil", () => {
-  it("zaehlt Tage bis zum Stichtag", () => {
+  it("zählt Tage bis zum Stichtag", () => {
     expect(daysUntil("2026-09-25", NOW)).toBe(7);
   });
 
-  it("liefert negative Werte fuer ueberfaellige Termine", () => {
+  it("liefert negative Werte für überfällige Termine", () => {
     expect(daysUntil("2026-09-15", NOW)).toBe(-3);
   });
 
@@ -47,19 +47,19 @@ describe("daysUntil", () => {
 });
 
 describe("deriveDeadlineStatus", () => {
-  it("markiert vergangene Termine als ueberfaellig", () => {
+  it("markiert vergangene Termine als überfällig", () => {
     expect(deriveDeadlineStatus("2026-09-01", "upcoming", NOW)).toBe("overdue");
   });
 
-  it("markiert Termine innerhalb einer Woche als bald faellig", () => {
+  it("markiert Termine innerhalb einer Woche als bald fällig", () => {
     expect(deriveDeadlineStatus("2026-09-22", "upcoming", NOW)).toBe("due_soon");
   });
 
-  it("laesst spaetere Termine anstehend", () => {
+  it("lässt spätere Termine anstehend", () => {
     expect(deriveDeadlineStatus("2026-12-01", "upcoming", NOW)).toBe("upcoming");
   });
 
-  it("ueberschreibt Nutzerentscheidungen nicht", () => {
+  it("überschreibt Nutzerentscheidungen nicht", () => {
     expect(deriveDeadlineStatus("2026-09-01", "met", NOW)).toBe("met");
     expect(deriveDeadlineStatus("2026-09-01", "dismissed", NOW)).toBe("dismissed");
   });
@@ -67,14 +67,14 @@ describe("deriveDeadlineStatus", () => {
 
 describe("describeDueDate", () => {
   it("beschreibt heute, morgen und die Zukunft", () => {
-    expect(describeDueDate("2026-09-18", NOW)).toBe("heute faellig");
-    expect(describeDueDate("2026-09-19", NOW)).toBe("morgen faellig");
+    expect(describeDueDate("2026-09-18", NOW)).toBe("heute fällig");
+    expect(describeDueDate("2026-09-19", NOW)).toBe("morgen fällig");
     expect(describeDueDate("2026-09-25", NOW)).toBe("in 7 Tagen");
   });
 
-  it("beschreibt Ueberfaelligkeit", () => {
-    expect(describeDueDate("2026-09-17", NOW)).toBe("seit gestern ueberfaellig");
-    expect(describeDueDate("2026-09-15", NOW)).toBe("seit 3 Tagen ueberfaellig");
+  it("beschreibt Überfälligkeit", () => {
+    expect(describeDueDate("2026-09-17", NOW)).toBe("seit gestern überfällig");
+    expect(describeDueDate("2026-09-15", NOW)).toBe("seit 3 Tagen überfällig");
   });
 });
 

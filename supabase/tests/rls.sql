@@ -1,16 +1,16 @@
 -- ===========================================================================
 -- Verhaltenstest der Row Level Security
 --
--- Prueft die wichtigste Zusage des Produkts direkt in der Datenbank:
--- Ein Nutzer sieht, aendert und loescht niemals Daten eines anderen Nutzers.
+-- Prüft die wichtigste Zusage des Produkts direkt in der Datenbank:
+-- Ein Nutzer sieht, ändert und löscht niemals Daten eines anderen Nutzers.
 --
--- Anders als tests/integration/rls-policies.test.ts (statische Pruefung der
--- Migrationen) laeuft dieser Test gegen echtes PostgreSQL mit aktiven
--- Policies. Ausfuehrung: npm run test:db
+-- Anders als tests/integration/rls-policies.test.ts (statische Prüfung der
+-- Migrationen) läuft dieser Test gegen echtes PostgreSQL mit aktiven
+-- Policies. Ausführung: npm run test:db
 --
--- Der Test schaltet ueber request.jwt.claim.sub zwischen zwei Nutzern um und
--- laeuft als Rolle "authenticated" - nicht als Eigentuemer, denn der wuerde
--- RLS umgehen. Die erste Pruefung stellt genau das sicher.
+-- Der Test schaltet über request.jwt.claim.sub zwischen zwei Nutzern um und
+-- läuft als Rolle "authenticated" - nicht als Eigentümer, denn der würde
+-- RLS umgehen. Die erste Prüfung stellt genau das sicher.
 -- ===========================================================================
 
 \set ON_ERROR_STOP on
@@ -35,7 +35,7 @@ begin
   end if;
 end; $$;
 
--- Prueft, dass eine Anweisung an RLS scheitert.
+-- Prüft, dass eine Anweisung an RLS scheitert.
 create or replace function assert_denied(stmt text, label text) returns void
 language plpgsql as $$
 begin
@@ -45,7 +45,7 @@ exception
   when insufficient_privilege then raise notice '  OK    %', label;
 end; $$;
 
-\echo '--- Kontrolle: greift RLS ueberhaupt? ---'
+\echo '--- Kontrolle: greift RLS überhaupt? ---'
 set role authenticated;
 set request.jwt.claim.sub = 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa';
 select assert(current_user = 'authenticated', 'Rolle ist authenticated (kein Superuser)');
@@ -103,32 +103,32 @@ insert into public.cases (user_id, title)
 values ('bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb', 'Vorgang von B');
 select assert((select count(*) from public.cases) = 1, 'B sieht den eigenen Vorgang');
 select public.delete_my_data();
-select assert((select count(*) from public.cases) = 0, 'delete_my_data loescht die Daten von B');
+select assert((select count(*) from public.cases) = 0, 'delete_my_data löscht die Daten von B');
 
 \echo '--- Kontrolle bei Nutzer A ---'
 set request.jwt.claim.sub = 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa';
 
-select assert((select count(*) from public.cases) = 1, 'Vorgang von A ueberlebt Update und Delete durch B');
+select assert((select count(*) from public.cases) = 1, 'Vorgang von A überlebt Update und Delete durch B');
 select assert((select title from public.cases limit 1) = 'Vertraulicher Vorgang von A',
-              'Titel von A ist unveraendert');
-select assert((select count(*) from public.tasks) = 1, 'Aufgabe von A ueberlebt delete_my_data von B');
-select assert((select count(*) from storage.objects) = 1, 'Datei von A ueberlebt Delete durch B');
+              'Titel von A ist unverändert');
+select assert((select count(*) from public.tasks) = 1, 'Aufgabe von A überlebt delete_my_data von B');
+select assert((select count(*) from storage.objects) = 1, 'Datei von A überlebt Delete durch B');
 select assert((select count(*) from public.profiles
                where id = 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa') = 1,
-              'Profil von A ueberlebt delete_my_data von B');
+              'Profil von A überlebt delete_my_data von B');
 select assert((select count(*) from public.profiles) = 1,
-              'A sieht ausschliesslich das eigene Profil');
+              'A sieht ausschließlich das eigene Profil');
 
 \echo '--- Kaskaden und anonymer Zugriff ---'
 delete from public.cases where id = '11111111-1111-4111-8111-111111111111';
-select assert((select count(*) from public.tasks) = 0, 'Vorgang loeschen raeumt Aufgaben mit ab');
-select assert((select count(*) from public.deadlines) = 0, 'Vorgang loeschen raeumt Fristen mit ab');
+select assert((select count(*) from public.tasks) = 0, 'Vorgang löschen räumt Aufgaben mit ab');
+select assert((select count(*) from public.deadlines) = 0, 'Vorgang löschen räumt Fristen mit ab');
 
 set role anon;
 set request.jwt.claim.sub = '';
-select assert((select count(*) from public.cases) = 0, 'Anonym sieht keine Vorgaenge');
+select assert((select count(*) from public.cases) = 0, 'Anonym sieht keine Vorgänge');
 select assert((select count(*) from public.profiles) = 0, 'Anonym sieht keine Profile');
 
 reset role;
 \echo ''
-\echo 'Alle RLS-Pruefungen bestanden.'
+\echo 'Alle RLS-Prüfungen bestanden.'

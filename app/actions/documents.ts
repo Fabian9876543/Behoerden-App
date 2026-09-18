@@ -28,7 +28,7 @@ export interface UploadResult {
 
 /**
  * Nimmt eine Datei entgegen, legt bei Bedarf einen Vorgang an und speichert
- * das Dokument. Die Analyse laeuft als separater Schritt, damit die UI den
+ * das Dokument. Die Analyse läuft als separater Schritt, damit die UI den
  * Fortschritt anzeigen kann und ein Analysefehler den Upload nicht verwirft.
  */
 export async function uploadDocumentAction(
@@ -39,14 +39,14 @@ export async function uploadDocumentAction(
 
     const file = formData.get("file");
     if (!(file instanceof File)) {
-      throw new AppError("validation_failed", "Es wurde keine Datei uebermittelt.");
+      throw new AppError("validation_failed", "Es wurde keine Datei übermittelt.");
     }
 
     const maxBytes = safeMaxUploadBytes();
     assertUploadable({ mimeType: file.type, sizeBytes: file.size, maxBytes });
 
     const bytes = new Uint8Array(await file.arrayBuffer());
-    // Der gemeldete MIME-Typ ist nicht vertrauenswuerdig - Magic Bytes entscheiden.
+    // Der gemeldete MIME-Typ ist nicht vertrauenswürdig - Magic Bytes entscheiden.
     const mimeType = assertMimeMatchesContent(file.type, bytes);
 
     const rawCaseId = formData.get("caseId");
@@ -82,7 +82,7 @@ export async function uploadDocumentAction(
         storagePath,
       });
     } catch (error) {
-      // Keine verwaisten Dateien im Storage zuruecklassen.
+      // Keine verwaisten Dateien im Storage zurücklassen.
       await deleteDocuments([storagePath]);
       throw error;
     }
@@ -161,7 +161,7 @@ export async function deleteDocumentAction(documentId: string): Promise<ActionRe
         userId: user.id,
         caseId: document.case_id,
         type: "document_deleted",
-        title: "Dokument geloescht",
+        title: "Dokument gelöscht",
         description: document.file_name,
         metadata: { documentId: document.id },
       });

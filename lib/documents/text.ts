@@ -1,11 +1,11 @@
 /**
- * Reine Textauswertung fuer Dokumente - ohne I/O, damit sie ueberall
- * nutzbar und vollstaendig testbar ist.
+ * Reine Textauswertung für Dokumente - ohne I/O, damit sie überall
+ * nutzbar und vollständig testbar ist.
  */
 
 /**
- * Fuegt Seitentexte mit Seitenmarkern zusammen.
- * Die Marker sind fuer die KI relevant: nur so kann sie `page` korrekt setzen.
+ * Fügt Seitentexte mit Seitenmarkern zusammen.
+ * Die Marker sind für die KI relevant: nur so kann sie `page` korrekt setzen.
  */
 export function joinPages(pages: string[]): string {
   return pages

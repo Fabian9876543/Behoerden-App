@@ -7,12 +7,12 @@ import { AppError } from "@/lib/errors";
 import type { OcrInput, OcrProvider, OcrResult } from "@/lib/ocr/provider";
 
 /**
- * OCR ueber Claude Vision.
+ * OCR über Claude Vision.
  *
- * MVP-Default: Es wird kein zusaetzlicher Anbieter und kein weiteres
- * Systempaket benoetigt, und die Erkennungsqualitaet bei deutschen
- * Behoerdenbriefen ist gut. Fuer hohe Volumina laesst sich hier ein
- * spezialisierter OCR-Dienst einhaengen, ohne Aufrufer zu aendern.
+ * MVP-Default: Es wird kein zusätzlicher Anbieter und kein weiteres
+ * Systempaket benötigt, und die Erkennungsqualität bei deutschen
+ * Behördenbriefen ist gut. Für hohe Volumina lässt sich hier ein
+ * spezialisierter OCR-Dienst einhängen, ohne Aufrufer zu ändern.
  */
 export const claudeVisionOcr: OcrProvider = {
   name: "claude-vision",

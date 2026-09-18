@@ -19,9 +19,9 @@ export default async function OnboardingPage() {
 
   return (
     <main className="mx-auto flex min-h-dvh max-w-lg flex-col justify-center px-6 py-12">
-      <h1 className="text-2xl font-semibold tracking-tight">Wie moechtest du Behoerdenpost verwalten?</h1>
+      <h1 className="text-2xl font-semibold tracking-tight">Wie möchtest du Behördenpost verwalten?</h1>
       <p className="mt-2 text-sm text-muted-foreground">
-        Das laesst sich jederzeit in den Einstellungen aendern.
+        Das lässt sich jederzeit in den Einstellungen ändern.
       </p>
       <OnboardingForm className="mt-8" />
     </main>

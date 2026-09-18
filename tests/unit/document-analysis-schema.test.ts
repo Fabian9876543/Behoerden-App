@@ -4,7 +4,7 @@ import { sanitizeAnalysis } from "@/lib/ai/analysis-sanitizer";
 import { makeAnalysis } from "../fixtures/analysis";
 
 describe("documentAnalysisSchema", () => {
-  it("akzeptiert eine vollstaendige Analyse", () => {
+  it("akzeptiert eine vollständige Analyse", () => {
     const result = documentAnalysisSchema.safeParse(makeAnalysis());
     expect(result.success).toBe(true);
   });
@@ -27,7 +27,7 @@ describe("documentAnalysisSchema", () => {
     expect(result.success).toBe(false);
   });
 
-  it("lehnt eine Konfidenz ausserhalb von 0..1 ab", () => {
+  it("lehnt eine Konfidenz außerhalb von 0..1 ab", () => {
     const result = documentAnalysisSchema.safeParse(
       makeAnalysis({ authority: { name: "Jobcenter", confidence: 1.4 } }),
     );
@@ -39,7 +39,7 @@ describe("documentAnalysisSchema", () => {
     expect(result.success).toBe(false);
   });
 
-  it("erlaubt null fuer nicht erkannte Felder", () => {
+  it("erlaubt null für nicht erkannte Felder", () => {
     const result = documentAnalysisSchema.safeParse(
       makeAnalysis({ authority: null, caseType: null, referenceNumber: null, documentDate: null }),
     );
@@ -63,7 +63,7 @@ describe("isLowConfidence", () => {
 describe("sanitizeAnalysis", () => {
   const now = new Date("2026-09-18T10:00:00Z");
 
-  it("verwirft Fristen ausserhalb eines plausiblen Zeitraums", () => {
+  it("verwirft Fristen außerhalb eines plausiblen Zeitraums", () => {
     const analysis = sanitizeAnalysis(
       makeAnalysis({
         deadlines: [
@@ -84,30 +84,30 @@ describe("sanitizeAnalysis", () => {
     expect(analysis.uncertaintyNotes.join(" ")).toContain("1999-01-01");
   });
 
-  it("behaelt plausible Fristen", () => {
+  it("behält plausible Fristen", () => {
     const analysis = sanitizeAnalysis(makeAnalysis(), now);
     expect(analysis.deadlines).toHaveLength(1);
     expect(analysis.deadlines[0]?.date).toBe("2026-10-15");
   });
 
-  it("verwirft eine Behoerde mit sehr niedriger Konfidenz", () => {
+  it("verwirft eine Behörde mit sehr niedriger Konfidenz", () => {
     const analysis = sanitizeAnalysis(
       makeAnalysis({ authority: { name: "Irgendwas", confidence: 0.2 } }),
       now,
     );
     expect(analysis.authority).toBeNull();
-    expect(analysis.uncertaintyNotes.join(" ")).toContain("Behoerde");
+    expect(analysis.uncertaintyNotes.join(" ")).toContain("Behörde");
   });
 
-  it("warnt, wenn das Dokument keine Behoerdenpost ist", () => {
+  it("warnt, wenn das Dokument keine Behördenpost ist", () => {
     const analysis = sanitizeAnalysis(
       makeAnalysis({ looksLikeAuthorityLetter: false }),
       now,
     );
-    expect(analysis.uncertaintyNotes.join(" ")).toContain("Behoerdenpost");
+    expect(analysis.uncertaintyNotes.join(" ")).toContain("Behördenpost");
   });
 
-  it("entfernt unplausible Aufgabenfristen, behaelt aber die Aufgabe", () => {
+  it("entfernt unplausible Aufgabenfristen, behält aber die Aufgabe", () => {
     const analysis = sanitizeAnalysis(
       makeAnalysis({
         requiredActions: [

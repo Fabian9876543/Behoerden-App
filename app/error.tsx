@@ -15,7 +15,7 @@ export default function GlobalError({
   reset: () => void;
 }) {
   useEffect(() => {
-    // Nur die Digest-ID, nie die Fehlermeldung selbst (koennte Inhalte tragen).
+    // Nur die Digest-ID, nie die Fehlermeldung selbst (könnte Inhalte tragen).
     console.error(JSON.stringify({ level: "error", event: "ui_error", digest: error.digest }));
   }, [error.digest]);
 

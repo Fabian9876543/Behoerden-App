@@ -34,7 +34,7 @@ export function NextSteps({
           <div>
             <p className="font-medium">Aktuell ist nichts zu tun</p>
             <p className="mt-1 text-sm text-muted-foreground">
-              Fuer diesen Vorgang sind keine Aufgaben offen.
+              Für diesen Vorgang sind keine Aufgaben offen.
             </p>
           </div>
         </CardContent>

@@ -3,12 +3,12 @@ import { z } from "zod";
 /**
  * Strukturiertes Ausgabeformat der Dokumentanalyse.
  *
- * Claude liefert ausschliesslich JSON gegen dieses Schema (Structured
+ * Claude liefert ausschließlich JSON gegen dieses Schema (Structured
  * Outputs). Alles, was nicht validiert, wird als Fehler behandelt - es wird
  * nie Freitext interpretiert.
  *
- * Kernidee "Evidence": Jede extrahierte Tatsache traegt, wo moeglich,
- * `sourceText` (woertliches Zitat) + `page` + `confidence`.
+ * Kernidee "Evidence": Jede extrahierte Tatsache trägt, wo möglich,
+ * `sourceText` (wörtliches Zitat) + `page` + `confidence`.
  */
 
 export const DOCUMENT_ANALYSIS_SCHEMA_VERSION = 1;
@@ -22,7 +22,7 @@ const isoDate = z
   .regex(/^\d{4}-\d{2}-\d{2}$/, "Datum muss im Format YYYY-MM-DD vorliegen");
 
 export const evidenceSchema = z.object({
-  /** Woertliches Zitat aus dem Dokument. Leer, wenn nicht belegbar. */
+  /** Wörtliches Zitat aus dem Dokument. Leer, wenn nicht belegbar. */
   sourceText: z.string().max(500).nullable(),
   /** 1-basierte Seitenzahl, falls bekannt. */
   page: z.number().int().positive().nullable(),
@@ -70,7 +70,7 @@ export const authoritySchema = z.object({
 });
 
 export const documentAnalysisSchema = z.object({
-  /** z.B. "Bescheid", "Mitwirkungsaufforderung", "Anhoerung". */
+  /** z.B. "Bescheid", "Mitwirkungsaufforderung", "Anhörung". */
   documentType: z.string().min(1).max(120),
   authority: authoritySchema.nullable(),
   /** Vorgangsart, z.B. "weiterbewilligung". */
@@ -79,18 +79,18 @@ export const documentAnalysisSchema = z.object({
   referenceNumber: z.string().max(120).nullable(),
   /** Datum des Schreibens. */
   documentDate: isoDate.nullable(),
-  /** Kurzer, sprechender Titel fuer den Vorgang. */
+  /** Kurzer, sprechender Titel für den Vorgang. */
   suggestedCaseTitle: z.string().min(1).max(120),
   deadlines: z.array(deadlineSchema).max(20),
   requiredActions: z.array(requiredActionSchema).max(20),
   requiredDocuments: z.array(requiredDocumentSchema).max(20),
   mentionedForms: z.array(mentionedFormSchema).max(10),
   importantTerms: z.array(importantTermSchema).max(10),
-  /** Verstaendliche Zusammenfassung in einfachem Deutsch. */
+  /** Verständliche Zusammenfassung in einfachem Deutsch. */
   summary: z.string().min(1).max(1500),
   /** Explizite Hinweise, was unsicher oder nicht eindeutig erkannt wurde. */
   uncertaintyNotes: z.array(z.string().max(300)).max(15),
-  /** True, wenn das Dokument keine erkennbare Behoerdenpost ist. */
+  /** True, wenn das Dokument keine erkennbare Behördenpost ist. */
   looksLikeAuthorityLetter: z.boolean(),
 });
 
@@ -104,13 +104,13 @@ export type MentionedForm = z.infer<typeof mentionedFormSchema>;
 export const letterDraftSchema = z.object({
   subject: z.string().min(1).max(200),
   body: z.string().min(1).max(6000),
-  /** Punkte, die der Nutzer vor dem Versand pruefen/ergaenzen muss. */
+  /** Punkte, die der Nutzer vor dem Versand prüfen/ergänzen muss. */
   openPoints: z.array(z.string().max(300)).max(10),
 });
 
 export type LetterDraft = z.infer<typeof letterDraftSchema>;
 
-/** Schwelle, ab der eine Angabe in der UI als "bitte pruefen" markiert wird. */
+/** Schwelle, ab der eine Angabe in der UI als "bitte prüfen" markiert wird. */
 export const LOW_CONFIDENCE_THRESHOLD = 0.6;
 
 export function isLowConfidence(value: number | null | undefined): boolean {

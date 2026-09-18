@@ -19,8 +19,8 @@ export default async function LoginPage({
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-lg">Willkommen zurueck</CardTitle>
-        <CardDescription>Melde dich an, um deine Vorgaenge zu sehen.</CardDescription>
+        <CardTitle className="text-lg">Willkommen zurück</CardTitle>
+        <CardDescription>Melde dich an, um deine Vorgänge zu sehen.</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         <LoginForm redirectTo={redirectTo} />

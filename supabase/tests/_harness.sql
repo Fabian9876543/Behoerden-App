@@ -2,7 +2,7 @@
 -- Testharness: minimale Nachbildung der Supabase-Umgebung
 --
 -- Wird NUR gebraucht, um die Migrationen gegen ein nacktes PostgreSQL zu
--- pruefen (scripts/test-db.sh, CI ohne Docker). Eine echte Supabase-Instanz
+-- prüfen (scripts/test-db.sh, CI ohne Docker). Eine echte Supabase-Instanz
 -- bringt auth, storage und die Rollen bereits mit - dort diese Datei NICHT
 -- einspielen.
 -- ===========================================================================

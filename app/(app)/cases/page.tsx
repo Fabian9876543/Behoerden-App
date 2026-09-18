@@ -6,7 +6,7 @@ import { CaseCard } from "@/components/dashboard/case-card";
 import { EmptyState } from "@/components/ui/empty-state";
 import { NewCaseForm } from "@/components/cases/new-case-form";
 
-export const metadata: Metadata = { title: "Meine Vorgaenge" };
+export const metadata: Metadata = { title: "Meine Vorgänge" };
 export const dynamic = "force-dynamic";
 
 export default async function CasesPage() {
@@ -20,9 +20,9 @@ export default async function CasesPage() {
     <div className="space-y-8">
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-semibold tracking-tight">Meine Vorgaenge</h1>
+          <h1 className="text-2xl font-semibold tracking-tight">Meine Vorgänge</h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            Alle Behoerdenangelegenheiten an einem Ort.
+            Alle Behördenangelegenheiten an einem Ort.
           </p>
         </div>
         <NewCaseForm />
@@ -31,8 +31,8 @@ export default async function CasesPage() {
       {cases.length === 0 ? (
         <EmptyState
           icon={<FolderKanban className="size-8" />}
-          title="Noch keine Vorgaenge"
-          description="Lade auf dem Dashboard einen Behoerdenbrief hoch - daraus entsteht automatisch ein Vorgang."
+          title="Noch keine Vorgänge"
+          description="Lade auf dem Dashboard einen Behördenbrief hoch - daraus entsteht automatisch ein Vorgang."
         />
       ) : null}
 

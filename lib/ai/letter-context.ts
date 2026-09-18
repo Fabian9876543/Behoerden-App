@@ -2,11 +2,11 @@ import { formatDate } from "@/lib/dates";
 import type { CaseRow, DeadlineRow, Profile, TaskRow } from "@/lib/types/database";
 
 /**
- * Kontextaufbereitung fuer Antwortentwuerfe.
+ * Kontextaufbereitung für Antwortentwürfe.
  *
- * Claude bekommt bewusst NUR die fuer den Vorgang relevanten, strukturierten
- * Daten - nicht den kompletten Dokumenttext. Das haelt den Prompt klein und
- * verhindert, dass unnoetige personenbezogene Details die Anwendung verlassen.
+ * Claude bekommt bewusst NUR die für den Vorgang relevanten, strukturierten
+ * Daten - nicht den kompletten Dokumenttext. Das hält den Prompt klein und
+ * verhindert, dass unnötige personenbezogene Details die Anwendung verlassen.
  *
  * Reine Funktion, damit genau dieser Ausschnitt testbar bleibt.
  */
@@ -27,7 +27,7 @@ export function buildLetterContext(context: LetterContext): string {
   const lines: string[] = [
     "Vorgangsdaten:",
     `- Titel: ${caseRow.title}`,
-    `- Behoerde: ${caseRow.authority_name ?? "nicht erkannt"}`,
+    `- Behörde: ${caseRow.authority_name ?? "nicht erkannt"}`,
     `- Vorgangsart: ${caseRow.case_type ?? "nicht erkannt"}`,
     `- Aktenzeichen: ${caseRow.reference_number ?? "nicht bekannt"}`,
   ];
@@ -61,11 +61,11 @@ export function buildLetterContext(context: LetterContext): string {
   lines.push(
     "",
     "Absenderin/Absender:",
-    `- Name: ${name || "[Name ergaenzen]"}`,
+    `- Name: ${name || "[Name ergänzen]"}`,
     `- Anschrift: ${
       profile?.street && profile.postal_code && profile.city
         ? `${profile.street}, ${profile.postal_code} ${profile.city}`
-        : "[Anschrift ergaenzen]"
+        : "[Anschrift ergänzen]"
     }`,
   );
 

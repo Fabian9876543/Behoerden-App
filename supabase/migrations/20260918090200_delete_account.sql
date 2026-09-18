@@ -1,11 +1,11 @@
 -- ===========================================================================
--- DSGVO: "Alle meine Daten loeschen"
+-- DSGVO: "Alle meine Daten löschen"
 --
--- Loescht saemtliche Fachdaten des aufrufenden Nutzers. Storage-Objekte
+-- Löscht sämtliche Fachdaten des aufrufenden Nutzers. Storage-Objekte
 -- werden separat von der Anwendung entfernt (siehe lib/storage/documents.ts),
 -- da SQL keinen Zugriff auf die Storage-API hat.
 --
--- Das Auth-Konto selbst wird ueber den Service-Role-Key geloescht.
+-- Das Auth-Konto selbst wird über den Service-Role-Key gelöscht.
 -- ===========================================================================
 
 create or replace function public.delete_my_data()
@@ -20,7 +20,7 @@ begin
     raise exception 'not authenticated';
   end if;
 
-  -- Reihenfolge respektiert die Fremdschluessel; RLS begrenzt zusaetzlich
+  -- Reihenfolge respektiert die Fremdschlüssel; RLS begrenzt zusätzlich
   -- jede Anweisung auf die eigenen Zeilen.
   delete from public.case_events        where user_id = uid;
   delete from public.generated_letters  where user_id = uid;

@@ -28,7 +28,7 @@ export default async function DeadlinesPage() {
         <div>
           <h1 className="text-2xl font-semibold tracking-tight">Fristen</h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            Alle Termine aus deinen Vorgaengen - nach Faelligkeit sortiert.
+            Alle Termine aus deinen Vorgängen - nach Fälligkeit sortiert.
           </p>
         </div>
 
@@ -46,7 +46,7 @@ export default async function DeadlinesPage() {
         <EmptyState
           icon={<CalendarClock className="size-8" />}
           title="Keine Fristen"
-          description="Fristen werden automatisch erkannt, sobald du einen Behoerdenbrief hochlaedst."
+          description="Fristen werden automatisch erkannt, sobald du einen Behördenbrief hochlädst."
         />
       ) : null}
 

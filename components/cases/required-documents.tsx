@@ -6,7 +6,7 @@ export function RequiredDocumentsList({ items }: { items: RequiredDocumentRow[] 
   if (items.length === 0) {
     return (
       <p className="text-sm text-muted-foreground">
-        Es wurden keine zusaetzlichen Unterlagen erkannt.
+        Es wurden keine zusätzlichen Unterlagen erkannt.
       </p>
     );
   }

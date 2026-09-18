@@ -11,7 +11,7 @@ export default function RegisterPage() {
       <CardHeader>
         <CardTitle className="text-lg">Konto erstellen</CardTitle>
         <CardDescription>
-          Behoerdenpost hochladen, Fristen im Blick behalten, nichts mehr verpassen.
+          Behördenpost hochladen, Fristen im Blick behalten, nichts mehr verpassen.
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">

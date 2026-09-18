@@ -1,7 +1,7 @@
 /**
  * Zentraler, validierter Zugriff auf Environment-Variablen.
  *
- * Serverseitige Keys werden bewusst ueber Funktionen ausgeliefert, damit sie
+ * Serverseitige Keys werden bewusst über Funktionen ausgeliefert, damit sie
  * niemals versehentlich in ein Client-Bundle inlined werden.
  */
 
@@ -9,13 +9,13 @@ function required(name: string, value: string | undefined): string {
   if (!value || value.trim() === "") {
     throw new Error(
       `Konfigurationsfehler: Umgebungsvariable ${name} fehlt. ` +
-        `Bitte .env.local anhand von .env.example ergaenzen.`,
+        `Bitte .env.local anhand von .env.example ergänzen.`,
     );
   }
   return value;
 }
 
-/** Oeffentliche Werte - duerfen im Client landen. */
+/** Oeffentliche Werte - dürfen im Client landen. */
 export const publicEnv = {
   supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL ?? "",
   supabaseAnonKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? "",
@@ -43,7 +43,7 @@ export function serverEnv() {
   };
 }
 
-/** Prueft ohne Exception, ob die KI-Integration konfiguriert ist. */
+/** Prüft ohne Exception, ob die KI-Integration konfiguriert ist. */
 export function isAiConfigured(): boolean {
   return Boolean(process.env.ANTHROPIC_API_KEY);
 }

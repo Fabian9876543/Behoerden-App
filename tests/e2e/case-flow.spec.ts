@@ -6,32 +6,32 @@ import { expect, test, type Page } from "@playwright/test";
  *
  *   Registrieren -> Onboarding -> Dokument hochladen -> Analyse
  *   -> Vorgang entsteht -> Aufgaben entstehen -> Frist erscheint
- *   -> Aufgabe abhaken -> Dokument loeschen
+ *   -> Aufgabe abhaken -> Dokument löschen
  *
  * Voraussetzungen (siehe README, Abschnitt "Tests"):
  *   - laufende Supabase-Instanz mit angewendeten Migrationen
- *   - E-Mail-Bestaetigung deaktiviert (supabase/config.toml)
- *   - gesetzter ANTHROPIC_API_KEY, damit die Analyse echt laeuft
+ *   - E-Mail-Bestätigung deaktiviert (supabase/config.toml)
+ *   - gesetzter ANTHROPIC_API_KEY, damit die Analyse echt läuft
  *
  * Der Test nutzt eine echte PDF-Datei und eine echte Claude-Analyse -
- * er prueft den Flow, nicht eine bestimmte Formulierung der KI.
+ * er prüft den Flow, nicht eine bestimmte Formulierung der KI.
  */
 
 const PASSWORD = "Test-Passwort-2026!";
 
-/** Minimales, gueltiges PDF mit dem Text eines Jobcenter-Schreibens. */
+/** Minimales, gültiges PDF mit dem Text eines Jobcenter-Schreibens. */
 function buildTestPdf(): Buffer {
   const lines = [
     "Jobcenter Musterstadt",
     "Aktenzeichen: E2E-12345/2026",
     "Datum: 18.09.2026",
-    "Weiterbewilligung Ihres Anspruchs auf Buergergeld",
+    "Weiterbewilligung Ihres Anspruchs auf Bürgergeld",
     "Sehr geehrte Damen und Herren,",
     "Ihr Bewilligungszeitraum endet am 31.10.2026. Bitte reichen Sie den",
     "Weiterbewilligungsantrag bis zum 15.10.2026 bei uns ein.",
-    "Benoetigte Unterlagen: Kontoauszuege der letzten drei Monate sowie",
+    "Benötigte Unterlagen: Kontoauszüge der letzten drei Monate sowie",
     "eine aktuelle Mietbescheinigung.",
-    "Mit freundlichen Gruessen",
+    "Mit freundlichen Grüßen",
   ];
 
   const textOps = lines
@@ -75,10 +75,10 @@ async function registerAndOnboard(page: Page): Promise<void> {
   await page.getByRole("button", { name: "Konto erstellen" }).click();
 
   await expect(
-    page.getByRole("heading", { name: /Wie moechtest du Behoerdenpost verwalten/i }),
+    page.getByRole("heading", { name: /Wie möchtest du Behördenpost verwalten/i }),
   ).toBeVisible({ timeout: 30_000 });
 
-  await page.getByText("Nur fuer mich").click();
+  await page.getByText("Nur für mich").click();
   await page.getByRole("button", { name: /Weiter zum Dashboard/i }).click();
 
   await expect(page.getByRole("heading", { name: /Guten (Morgen|Tag|Abend)/ })).toBeVisible({
@@ -130,19 +130,19 @@ test.describe("Zentraler Produkt-Loop", () => {
 
     // --- Dashboard zeigt den Vorgang --------------------------------------
     await page.goto("/dashboard");
-    await expect(page.getByRole("link", { name: /Vorgang oeffnen/ }).first()).toBeVisible();
+    await expect(page.getByRole("link", { name: /Vorgang öffnen/ }).first()).toBeVisible();
 
     // --- Frist erscheint in der Fristenliste -------------------------------
     await page.goto("/deadlines");
     await expect(page.getByText(/15\.10\.2026/).first()).toBeVisible();
 
-    // --- Dokument loeschen ------------------------------------------------
+    // --- Dokument löschen ------------------------------------------------
     await page.goto("/documents");
-    await page.getByRole("button", { name: /loeschen/i }).first().click();
+    await page.getByRole("button", { name: /löschen/i }).first().click();
     await expect(page.getByText("jobcenter-schreiben.pdf")).toBeHidden({ timeout: 30_000 });
   });
 
-  test("lehnt ein nicht unterstuetztes Dateiformat verstaendlich ab", async ({ page }) => {
+  test("lehnt ein nicht unterstütztes Dateiformat verständlich ab", async ({ page }) => {
     await registerAndOnboard(page);
 
     await page.setInputFiles('input[type="file"]', {
@@ -151,12 +151,12 @@ test.describe("Zentraler Produkt-Loop", () => {
       buffer: Buffer.from("a,b,c\n1,2,3\n"),
     });
 
-    await expect(page.getByText(/Dateiformat wird nicht unterstuetzt/i)).toBeVisible({
+    await expect(page.getByText(/Dateiformat wird nicht unterstützt/i)).toBeVisible({
       timeout: 20_000,
     });
   });
 
-  test("schuetzt App-Routen vor nicht angemeldeten Besuchern", async ({ page }) => {
+  test("schützt App-Routen vor nicht angemeldeten Besuchern", async ({ page }) => {
     await page.goto("/dashboard");
     await expect(page).toHaveURL(/\/login/);
   });

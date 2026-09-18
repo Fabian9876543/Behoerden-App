@@ -6,7 +6,7 @@ import { AppError, toUserMessage } from "@/lib/errors";
 
 /**
  * Diese Route liest Cookies bzw. Nutzerdaten und darf nie statisch
- * vorgerendert werden - sonst braeuchte schon der Build die Supabase-Keys.
+ * vorgerendert werden - sonst bräuchte schon der Build die Supabase-Keys.
  */
 export const dynamic = "force-dynamic";
 
@@ -14,8 +14,8 @@ export const dynamic = "force-dynamic";
 /**
  * Leitet auf eine kurzlebige signierte URL um.
  *
- * Der Bucket ist privat; ohne Session und Eigentuemerschaft gibt es keinen
- * Zugriff. Die URL ist 5 Minuten gueltig.
+ * Der Bucket ist privat; ohne Session und Eigentümerschaft gibt es keinen
+ * Zugriff. Die URL ist 5 Minuten gültig.
  */
 export async function GET(
   _request: Request,

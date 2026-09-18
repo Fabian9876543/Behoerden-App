@@ -10,8 +10,8 @@ import { log } from "@/lib/logging";
 /**
  * Zentraler Claude-Zugang.
  *
- * Alles, was mit der Anthropic-API spricht, laeuft ueber diese Datei:
- * Client-Erzeugung, strukturierte Ausgaben, Fehleruebersetzung.
+ * Alles, was mit der Anthropic-API spricht, läuft über diese Datei:
+ * Client-Erzeugung, strukturierte Ausgaben, Fehlerübersetzung.
  * Prompts liegen in lib/ai/prompts.ts, nie in UI-Komponenten.
  */
 
@@ -70,11 +70,11 @@ function toContentBlock(block: DocumentBlock): Anthropic.ContentBlockParam {
 }
 
 /**
- * Fuehrt einen Claude-Aufruf mit erzwungenem JSON-Schema aus.
+ * Führt einen Claude-Aufruf mit erzwungenem JSON-Schema aus.
  *
  * Wirft AppError("ai_unavailable") bei Transport-/API-Problemen und
  * AppError("ai_invalid_output"), wenn die Antwort nicht gegen das Schema
- * validiert. Es wird niemals ein teilweise geparstes Ergebnis zurueckgegeben.
+ * validiert. Es wird niemals ein teilweise geparstes Ergebnis zurückgegeben.
  */
 export async function requestStructured<TSchema extends z.ZodType>(
   request: StructuredRequest<TSchema>,
@@ -102,7 +102,7 @@ export async function requestStructured<TSchema extends z.ZodType>(
     if (response.stop_reason === "refusal") {
       throw new AppError(
         "ai_invalid_output",
-        "Die Analyse wurde fuer dieses Dokument abgelehnt. Bitte pruefe den Inhalt und versuche es erneut.",
+        "Die Analyse wurde für dieses Dokument abgelehnt. Bitte prüfe den Inhalt und versuche es erneut.",
       );
     }
 
@@ -115,7 +115,7 @@ export async function requestStructured<TSchema extends z.ZodType>(
       throw new AppError("ai_invalid_output");
     }
 
-    // Zweite, eigene Validierung: Wir vertrauen der Modellausgabe nie ungeprueft.
+    // Zweite, eigene Validierung: Wir vertrauen der Modellausgabe nie ungeprüft.
     const validated = request.schema.safeParse(parsed);
     if (!validated.success) {
       log.warn("claude_output_zod_mismatch", { model, issues: validated.error.issues.length });
@@ -141,7 +141,7 @@ export async function requestStructured<TSchema extends z.ZodType>(
     if (error instanceof Anthropic.AuthenticationError) {
       throw new AppError(
         "not_configured",
-        "Der Claude-API-Schluessel wurde nicht akzeptiert. Bitte ANTHROPIC_API_KEY pruefen.",
+        "Der Claude-API-Schlüssel wurde nicht akzeptiert. Bitte ANTHROPIC_API_KEY prüfen.",
         { cause: error },
       );
     }
@@ -149,7 +149,7 @@ export async function requestStructured<TSchema extends z.ZodType>(
   }
 }
 
-/** Freitextantwort - nur fuer OCR, wo es kein sinnvolles Schema gibt. */
+/** Freitextantwort - nur für OCR, wo es kein sinnvolles Schema gibt. */
 export async function requestText(params: {
   system: string;
   blocks: DocumentBlock[];

@@ -8,7 +8,7 @@ import { UserMenu } from "@/components/layout/user-menu";
 
 /**
  * Diese Route liest Cookies bzw. Nutzerdaten und darf nie statisch
- * vorgerendert werden - sonst braeuchte schon der Build die Supabase-Keys.
+ * vorgerendert werden - sonst bräuchte schon der Build die Supabase-Keys.
  */
 export const dynamic = "force-dynamic";
 
@@ -26,7 +26,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
         <div className="mx-auto flex h-14 w-full max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">
           <Link href="/dashboard" className="inline-flex items-center gap-2 font-semibold">
             <ShieldCheck className="size-5 text-primary" aria-hidden />
-            <span>BehoerdenBuddy</span>
+            <span>BehördenBuddy</span>
           </Link>
           <UserMenu email={user.email} />
         </div>

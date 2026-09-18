@@ -1,7 +1,7 @@
 /**
  * OCR-Schnittstelle.
  *
- * Bewusst minimal gehalten, damit der Provider spaeter ohne Aenderung an
+ * Bewusst minimal gehalten, damit der Provider später ohne Aenderung an
  * Aufrufern getauscht werden kann (z.B. Google Document AI, AWS Textract,
  * Azure Document Intelligence oder ein selbst gehostetes Tesseract).
  *

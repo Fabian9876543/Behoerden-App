@@ -5,8 +5,8 @@ import { requirePublicEnv, serverEnv } from "@/lib/env";
 import type { Database } from "@/lib/types/database";
 
 /**
- * Service-Role-Client. Umgeht RLS und wird ausschliesslich fuer Operationen
- * benutzt, die die Auth-Ebene betreffen (Account-Loeschung).
+ * Service-Role-Client. Umgeht RLS und wird ausschließlich für Operationen
+ * benutzt, die die Auth-Ebene betreffen (Account-Löschung).
  *
  * Jeder Aufruf MUSS vorher die User-ID aus der Session verifiziert haben.
  */
@@ -17,7 +17,7 @@ export function createSupabaseAdminClient() {
   if (!supabaseServiceRoleKey) {
     throw new Error(
       "SUPABASE_SERVICE_ROLE_KEY ist nicht gesetzt. " +
-        "Die vollstaendige Kontoloeschung steht ohne diesen Key nicht zur Verfuegung.",
+        "Die vollständige Kontolöschung steht ohne diesen Key nicht zur Verfügung.",
     );
   }
 

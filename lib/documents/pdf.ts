@@ -14,7 +14,7 @@ export interface PdfExtraction {
 /**
  * Extrahiert Text aus einem PDF.
  *
- * Kapselt `unpdf` vollstaendig, damit die Bibliothek spaeter ohne Aenderung
+ * Kapselt `unpdf` vollständig, damit die Bibliothek später ohne Aenderung
  * an Aufrufern getauscht werden kann.
  */
 export async function extractPdfPages(bytes: Uint8Array): Promise<PdfExtraction> {

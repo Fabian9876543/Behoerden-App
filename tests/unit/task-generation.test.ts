@@ -23,15 +23,15 @@ describe("generateCaseShape", () => {
     expect(shape.tasks.map((t) => t.position)).toEqual([0, 1, 2]);
   });
 
-  it("verknuepft eine Aufgabe ueber ihr Datum mit der Frist", () => {
+  it("verknüpft eine Aufgabe über ihr Datum mit der Frist", () => {
     const shape = generateCaseShape(makeAnalysis(), NOW);
     const linked = shape.tasks.find((task) =>
-      task.title.includes("Kontoauszuege"),
+      task.title.includes("Kontoauszüge"),
     );
     expect(linked?.deadlineIndex).toBe(0);
   });
 
-  it("uebernimmt das Fristdatum, wenn es nur eine Frist gibt", () => {
+  it("übernimmt das Fristdatum, wenn es nur eine Frist gibt", () => {
     const shape = generateCaseShape(makeAnalysis(), NOW);
     const miete = shape.tasks.find((task) => task.title.includes("Mietbescheinigung"));
     expect(miete?.dueDate).toBe("2026-10-15");
@@ -39,7 +39,7 @@ describe("generateCaseShape", () => {
 
   it("entfernt doppelte Aufgaben", () => {
     const duplicate = {
-      title: "Kontoauszuege der letzten drei Monate hochladen",
+      title: "Kontoauszüge der letzten drei Monate hochladen",
       description: null,
       deadline: null,
       required: true,
@@ -55,7 +55,7 @@ describe("generateCaseShape", () => {
     expect(shape.tasks).toHaveLength(3);
   });
 
-  it("entfernt doppelte Fristen und behaelt die hoehere Konfidenz", () => {
+  it("entfernt doppelte Fristen und behält die höhere Konfidenz", () => {
     const analysis = makeAnalysis();
     const shape = generateCaseShape(
       {
@@ -71,11 +71,11 @@ describe("generateCaseShape", () => {
     expect(shape.deadlines[0]?.confidence).toBe(0.99);
   });
 
-  it("uebernimmt die Quellenangaben in Aufgaben und Fristen", () => {
+  it("übernimmt die Quellenangaben in Aufgaben und Fristen", () => {
     const shape = generateCaseShape(makeAnalysis(), NOW);
     expect(shape.deadlines[0]?.sourcePage).toBe(1);
     expect(shape.deadlines[0]?.sourceText).toContain("15.10.2026");
-    const konto = shape.tasks.find((t) => t.title.includes("Kontoauszuege"));
+    const konto = shape.tasks.find((t) => t.title.includes("Kontoauszüge"));
     expect(konto?.sourcePage).toBe(2);
   });
 });
@@ -101,7 +101,7 @@ describe("deriveCaseStatus", () => {
     expect(deriveCaseStatus([task(false)])).toBe("waiting_on_user");
   });
 
-  it("wartet auf die Behoerde, wenn nichts zu tun ist", () => {
+  it("wartet auf die Behörde, wenn nichts zu tun ist", () => {
     expect(deriveCaseStatus([])).toBe("waiting_on_authority");
   });
 });
@@ -116,7 +116,7 @@ describe("derivePriority", () => {
     confidence: 1,
   });
 
-  it("stuft eine ueberfaellige Frist als dringend ein", () => {
+  it("stuft eine überfällige Frist als dringend ein", () => {
     expect(derivePriority([deadline("2026-09-01")], [], NOW)).toBe("critical");
   });
 

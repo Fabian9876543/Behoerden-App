@@ -14,13 +14,13 @@ import {
 const UUID = "44444444-4444-4444-8444-444444444444";
 
 describe("credentialsSchema", () => {
-  it("akzeptiert gueltige Zugangsdaten", () => {
+  it("akzeptiert gültige Zugangsdaten", () => {
     expect(
       credentialsSchema.safeParse({ email: "a@b.de", password: "12345678" }).success,
     ).toBe(true);
   });
 
-  it("lehnt kurze Passwoerter und kaputte Mails ab", () => {
+  it("lehnt kurze Passwörter und kaputte Mails ab", () => {
     expect(credentialsSchema.safeParse({ email: "a@b.de", password: "123" }).success).toBe(false);
     expect(
       credentialsSchema.safeParse({ email: "keine-mail", password: "12345678" }).success,
@@ -31,7 +31,7 @@ describe("credentialsSchema", () => {
     const result = credentialsSchema.safeParse({ email: "x", password: "12345678" });
     expect(result.success).toBe(false);
     if (!result.success) {
-      expect(firstIssueMessage(result.error)).toBe("Ungueltige E-Mail-Adresse.");
+      expect(firstIssueMessage(result.error)).toBe("Ungültige E-Mail-Adresse.");
     }
   });
 });
@@ -57,21 +57,21 @@ describe("profileSchema", () => {
     expect(result.success).toBe(true);
   });
 
-  it("prueft die Postleitzahl", () => {
+  it("prüft die Postleitzahl", () => {
     expect(profileSchema.safeParse({ postalCode: "12345" }).success).toBe(true);
     expect(profileSchema.safeParse({ postalCode: "123" }).success).toBe(false);
   });
 });
 
 describe("createCaseSchema", () => {
-  it("verlangt einen aussagekraeftigen Titel", () => {
+  it("verlangt einen aussagekräftigen Titel", () => {
     expect(createCaseSchema.safeParse({ title: "Wohngeld" }).success).toBe(true);
     expect(createCaseSchema.safeParse({ title: "ab" }).success).toBe(false);
   });
 });
 
 describe("createTaskSchema", () => {
-  it("verlangt eine gueltige Vorgangs-ID", () => {
+  it("verlangt eine gültige Vorgangs-ID", () => {
     expect(
       createTaskSchema.safeParse({ caseId: "keine-uuid", title: "Etwas tun" }).success,
     ).toBe(false);

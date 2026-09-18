@@ -3,7 +3,7 @@ import { getSessionUser, getProfile } from "@/lib/auth";
 
 /**
  * Diese Route liest Cookies bzw. Nutzerdaten und darf nie statisch
- * vorgerendert werden - sonst braeuchte schon der Build die Supabase-Keys.
+ * vorgerendert werden - sonst bräuchte schon der Build die Supabase-Keys.
  */
 export const dynamic = "force-dynamic";
 

@@ -7,23 +7,23 @@ import { z } from "zod";
  * niemals direkt aus FormData oder JSON lesen.
  */
 
-const uuid = z.uuid("Ungueltige ID.");
+const uuid = z.uuid("Ungültige ID.");
 const isoDate = z
   .string()
-  .regex(/^\d{4}-\d{2}-\d{2}$/, "Bitte ein gueltiges Datum angeben.");
+  .regex(/^\d{4}-\d{2}-\d{2}$/, "Bitte ein gültiges Datum angeben.");
 
 export const credentialsSchema = z.object({
   email: z
     .string()
     .trim()
     .min(1, "Bitte E-Mail-Adresse angeben.")
-    .pipe(z.email("Ungueltige E-Mail-Adresse.")),
+    .pipe(z.email("Ungültige E-Mail-Adresse.")),
   password: z.string().min(8, "Das Passwort muss mindestens 8 Zeichen lang sein."),
 });
 
 export const onboardingSchema = z.object({
   householdMode: z.enum(["personal", "family"], {
-    error: "Bitte eine Option waehlen.",
+    error: "Bitte eine Option wählen.",
   }),
 });
 
@@ -36,7 +36,7 @@ export const profileSchema = z.object({
     .string()
     .trim()
     .max(10)
-    .refine((v) => v === "" || /^\d{5}$/.test(v), "Bitte eine fuenfstellige PLZ angeben.")
+    .refine((v) => v === "" || /^\d{5}$/.test(v), "Bitte eine fünfstellige PLZ angeben.")
     .optional()
     .or(z.literal("")),
   city: z.string().trim().max(120).optional().or(z.literal("")),
@@ -99,7 +99,7 @@ export const updateDeadlineSchema = z.object({
 
 export const generateLetterSchema = z.object({
   caseId: uuid,
-  intent: z.string().trim().min(1, "Bitte ein Anliegen waehlen.").max(60),
+  intent: z.string().trim().min(1, "Bitte ein Anliegen wählen.").max(60),
   note: z.string().trim().max(1000).optional().or(z.literal("")),
 });
 
@@ -116,9 +116,9 @@ export const uploadMetadataSchema = z.object({
   caseId: uuid.optional().nullable(),
 });
 
-/** Erste Fehlermeldung eines Zod-Fehlers - fuer die Anzeige im Formular. */
+/** Erste Fehlermeldung eines Zod-Fehlers - für die Anzeige im Formular. */
 export function firstIssueMessage(error: z.ZodError): string {
-  return error.issues[0]?.message ?? "Die Eingabe ist ungueltig.";
+  return error.issues[0]?.message ?? "Die Eingabe ist ungültig.";
 }
 
 /** Normalisiert optionale Textfelder: "" -> null. */

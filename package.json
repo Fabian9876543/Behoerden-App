@@ -2,7 +2,7 @@
   "name": "behoerdenbuddy",
   "version": "0.1.0",
   "private": true,
-  "description": "BehoerdenBuddy - Case Manager fuer persoenliche Behoerdenangelegenheiten",
+  "description": "BehördenBuddy - Case Manager für persönliche Behördenangelegenheiten",
   "scripts": {
     "dev": "next dev",
     "build": "next build",

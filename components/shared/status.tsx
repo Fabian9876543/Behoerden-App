@@ -11,7 +11,7 @@ import type {
 export const CASE_STATUS_LABELS: Record<CaseStatus, string> = {
   action_required: "Aktion erforderlich",
   waiting_on_user: "Wartet auf dich",
-  waiting_on_authority: "Wartet auf Behoerde",
+  waiting_on_authority: "Wartet auf Behörde",
   in_progress: "In Bearbeitung",
   completed: "Abgeschlossen",
 };
@@ -38,8 +38,8 @@ export function CaseStatusBadge({ status }: { status: CaseStatus }) {
 
 export const DEADLINE_STATUS_LABELS: Record<DeadlineStatus, string> = {
   upcoming: "Anstehend",
-  due_soon: "Bald faellig",
-  overdue: "Ueberfaellig",
+  due_soon: "Bald fällig",
+  overdue: "Überfällig",
   met: "Erledigt",
   dismissed: "Verworfen",
 };
@@ -76,7 +76,7 @@ export const TASK_STATUS_LABELS: Record<TaskStatus, string> = {
   open: "Offen",
   in_progress: "In Arbeit",
   completed: "Erledigt",
-  dismissed: "Nicht noetig",
+  dismissed: "Nicht nötig",
 };
 
 export const DOCUMENT_STATUS_LABELS: Record<DocumentStatus, string> = {

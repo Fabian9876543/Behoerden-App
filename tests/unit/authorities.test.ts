@@ -16,15 +16,15 @@ describe("matchAuthorityKey", () => {
     expect(matchAuthorityKey("Bürgergeld-Stelle")).toBe("jobcenter");
     expect(matchAuthorityKey("Deutsche Rentenversicherung Bund")).toBe("rentenversicherung");
     expect(matchAuthorityKey("Ausländerbehörde der Stadt Musterstadt")).toBe(
-      "auslaenderbehoerde",
+      "ausländerbehörde",
     );
   });
 
-  it("erkennt eine Behoerde in einem laengeren Namen", () => {
+  it("erkennt eine Behörde in einem längeren Namen", () => {
     expect(matchAuthorityKey("Jobcenter Musterstadt - Team 42")).toBe("jobcenter");
   });
 
-  it("gibt null bei unbekannten Behoerden zurueck", () => {
+  it("gibt null bei unbekannten Behörden zurück", () => {
     expect(matchAuthorityKey("Musterverein e.V.")).toBeNull();
     expect(matchAuthorityKey(null)).toBeNull();
     expect(matchAuthorityKey("")).toBeNull();
@@ -32,11 +32,11 @@ describe("matchAuthorityKey", () => {
 });
 
 describe("getAuthority", () => {
-  it("liefert den Eintrag zum Schluessel", () => {
+  it("liefert den Eintrag zum Schlüssel", () => {
     expect(getAuthority("jobcenter")?.name).toBe("Jobcenter");
   });
 
-  it("liefert null bei unbekanntem Schluessel", () => {
+  it("liefert null bei unbekanntem Schlüssel", () => {
     expect(getAuthority("gibtsnicht")).toBeNull();
     expect(getAuthority(null)).toBeNull();
   });
@@ -44,7 +44,7 @@ describe("getAuthority", () => {
 
 describe("isOfficialAuthorityUrl", () => {
   it("akzeptiert bekannte offizielle Quellen", () => {
-    expect(isOfficialAuthorityUrl("https://www.arbeitsagentur.de/buergergeld")).toBe(true);
+    expect(isOfficialAuthorityUrl("https://www.arbeitsagentur.de/bürgergeld")).toBe(true);
     expect(isOfficialAuthorityUrl("https://www.elster.de")).toBe(true);
     expect(isOfficialAuthorityUrl("https://service.bund.de/formulare")).toBe(true);
   });
@@ -54,7 +54,7 @@ describe("isOfficialAuthorityUrl", () => {
     expect(isOfficialAuthorityUrl("https://hartz4hilfe.de")).toBe(false);
   });
 
-  it("lehnt unverschluesselte Verbindungen ab", () => {
+  it("lehnt unverschlüsselte Verbindungen ab", () => {
     expect(isOfficialAuthorityUrl("http://www.arbeitsagentur.de")).toBe(false);
   });
 
@@ -62,14 +62,14 @@ describe("isOfficialAuthorityUrl", () => {
     expect(isOfficialAuthorityUrl("nicht-mal-eine-url")).toBe(false);
   });
 
-  it("laesst sich nicht durch angehaengte Domains taeuschen", () => {
-    expect(isOfficialAuthorityUrl("https://elster.de.boese.example")).toBe(false);
+  it("lässt sich nicht durch angehängte Domains täuschen", () => {
+    expect(isOfficialAuthorityUrl("https://elster.de.böse.example")).toBe(false);
     expect(isOfficialAuthorityUrl("https://bund.de.evil.com")).toBe(false);
   });
 });
 
 describe("AUTHORITIES", () => {
-  it("hat eindeutige Schluessel", () => {
+  it("hat eindeutige Schlüssel", () => {
     const keys = AUTHORITIES.map((a) => a.key);
     expect(new Set(keys).size).toBe(keys.length);
   });

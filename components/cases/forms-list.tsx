@@ -4,15 +4,15 @@ import type { FormRow } from "@/lib/types/database";
 
 const SOURCE_LABELS: Record<FormRow["source_kind"], string> = {
   official_catalog: "Offizielle Quelle",
-  authority_website: "Behoerdenwebsite",
-  unverified: "Quelle ungeprueft",
+  authority_website: "Behördenwebsite",
+  unverified: "Quelle ungeprüft",
 };
 
 /**
  * Formulare zum Vorgang.
  *
  * Eine Quelle wird nur dann als offiziell ausgewiesen, wenn sie aus dem
- * hinterlegten Katalog stammt. Alles andere wird sichtbar als ungeprueft
+ * hinterlegten Katalog stammt. Alles andere wird sichtbar als ungeprüft
  * gekennzeichnet - niemals als Tatsache dargestellt.
  */
 export function FormsList({ forms }: { forms: FormRow[] }) {
@@ -54,7 +54,7 @@ export function FormsList({ forms }: { forms: FormRow[] }) {
             <p className="mt-2 flex items-start gap-1.5 text-xs text-status-warning">
               <FileWarning className="mt-px size-3.5 shrink-0" aria-hidden />
               Zu diesem Formular ist keine offizielle Quelle hinterlegt. Bitte suche es auf der
-              Website der zustaendigen Behoerde.
+              Website der zuständigen Behörde.
             </p>
           )}
         </li>

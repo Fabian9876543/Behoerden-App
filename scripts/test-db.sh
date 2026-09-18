@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 #
-# Prueft die Migrationen und die Row Level Security gegen echtes PostgreSQL.
+# Prüft die Migrationen und die Row Level Security gegen echtes PostgreSQL.
 #
 # Startet einen temporaeren Cluster, spielt Harness und Migrationen ein, fuehrt
-# supabase/tests/rls.sql aus und raeumt danach auf. Braucht kein Docker und
+# supabase/tests/rls.sql aus und räumt danach auf. Braucht kein Docker und
 # keine laufende Supabase-Instanz - nur PostgreSQL-Binaries.
 #
 #   npm run test:db
@@ -20,7 +20,7 @@ if [ "$(id -u)" -eq 0 ]; then
   if id -u postgres >/dev/null 2>&1; then
     RUN_AS="postgres"
   else
-    echo "Als root wird ein Systemnutzer 'postgres' benoetigt." >&2
+    echo "Als root wird ein Systemnutzer 'postgres' benötigt." >&2
     exit 1
   fi
 fi
@@ -101,7 +101,7 @@ grep -vE '^[[:space:]]*$|^ (assert|assert_denied|delete_my_data) *$|^-+$|^\(1 ro
 ASSERTIONS="$(grep -cE 'OK {4}' "$WORKDIR/rls.log" || true)"
 EXPECTED="${PGTEST_MIN_ASSERTIONS:-26}"
 if [ "$ASSERTIONS" -lt "$EXPECTED" ]; then
-  echo "Nur $ASSERTIONS von mindestens $EXPECTED Zusicherungen gelaufen - Test unvollstaendig." >&2
+  echo "Nur $ASSERTIONS von mindestens $EXPECTED Zusicherungen gelaufen - Test unvollständig." >&2
   exit 1
 fi
 

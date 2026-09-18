@@ -1,8 +1,8 @@
 /**
  * Minimales Logging.
  *
- * Datenschutz: Es werden ausschliesslich IDs, Zaehler und Fehlercodes
- * geloggt. Dokumentinhalte, extrahierter Text, Adressen und Namen duerfen
+ * Datenschutz: Es werden ausschließlich IDs, Zähler und Fehlercodes
+ * geloggt. Dokumentinhalte, extrahierter Text, Adressen und Namen dürfen
  * niemals in ein Log gelangen.
  */
 

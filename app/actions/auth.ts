@@ -67,7 +67,7 @@ export async function signUpAction(
   if (!data.session) {
     return {
       error:
-        "Fast geschafft: Bitte bestaetige zuerst die E-Mail-Adresse ueber den Link in deinem Postfach.",
+        "Fast geschafft: Bitte bestätige zuerst die E-Mail-Adresse über den Link in deinem Postfach.",
     };
   }
 

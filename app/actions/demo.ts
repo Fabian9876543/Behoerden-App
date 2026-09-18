@@ -11,14 +11,14 @@ import { recordCaseEvents } from "@/lib/db/events";
 /**
  * Demo-Vorgang.
  *
- * Erzeugt einen vollstaendigen Beispielfall, damit die App auch ohne eigenen
- * Behoerdenbrief erlebbar ist. Alle erzeugten Zeilen tragen `is_demo = true`
+ * Erzeugt einen vollständigen Beispielfall, damit die App auch ohne eigenen
+ * Behördenbrief erlebbar ist. Alle erzeugten Zeilen tragen `is_demo = true`
  * und sind in der UI als Demo gekennzeichnet.
  *
  * Es wird KEINE Datei im Storage angelegt: Ein Demo-Dokument ohne echte Datei
- * waere ein Dokument, das man nicht oeffnen kann. Stattdessen wird der
+ * wäre ein Dokument, das man nicht öffnen kann. Stattdessen wird der
  * Beispielbrief als Dokumenteintrag mit Status "analyzed" und hinterlegtem
- * Beispieltext gefuehrt.
+ * Beispieltext geführt.
  */
 export async function createDemoCaseAction(): Promise<ActionResult<{ caseId: string }>> {
   try {
@@ -31,7 +31,7 @@ export async function createDemoCaseAction(): Promise<ActionResult<{ caseId: str
 
     const caseRow = await createCase({
       userId: user.id,
-      title: "[Demo] Weiterbewilligung Buergergeld",
+      title: "[Demo] Weiterbewilligung Bürgergeld",
       authorityName: "Jobcenter",
       authorityKey: "jobcenter",
       caseType: "weiterbewilligung",
@@ -40,7 +40,7 @@ export async function createDemoCaseAction(): Promise<ActionResult<{ caseId: str
       priority: "critical",
       summary:
         "Beispielvorgang: Das Jobcenter fordert zur Weiterbewilligung der Leistungen Unterlagen an. "
-        + "Der Weiterbewilligungsantrag und die Nachweise muessen bis zum 15.10.2026 eingereicht werden.",
+        + "Der Weiterbewilligungsantrag und die Nachweise müssen bis zum 15.10.2026 eingereicht werden.",
       isDemo: true,
     });
 
@@ -63,15 +63,15 @@ export async function createDemoCaseAction(): Promise<ActionResult<{ caseId: str
       extracted_text:
         "--- Seite 1 ---\n"
         + "Jobcenter Musterstadt\nAktenzeichen: DEMO-12345/2026\nDatum: 18.09.2026\n\n"
-        + "Weiterbewilligung Ihres Anspruchs auf Buergergeld\n\n"
+        + "Weiterbewilligung Ihres Anspruchs auf Bürgergeld\n\n"
         + "Sehr geehrte Damen und Herren,\n\n"
         + "Ihr aktueller Bewilligungszeitraum endet am 31.10.2026. Damit die Leistungen "
-        + "ohne Unterbrechung weitergezahlt werden koennen, reichen Sie bitte den "
+        + "ohne Unterbrechung weitergezahlt werden können, reichen Sie bitte den "
         + "Weiterbewilligungsantrag sowie die unten genannten Unterlagen bis zum "
         + "15.10.2026 bei uns ein.\n\n"
         + "--- Seite 2 ---\n"
-        + "Benoetigte Unterlagen:\n"
-        + "- Kontoauszuege der letzten drei Monate aller Konten\n"
+        + "Benötigte Unterlagen:\n"
+        + "- Kontoauszüge der letzten drei Monate aller Konten\n"
         + "- Aktuelle Mietbescheinigung bzw. Nachweis der Kosten der Unterkunft\n\n"
         + "Bitte verwenden Sie den beiliegenden Weiterbewilligungsantrag (WBA).",
     });
@@ -103,8 +103,8 @@ export async function createDemoCaseAction(): Promise<ActionResult<{ caseId: str
         case_id: caseRow.id,
         source_document_id: documentId,
         deadline_id: deadline?.id ?? null,
-        title: "Weiterbewilligungsantrag (WBA) ausfuellen",
-        description: "Den Weiterbewilligungsantrag vollstaendig ausfuellen und unterschreiben.",
+        title: "Weiterbewilligungsantrag (WBA) ausfüllen",
+        description: "Den Weiterbewilligungsantrag vollständig ausfüllen und unterschreiben.",
         is_required: true,
         due_date: deadlineDate,
         position: 0,
@@ -118,12 +118,12 @@ export async function createDemoCaseAction(): Promise<ActionResult<{ caseId: str
         case_id: caseRow.id,
         source_document_id: documentId,
         deadline_id: deadline?.id ?? null,
-        title: "Kontoauszuege der letzten drei Monate hochladen",
-        description: "Auszuege aller Konten, lueckenlos fuer die letzten drei Monate.",
+        title: "Kontoauszüge der letzten drei Monate hochladen",
+        description: "Auszüge aller Konten, lückenlos für die letzten drei Monate.",
         is_required: true,
         due_date: deadlineDate,
         position: 1,
-        source_text: "Kontoauszuege der letzten drei Monate aller Konten",
+        source_text: "Kontoauszüge der letzten drei Monate aller Konten",
         source_page: 2,
         confidence: 0.94,
         generated_by: "demo",
@@ -134,7 +134,7 @@ export async function createDemoCaseAction(): Promise<ActionResult<{ caseId: str
         source_document_id: documentId,
         deadline_id: deadline?.id ?? null,
         title: "Aktuelle Mietbescheinigung beschaffen",
-        description: "Nachweis ueber die Kosten der Unterkunft, von der Vermietung ausgefuellt.",
+        description: "Nachweis über die Kosten der Unterkunft, von der Vermietung ausgefüllt.",
         is_required: true,
         due_date: deadlineDate,
         position: 2,
@@ -150,8 +150,8 @@ export async function createDemoCaseAction(): Promise<ActionResult<{ caseId: str
         user_id: user.id,
         case_id: caseRow.id,
         source_document_id: documentId,
-        name: "Kontoauszuege der letzten drei Monate",
-        description: "Alle Konten, lueckenlos.",
+        name: "Kontoauszüge der letzten drei Monate",
+        description: "Alle Konten, lückenlos.",
         is_required: true,
       },
       {
@@ -167,12 +167,12 @@ export async function createDemoCaseAction(): Promise<ActionResult<{ caseId: str
     await supabase.from("forms").insert({
       user_id: user.id,
       case_id: caseRow.id,
-      name: "Weiterbewilligungsantrag Buergergeld",
+      name: "Weiterbewilligungsantrag Bürgergeld",
       form_number: "WBA",
       description: "Antrag auf Weiterbewilligung der Leistungen nach dem SGB II.",
-      official_url: "https://www.arbeitsagentur.de/arbeitslos-arbeit-finden/buergergeld",
+      official_url: "https://www.arbeitsagentur.de/arbeitslos-arbeit-finden/bürgergeld",
       source_kind: "official_catalog",
-      source_label: "Bundesagentur fuer Arbeit",
+      source_label: "Bundesagentur für Arbeit",
       authority_key: "jobcenter",
     });
 
@@ -196,7 +196,7 @@ export async function createDemoCaseAction(): Promise<ActionResult<{ caseId: str
         userId: user.id,
         caseId: caseRow.id,
         type: "authority_detected",
-        title: "Behoerde erkannt: Jobcenter",
+        title: "Behörde erkannt: Jobcenter",
         metadata: { confidence: 0.96 },
       },
       {

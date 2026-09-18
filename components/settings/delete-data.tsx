@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 /**
- * DSGVO-Funktion: alle eigenen Daten loeschen.
+ * DSGVO-Funktion: alle eigenen Daten löschen.
  * Bewusst mit expliziter Texteingabe als Schutz vor Fehlklicks.
  */
 export function DeleteDataSection() {
@@ -27,8 +27,8 @@ export function DeleteDataSection() {
         <span className="flex items-start gap-2">
           <AlertTriangle className="mt-0.5 size-4 shrink-0" aria-hidden />
           <span>
-            Dabei werden alle Vorgaenge, Dokumente, Aufgaben, Fristen und Entwuerfe
-            unwiderruflich geloescht - auch die hochgeladenen Dateien.
+            Dabei werden alle Vorgänge, Dokumente, Aufgaben, Fristen und Entwürfe
+            unwiderruflich gelöscht - auch die hochgeladenen Dateien.
           </span>
         </span>
       </Alert>
@@ -40,7 +40,7 @@ export function DeleteDataSection() {
             const result = await deleteAllDataAction(formData);
             // Bei Erfolg leitet die Action zum Login um; hier landet nur der Fehlerfall.
             if (result && !result.ok) {
-              setError(result.error?.message ?? "Das Loeschen ist fehlgeschlagen.");
+              setError(result.error?.message ?? "Das Löschen ist fehlgeschlagen.");
             }
           });
         }}
@@ -48,7 +48,7 @@ export function DeleteDataSection() {
       >
         <div className="space-y-1.5">
           <Label htmlFor="confirmation">
-            Tippe zur Bestaetigung <strong className="font-mono">LOESCHEN</strong>
+            Tippe zur Bestätigung <strong className="font-mono">LOESCHEN</strong>
           </Label>
           <Input
             id="confirmation"
@@ -64,12 +64,12 @@ export function DeleteDataSection() {
           <Checkbox
             checked={deleteAccount}
             onCheckedChange={(value) => setDeleteAccount(value === true)}
-            aria-label="Konto vollstaendig loeschen"
+            aria-label="Konto vollständig löschen"
           />
           <span>
-            Auch mein Konto vollstaendig loeschen
+            Auch mein Konto vollständig löschen
             <span className="block text-xs text-muted-foreground">
-              Danach ist keine Anmeldung mehr moeglich.
+              Danach ist keine Anmeldung mehr möglich.
             </span>
           </span>
         </label>
@@ -79,7 +79,7 @@ export function DeleteDataSection() {
         {error ? <Alert variant="critical">{error}</Alert> : null}
 
         <Button type="submit" variant="destructive" disabled={!canSubmit || pending}>
-          {pending ? "Wird geloescht..." : "Alle meine Daten loeschen"}
+          {pending ? "Wird gelöscht..." : "Alle meine Daten löschen"}
         </Button>
       </form>
     </div>

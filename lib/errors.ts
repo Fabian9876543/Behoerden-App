@@ -1,7 +1,7 @@
 /**
  * Fehlerbehandlung.
  *
- * Grundsatz: Der Nutzer sieht eine verstaendliche deutsche Meldung.
+ * Grundsatz: Der Nutzer sieht eine verständliche deutsche Meldung.
  * Technische Details bleiben im Server-Log - und dort ohne Dokumentinhalte.
  */
 
@@ -23,22 +23,22 @@ export type AppErrorCode =
 const USER_MESSAGES: Record<AppErrorCode, string> = {
   unauthorized: "Bitte melde dich an, um fortzufahren.",
   not_found: "Der gesuchte Eintrag wurde nicht gefunden.",
-  validation_failed: "Die Eingabe ist unvollstaendig oder ungueltig.",
-  file_too_large: "Die Datei ist zu gross. Erlaubt sind maximal 10 MB.",
+  validation_failed: "Die Eingabe ist unvollständig oder ungültig.",
+  file_too_large: "Die Datei ist zu groß. Erlaubt sind maximal 10 MB.",
   unsupported_file_type:
-    "Dieses Dateiformat wird nicht unterstuetzt. Moeglich sind PDF, JPG und PNG.",
+    "Dieses Dateiformat wird nicht unterstützt. Möglich sind PDF, JPG und PNG.",
   pdf_unreadable:
     "Das PDF konnte nicht gelesen werden. Bitte versuche es mit einem Foto oder Scan der Seiten.",
   ocr_failed:
-    "Der Text im Dokument konnte nicht erkannt werden. Bitte lade ein schaerferes Foto oder ein PDF hoch.",
+    "Der Text im Dokument konnte nicht erkannt werden. Bitte lade ein schärferes Foto oder ein PDF hoch.",
   ai_unavailable:
-    "Die Analyse ist derzeit nicht erreichbar. Das Dokument ist gespeichert - du kannst die Analyse spaeter erneut starten.",
+    "Die Analyse ist derzeit nicht erreichbar. Das Dokument ist gespeichert - du kannst die Analyse später erneut starten.",
   ai_invalid_output:
     "Die Analyse hat kein verwertbares Ergebnis geliefert. Bitte starte die Analyse erneut.",
   storage_failed: "Die Datei konnte nicht gespeichert werden. Bitte versuche es erneut.",
   database_failed: "Die Daten konnten nicht gespeichert werden. Bitte versuche es erneut.",
   not_configured:
-    "Die Anwendung ist noch nicht vollstaendig konfiguriert. Bitte pruefe die Umgebungsvariablen.",
+    "Die Anwendung ist noch nicht vollständig konfiguriert. Bitte prüfe die Umgebungsvariablen.",
   unknown: "Es ist ein unerwarteter Fehler aufgetreten. Bitte versuche es erneut.",
 };
 

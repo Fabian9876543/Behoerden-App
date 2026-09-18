@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
  * Quellenangabe zu einer KI-extrahierten Information.
  *
  * Nachvollziehbarkeit ist ein Kernversprechen des Produkts: Jede Frist und
- * jede Aufgabe zeigt, worauf sie sich stuetzt - und markiert sichtbar, wenn
+ * jede Aufgabe zeigt, worauf sie sich stützt - und markiert sichtbar, wenn
  * die Erkennung unsicher war.
  */
 export function EvidenceNote({
@@ -43,7 +43,7 @@ export function EvidenceNote({
               &bdquo;{sourceText}&ldquo;
             </blockquote>
           ) : (
-            <p className="mt-2 pl-3">Kein woertliches Zitat hinterlegt.</p>
+            <p className="mt-2 pl-3">Kein wörtliches Zitat hinterlegt.</p>
           )}
         </details>
       ) : null}
@@ -51,7 +51,7 @@ export function EvidenceNote({
       {uncertain ? (
         <p className="flex items-start gap-1.5 text-xs text-status-warning">
           <Info className="mt-px size-3.5 shrink-0" aria-hidden />
-          <span>Nicht eindeutig erkannt. Bitte ueberpruefe diese Angabe.</span>
+          <span>Nicht eindeutig erkannt. Bitte überprüfe diese Angabe.</span>
         </p>
       ) : null}
     </div>
@@ -65,7 +65,7 @@ export function UncertaintyNotes({ notes }: { notes: string[] }) {
     <div className="rounded-lg border border-status-warning/30 bg-status-warning/8 px-4 py-3">
       <p className="mb-1.5 flex items-center gap-2 text-sm font-medium">
         <Info className="size-4 text-status-warning" aria-hidden />
-        Bitte selbst pruefen
+        Bitte selbst prüfen
       </p>
       <ul className="list-disc space-y-1 pl-5 text-sm text-muted-foreground">
         {notes.map((note, index) => (

@@ -8,7 +8,7 @@ export type { OcrInput, OcrProvider, OcrResult } from "@/lib/ocr/provider";
 
 /**
  * Registrierte OCR-Provider, in Reihenfolge der Bevorzugung.
- * Neue Provider werden hier ergaenzt - Aufrufer bleiben unveraendert.
+ * Neue Provider werden hier ergänzt - Aufrufer bleiben unverändert.
  */
 const PROVIDERS: OcrProvider[] = [claudeVisionOcr];
 

@@ -1,5 +1,5 @@
 -- ===========================================================================
--- BehoerdenBuddy - Initiales Schema
+-- BehördenBuddy - Initiales Schema
 --
 -- Grundregeln:
 --   * Jede Tabelle ist user-scoped (Spalte user_id -> auth.users).
@@ -15,7 +15,7 @@ create extension if not exists "pgcrypto";
 create type case_status as enum (
   'action_required',   -- Aktion erforderlich
   'waiting_on_user',   -- Wartet auf Nutzer
-  'waiting_on_authority', -- Wartet auf Behoerde
+  'waiting_on_authority', -- Wartet auf Behörde
   'in_progress',       -- In Bearbeitung
   'completed'          -- Abgeschlossen
 );
@@ -72,7 +72,7 @@ create table public.profiles (
 );
 
 comment on table public.profiles is
-  'Minimales Nutzerprofil. Nur Daten, die spaeter zum Vorbefuellen von Formularen gebraucht werden.';
+  'Minimales Nutzerprofil. Nur Daten, die später zum Vorbefüllen von Formularen gebraucht werden.';
 
 create trigger profiles_set_updated_at
   before update on public.profiles
@@ -105,7 +105,7 @@ create table public.cases (
   user_id uuid not null references auth.users(id) on delete cascade,
   title text not null,
   authority_name text,
-  authority_key text,               -- stabiler Schluessel aus lib/authorities
+  authority_key text,               -- stabiler Schlüssel aus lib/authorities
   case_type text,                   -- z.B. 'weiterbewilligung'
   reference_number text,            -- Aktenzeichen / BG-Nummer
   status case_status not null default 'in_progress',
@@ -139,7 +139,7 @@ create table public.documents (
   status document_status not null default 'uploaded',
   source document_source not null default 'upload',
   page_count integer,
-  -- Extrahierter Text. Hochsensibel: nur ueber RLS erreichbar, nie geloggt.
+  -- Extrahierter Text. Hochsensibel: nur über RLS erreichbar, nie geloggt.
   extracted_text text,
   extraction_method text,           -- 'pdf-text' | 'ocr:claude-vision' | 'demo'
   document_date date,
@@ -166,7 +166,7 @@ create table public.document_analysis (
   case_id uuid references public.cases(id) on delete cascade,
   model text not null,
   schema_version integer not null default 1,
-  -- Vollstaendiges, gegen das Zod-Schema validiertes Analyseergebnis.
+  -- Vollständiges, gegen das Zod-Schema validiertes Analyseergebnis.
   result jsonb not null,
   document_type text,
   authority_name text,
@@ -297,7 +297,7 @@ create trigger forms_set_updated_at
   for each row execute function public.set_updated_at();
 
 -- ---------------------------------------------------------------------------
--- generated_letters  (Antwortentwuerfe)
+-- generated_letters  (Antwortentwürfe)
 -- ---------------------------------------------------------------------------
 create table public.generated_letters (
   id uuid primary key default gen_random_uuid(),
@@ -305,10 +305,10 @@ create table public.generated_letters (
   case_id uuid not null references public.cases(id) on delete cascade,
   subject text not null,
   body text not null,
-  intent text,                      -- z.B. 'fristverlaengerung'
+  intent text,                      -- z.B. 'fristverlängerung'
   model text,
   status letter_status not null default 'draft',
-  -- Ein Entwurf gilt erst als bestaetigt, wenn der Nutzer ihn ausdruecklich
+  -- Ein Entwurf gilt erst als bestätigt, wenn der Nutzer ihn ausdrücklich
   -- freigibt. Es wird nie automatisch etwas versendet.
   approved_at timestamptz,
   created_at timestamptz not null default now(),
@@ -331,7 +331,7 @@ create table public.case_events (
   event_type text not null,
   title text not null,
   description text,
-  -- Nur nicht-sensible Metadaten (IDs, Zaehler). Keine Dokumentinhalte.
+  -- Nur nicht-sensible Metadaten (IDs, Zähler). Keine Dokumentinhalte.
   metadata jsonb not null default '{}'::jsonb,
   created_at timestamptz not null default now()
 );
@@ -362,7 +362,7 @@ create policy "profiles_update_own" on public.profiles
 create policy "profiles_delete_own" on public.profiles
   for delete using (auth.uid() = id);
 
--- Alle uebrigen Tabellen folgen demselben Muster ueber user_id.
+-- Alle übrigen Tabellen folgen demselben Muster über user_id.
 do $$
 declare
   t text;

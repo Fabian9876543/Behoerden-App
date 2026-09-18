@@ -1,7 +1,7 @@
 /**
- * Anliegen fuer Antwortschreiben.
+ * Anliegen für Antwortschreiben.
  *
- * Bewusst frei von Server-Abhaengigkeiten: Die Liste wird auch im Client
+ * Bewusst frei von Server-Abhängigkeiten: Die Liste wird auch im Client
  * gebraucht (Auswahlfeld) und darf das Anthropic-SDK nicht mitziehen.
  */
 
@@ -12,13 +12,13 @@ export const LETTER_INTENTS = [
     description: "Begleitschreiben zu Unterlagen, die du einreichst.",
   },
   {
-    key: "fristverlaengerung",
-    label: "Fristverlaengerung bitten",
-    description: "Bitte um mehr Zeit, mit Begruendung.",
+    key: "fristverlängerung",
+    label: "Fristverlängerung bitten",
+    description: "Bitte um mehr Zeit, mit Begründung.",
   },
   {
-    key: "rueckfrage",
-    label: "Rueckfrage stellen",
+    key: "rückfrage",
+    label: "Rückfrage stellen",
     description: "Sachliche Nachfrage zu einem unklaren Punkt.",
   },
   {
@@ -27,9 +27,9 @@ export const LETTER_INTENTS = [
     description: "Mitteilung einer Aenderung (Adresse, Einkommen, Situation).",
   },
   {
-    key: "eingang_bestaetigen",
-    label: "Eingang bestaetigen",
-    description: "Kurze Bestaetigung, dass du das Schreiben erhalten hast.",
+    key: "eingang_bestätigen",
+    label: "Eingang bestätigen",
+    description: "Kurze Bestätigung, dass du das Schreiben erhalten hast.",
   },
 ] as const;
 

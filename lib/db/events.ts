@@ -7,7 +7,7 @@ import type { CaseEventRow } from "@/lib/types/database";
 /**
  * Case-Timeline.
  *
- * Wichtig: metadata enthaelt ausschliesslich IDs und Zaehler - niemals
+ * Wichtig: metadata enthält ausschließlich IDs und Zähler - niemals
  * Dokumentinhalte oder personenbezogene Texte.
  */
 

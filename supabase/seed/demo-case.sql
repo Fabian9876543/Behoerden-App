@@ -4,7 +4,7 @@
 -- Aufruf mit expliziter User-ID:
 --   psql "$DATABASE_URL" -v user_id="'<UUID>'" -f supabase/seed/demo-case.sql
 --
--- Alle Zeilen sind mit is_demo = true markiert und in der Oberflaeche klar
+-- Alle Zeilen sind mit is_demo = true markiert und in der Oberfläche klar
 -- als Demo erkennbar. Es wird bewusst KEINE Datei im Storage angelegt.
 -- ===========================================================================
 
@@ -19,7 +19,7 @@ with demo_case as (
   )
   values (
     :user_id,
-    '[Demo] Weiterbewilligung Buergergeld',
+    '[Demo] Weiterbewilligung Bürgergeld',
     'Jobcenter',
     'jobcenter',
     'weiterbewilligung',
@@ -27,7 +27,7 @@ with demo_case as (
     'action_required',
     'critical',
     'Beispielvorgang: Das Jobcenter fordert zur Weiterbewilligung der Leistungen '
-      || 'Unterlagen an. Der Weiterbewilligungsantrag und die Nachweise muessen bis '
+      || 'Unterlagen an. Der Weiterbewilligungsantrag und die Nachweise müssen bis '
       || 'zum 15.10.2026 eingereicht werden.',
     true
   )
@@ -52,11 +52,11 @@ demo_document as (
     date '2026-09-18',
     true,
     E'--- Seite 1 ---\nJobcenter Musterstadt\nAktenzeichen: DEMO-12345/2026\n'
-      || E'Datum: 18.09.2026\n\nWeiterbewilligung Ihres Anspruchs auf Buergergeld\n\n'
+      || E'Datum: 18.09.2026\n\nWeiterbewilligung Ihres Anspruchs auf Bürgergeld\n\n'
       || E'Ihr aktueller Bewilligungszeitraum endet am 31.10.2026. Reichen Sie bitte '
       || E'den Weiterbewilligungsantrag sowie die unten genannten Unterlagen bis zum '
-      || E'15.10.2026 bei uns ein.\n\n--- Seite 2 ---\nBenoetigte Unterlagen:\n'
-      || E'- Kontoauszuege der letzten drei Monate aller Konten\n'
+      || E'15.10.2026 bei uns ein.\n\n--- Seite 2 ---\nBenötigte Unterlagen:\n'
+      || E'- Kontoauszüge der letzten drei Monate aller Konten\n'
       || E'- Aktuelle Mietbescheinigung bzw. Nachweis der Kosten der Unterkunft\n\n'
       || E'Bitte verwenden Sie den beiliegenden Weiterbewilligungsantrag (WBA).'
   from demo_case
@@ -105,18 +105,18 @@ demo_tasks as (
   from demo_deadline
   cross join (values
     (
-      'Weiterbewilligungsantrag (WBA) ausfuellen',
-      'Den Weiterbewilligungsantrag vollstaendig ausfuellen und unterschreiben.',
+      'Weiterbewilligungsantrag (WBA) ausfüllen',
+      'Den Weiterbewilligungsantrag vollständig ausfüllen und unterschreiben.',
       0, 'Bitte verwenden Sie den beiliegenden Weiterbewilligungsantrag (WBA).', 2, 0.92
     ),
     (
-      'Kontoauszuege der letzten drei Monate hochladen',
-      'Auszuege aller Konten, lueckenlos fuer die letzten drei Monate.',
-      1, 'Kontoauszuege der letzten drei Monate aller Konten', 2, 0.94
+      'Kontoauszüge der letzten drei Monate hochladen',
+      'Auszüge aller Konten, lückenlos für die letzten drei Monate.',
+      1, 'Kontoauszüge der letzten drei Monate aller Konten', 2, 0.94
     ),
     (
       'Aktuelle Mietbescheinigung beschaffen',
-      'Nachweis ueber die Kosten der Unterkunft, von der Vermietung ausgefuellt.',
+      'Nachweis über die Kosten der Unterkunft, von der Vermietung ausgefüllt.',
       2, 'Aktuelle Mietbescheinigung bzw. Nachweis der Kosten der Unterkunft', 2, 0.90
     )
   ) as task(title, description, position, source_text, source_page, confidence)
@@ -130,7 +130,7 @@ demo_required as (
     :user_id, demo_document.case_id, demo_document.id, item.name, item.description, true
   from demo_document
   cross join (values
-    ('Kontoauszuege der letzten drei Monate', 'Alle Konten, lueckenlos.'),
+    ('Kontoauszüge der letzten drei Monate', 'Alle Konten, lückenlos.'),
     ('Mietbescheinigung', 'Nachweis der Kosten der Unterkunft.')
   ) as item(name, description)
   returning case_id
@@ -143,12 +143,12 @@ demo_form as (
   select
     :user_id,
     demo_case.id,
-    'Weiterbewilligungsantrag Buergergeld',
+    'Weiterbewilligungsantrag Bürgergeld',
     'WBA',
     'Antrag auf Weiterbewilligung der Leistungen nach dem SGB II.',
-    'https://www.arbeitsagentur.de/arbeitslos-arbeit-finden/buergergeld',
+    'https://www.arbeitsagentur.de/arbeitslos-arbeit-finden/bürgergeld',
     'official_catalog',
-    'Bundesagentur fuer Arbeit',
+    'Bundesagentur für Arbeit',
     'jobcenter'
   from demo_case
   returning case_id
@@ -159,7 +159,7 @@ from demo_case
 cross join (values
   ('case_created', 'Demo-Vorgang angelegt', '{"demo": true}'),
   ('document_uploaded', 'Dokument hochgeladen', '{"demo": true}'),
-  ('authority_detected', 'Behoerde erkannt: Jobcenter', '{"confidence": 0.96}'),
+  ('authority_detected', 'Behörde erkannt: Jobcenter', '{"confidence": 0.96}'),
   ('deadline_detected', 'Frist erkannt: 15.10.2026', '{"count": 1}'),
   ('tasks_created', '3 Aufgaben erstellt', '{"count": 3}')
 ) as event(type, title, metadata);

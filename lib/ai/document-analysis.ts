@@ -13,7 +13,7 @@ export interface AnalyzeDocumentInput {
   /** Bereits extrahierter Text mit "--- Seite N ---"-Markern. */
   text: string;
   /**
-   * Rohbytes. Werden nur genutzt, wenn der Textlayer duenn ist - dann sieht
+   * Rohbytes. Werden nur genutzt, wenn der Textlayer dünn ist - dann sieht
    * Claude das Original und kann Layoutinformationen mitlesen.
    */
   bytes?: Uint8Array;
@@ -27,11 +27,11 @@ export interface AnalyzeDocumentResult {
   outputTokens: number | null;
 }
 
-/** Ab dieser Textlaenge reicht der extrahierte Text ohne Originaldatei. */
+/** Ab dieser Textlänge reicht der extrahierte Text ohne Originaldatei. */
 const TEXT_ONLY_THRESHOLD = 400;
 
 /**
- * Fuehrt die strukturierte Dokumentanalyse durch.
+ * Führt die strukturierte Dokumentanalyse durch.
  *
  * Reine Extraktion - es wird nichts gespeichert und nichts abgeleitet.
  * Persistenz und Ableitungen passieren in lib/db/analysis-pipeline.ts.

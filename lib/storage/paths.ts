@@ -1,10 +1,10 @@
 import { extensionFor, type SupportedMimeType } from "@/lib/documents/mime";
 
 /**
- * Pfadschema fuer Behoerdenunterlagen im Storage.
+ * Pfadschema für Behördenunterlagen im Storage.
  *
- * Bewusst frei von I/O, damit es ueberall - auch im Test - nutzbar ist.
- * Das zweite Segment ist die User-ID; genau darauf stuetzt sich die
+ * Bewusst frei von I/O, damit es überall - auch im Test - nutzbar ist.
+ * Das zweite Segment ist die User-ID; genau darauf stützt sich die
  * Storage-Policy in supabase/migrations.
  */
 export function buildStoragePath(params: {

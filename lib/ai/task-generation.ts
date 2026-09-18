@@ -7,7 +7,7 @@ import type { CasePriority, CaseStatus } from "@/lib/types/database";
 import { daysUntil } from "@/lib/dates";
 
 /**
- * Ableitung von Aufgaben, Fristen, Status und Prioritaet aus der Analyse.
+ * Ableitung von Aufgaben, Fristen, Status und Priorität aus der Analyse.
  *
  * Bewusst deterministisch und ohne weiteren KI-Aufruf: Das Ergebnis muss
  * nachvollziehbar und testbar sein. Die KI liefert die Fakten, diese Datei
@@ -23,7 +23,7 @@ export interface GeneratedTask {
   sourceText: string | null;
   sourcePage: number | null;
   confidence: number;
-  /** Index der zugehoerigen Frist in `deadlines`, falls zuordenbar. */
+  /** Index der zugehörigen Frist in `deadlines`, falls zuordenbar. */
   deadlineIndex: number | null;
 }
 
@@ -48,7 +48,7 @@ function dedupeDeadlines(deadlines: ExtractedDeadline[]): ExtractedDeadline[] {
   for (const deadline of deadlines) {
     const key = `${deadline.date}|${deadline.title.toLowerCase().trim()}`;
     const existing = seen.get(key);
-    // Bei Duplikaten gewinnt die Angabe mit der hoeheren Konfidenz.
+    // Bei Duplikaten gewinnt die Angabe mit der höheren Konfidenz.
     if (!existing || deadline.confidence > existing.confidence) {
       seen.set(key, deadline);
     }
@@ -70,8 +70,8 @@ function dedupeActions(actions: ExtractedAction[]): ExtractedAction[] {
 
 /**
  * Ordnet einer Aufgabe eine Frist zu.
- * Zuerst ueber das explizite Datum, sonst - bei genau einer Frist im
- * Dokument - ueber diese. Mehrdeutigkeiten bleiben bewusst unzugeordnet.
+ * Zuerst über das explizite Datum, sonst - bei genau einer Frist im
+ * Dokument - über diese. Mehrdeutigkeiten bleiben bewusst unzugeordnet.
  */
 function matchDeadlineIndex(
   action: ExtractedAction,
@@ -117,7 +117,7 @@ export function generateCaseShape(
     };
   });
 
-  // Erforderliche Aufgaben zuerst, danach nach Faelligkeit.
+  // Erforderliche Aufgaben zuerst, danach nach Fälligkeit.
   tasks.sort((a, b) => {
     if (a.isRequired !== b.isRequired) return a.isRequired ? -1 : 1;
     if (a.dueDate && b.dueDate) return a.dueDate.localeCompare(b.dueDate);

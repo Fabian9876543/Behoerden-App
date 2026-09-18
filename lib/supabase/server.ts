@@ -4,7 +4,7 @@ import { requirePublicEnv } from "@/lib/env";
 import type { Database } from "@/lib/types/database";
 
 /**
- * Supabase-Client fuer Server Components, Server Actions und Route Handler.
+ * Supabase-Client für Server Components, Server Actions und Route Handler.
  * Nutzt die Cookies der Session - damit greift RLS immer im Namen des
  * angemeldeten Nutzers.
  */

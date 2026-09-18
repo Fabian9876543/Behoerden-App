@@ -15,7 +15,7 @@ const INITIAL_STEPS: AnalysisStep[] = [
   { key: "upload", label: "Dokument hochladen", state: "pending" },
   { key: "extract", label: "Dokument wird gelesen", state: "pending" },
   { key: "analyze", label: "Dokument wird analysiert", state: "pending" },
-  { key: "deadlines", label: "Fristen werden geprueft", state: "pending" },
+  { key: "deadlines", label: "Fristen werden geprüft", state: "pending" },
   { key: "tasks", label: "Aufgaben werden erkannt", state: "pending" },
 ];
 
@@ -52,11 +52,11 @@ export function UploadDropzone({
       setError(null);
 
       if (file.size > DEFAULT_MAX_UPLOAD_BYTES) {
-        setError("Die Datei ist zu gross. Erlaubt sind maximal 10 MB.");
+        setError("Die Datei ist zu groß. Erlaubt sind maximal 10 MB.");
         return;
       }
       if (!(SUPPORTED_MIME_TYPES as readonly string[]).includes(file.type)) {
-        setError("Dieses Dateiformat wird nicht unterstuetzt. Moeglich sind PDF, JPG und PNG.");
+        setError("Dieses Dateiformat wird nicht unterstützt. Möglich sind PDF, JPG und PNG.");
         return;
       }
 
@@ -98,8 +98,8 @@ export function UploadDropzone({
       patch("analyze", {
         state: "done",
         result: result.authorityName
-          ? `Behoerde erkannt: ${result.authorityName}`
-          : "Behoerde nicht eindeutig erkannt",
+          ? `Behörde erkannt: ${result.authorityName}`
+          : "Behörde nicht eindeutig erkannt",
       });
       patch("deadlines", {
         state: "done",
@@ -177,7 +177,7 @@ export function UploadDropzone({
           aria-hidden
         />
         <p className={cn("mt-3 font-medium", compact ? "text-sm" : "text-base")}>
-          Behoerdenbrief hinzufuegen
+          Behördenbrief hinzufügen
         </p>
         <p className="mt-1 text-sm text-muted-foreground">PDF, Foto oder Scan hochladen</p>
         <p className="mt-0.5 text-xs text-muted-foreground">
@@ -191,7 +191,7 @@ export function UploadDropzone({
           disabled={busy}
         >
           <Upload className="size-4" aria-hidden />
-          Datei auswaehlen
+          Datei auswählen
         </Button>
 
         <input

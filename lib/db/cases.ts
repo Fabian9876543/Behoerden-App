@@ -75,10 +75,10 @@ export async function getCase(caseId: string): Promise<CaseRow | null> {
   return data ?? null;
 }
 
-/** Wirft, wenn der Vorgang nicht existiert oder nicht dem Nutzer gehoert. */
+/** Wirft, wenn der Vorgang nicht existiert oder nicht dem Nutzer gehört. */
 export async function requireCase(caseId: string, userId: string): Promise<CaseRow> {
   const caseRow = await getCase(caseId);
-  // RLS filtert bereits, die explizite Pruefung ist die zweite Verteidigungslinie.
+  // RLS filtert bereits, die explizite Prüfung ist die zweite Verteidigungslinie.
   if (!caseRow || caseRow.user_id !== userId) throw new AppError("not_found");
   return caseRow;
 }
@@ -131,7 +131,7 @@ const ACTIVE_STATUSES: CaseStatus[] = [
   "in_progress",
 ];
 
-/** Vorgaenge inklusive naechster Aufgabe und naechster Frist fuer das Dashboard. */
+/** Vorgänge inklusive nächster Aufgabe und nächster Frist für das Dashboard. */
 export async function listCasesWithContext(
   userId: string,
   options: { onlyActive?: boolean } = {},
@@ -267,7 +267,7 @@ export async function refreshCaseStatus(caseId: string): Promise<void> {
     .eq("id", caseId)
     .maybeSingle();
 
-  // Abgeschlossene Vorgaenge bleiben abgeschlossen, bis der Nutzer sie oeffnet.
+  // Abgeschlossene Vorgänge bleiben abgeschlossen, bis der Nutzer sie öffnet.
   if (!caseRow || caseRow.status === "completed") return;
 
   const open = (tasks ?? []).filter(

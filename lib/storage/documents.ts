@@ -10,10 +10,10 @@ import { createSupabaseServerClient } from "@/lib/supabase/server";
 export { buildStoragePath, userIdFromStoragePath } from "@/lib/storage/paths";
 
 /**
- * Storage-Zugriff fuer Behoerdenunterlagen.
+ * Storage-Zugriff für Behördenunterlagen.
  *
  * Pfadschema: users/{userId}/cases/{caseId}/documents/{documentId}.{ext}
- * Der Bucket ist privat; Downloads laufen ausschliesslich ueber kurzlebige
+ * Der Bucket ist privat; Downloads laufen ausschließlich über kurzlebige
  * signierte URLs.
  */
 
@@ -68,12 +68,12 @@ export async function deleteDocuments(paths: string[]): Promise<void> {
   const { error } = await supabase.storage.from(STORAGE_BUCKET).remove(paths);
   if (error) {
     // Nicht fatal: Der Datenbankeintrag ist bereits weg, die Datei bleibt
-    // durch die Storage-Policy fuer alle anderen unzugaenglich.
+    // durch die Storage-Policy für alle anderen unzugänglich.
     log.warn("storage_delete_failed", { count: paths.length, message: error.message });
   }
 }
 
-/** Entfernt alle Dateien eines Nutzers - fuer "Alle meine Daten loeschen". */
+/** Entfernt alle Dateien eines Nutzers - für "Alle meine Daten löschen". */
 export async function deleteAllUserFiles(userId: string): Promise<number> {
   const supabase = await createSupabaseServerClient();
   const prefix = userStoragePrefix(userId);

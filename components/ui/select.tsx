@@ -3,8 +3,8 @@ import { ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 /**
- * Bewusst das native <select>: es funktioniert auf Mobilgeraeten am besten,
- * ist barrierefrei und spart eine Abhaengigkeit.
+ * Bewusst das native <select>: es funktioniert auf Mobilgeräten am besten,
+ * ist barrierefrei und spart eine Abhängigkeit.
  */
 const Select = React.forwardRef<
   HTMLSelectElement,

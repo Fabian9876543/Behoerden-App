@@ -3,12 +3,12 @@
  *
  * Vorbereitete Schnittstelle: Die Anwendung erzeugt eine .ics-Datei mit allen
  * offenen Fristen. Eine echte Zwei-Wege-Kalendersynchronisation ist bewusst
- * nicht Teil des MVP, laesst sich hier aber andocken.
+ * nicht Teil des MVP, lässt sich hier aber andocken.
  */
 
 export interface CalendarEvent {
   uid: string;
-  /** Ganztaegiger Termin, YYYY-MM-DD. */
+  /** Ganztägiger Termin, YYYY-MM-DD. */
   date: string;
   title: string;
   description?: string | null;
@@ -56,7 +56,7 @@ export function buildIcsCalendar(events: CalendarEvent[], now: Date = new Date()
     "PRODID:-//BehoerdenBuddy//Fristen//DE",
     "CALSCALE:GREGORIAN",
     "METHOD:PUBLISH",
-    "X-WR-CALNAME:BehoerdenBuddy Fristen",
+    "X-WR-CALNAME:BehördenBuddy Fristen",
   ];
 
   for (const event of events) {
@@ -64,7 +64,7 @@ export function buildIcsCalendar(events: CalendarEvent[], now: Date = new Date()
       "BEGIN:VEVENT",
       `UID:${event.uid}@behoerdenbuddy.local`,
       `DTSTAMP:${stamp}`,
-      // Ganztaegig: DTEND ist exklusiv, daher +1 Tag.
+      // Ganztägig: DTEND ist exklusiv, daher +1 Tag.
       `DTSTART;VALUE=DATE:${compactDate(event.date)}`,
       `DTEND;VALUE=DATE:${compactDate(addDays(event.date, 1))}`,
       `SUMMARY:${escapeText(event.title)}`,

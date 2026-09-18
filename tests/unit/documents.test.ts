@@ -17,13 +17,13 @@ const PNG_BYTES = new Uint8Array([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a
 const GIF_BYTES = new Uint8Array([0x47, 0x49, 0x46, 0x38, 0x39, 0x61, 0x01, 0x00]);
 
 describe("sniffMimeType", () => {
-  it("erkennt die unterstuetzten Formate", () => {
+  it("erkennt die unterstützten Formate", () => {
     expect(sniffMimeType(PDF_BYTES)).toBe("application/pdf");
     expect(sniffMimeType(JPEG_BYTES)).toBe("image/jpeg");
     expect(sniffMimeType(PNG_BYTES)).toBe("image/png");
   });
 
-  it("lehnt nicht unterstuetzte Formate ab", () => {
+  it("lehnt nicht unterstützte Formate ab", () => {
     expect(sniffMimeType(GIF_BYTES)).toBeNull();
     expect(sniffMimeType(new Uint8Array([1, 2]))).toBeNull();
   });
@@ -31,7 +31,7 @@ describe("sniffMimeType", () => {
 
 describe("assertMimeMatchesContent", () => {
   it("vertraut dem Dateiinhalt, nicht dem gemeldeten Typ", () => {
-    // Browser melden fuer manche Scans einen falschen Typ.
+    // Browser melden für manche Scans einen falschen Typ.
     expect(assertMimeMatchesContent("image/jpg", JPEG_BYTES)).toBe("image/jpeg");
   });
 
@@ -41,13 +41,13 @@ describe("assertMimeMatchesContent", () => {
 });
 
 describe("assertUploadable", () => {
-  it("laesst gueltige Uploads durch", () => {
+  it("lässt gültige Uploads durch", () => {
     expect(() =>
       assertUploadable({ mimeType: "application/pdf", sizeBytes: 1024 }),
     ).not.toThrow();
   });
 
-  it("lehnt zu grosse Dateien ab", () => {
+  it("lehnt zu große Dateien ab", () => {
     try {
       assertUploadable({ mimeType: "application/pdf", sizeBytes: 50 * 1024 * 1024 });
       expect.unreachable("sollte werfen");
@@ -87,7 +87,7 @@ describe("mime helpers", () => {
 });
 
 describe("PDF-Textauswertung", () => {
-  it("markiert Seiten fuer die Quellenangabe", () => {
+  it("markiert Seiten für die Quellenangabe", () => {
     const joined = joinPages(["Erste Seite", "Zweite Seite"]);
     expect(joined).toContain("--- Seite 1 ---");
     expect(joined).toContain("--- Seite 2 ---");

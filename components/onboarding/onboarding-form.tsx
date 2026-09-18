@@ -12,14 +12,14 @@ const initialState: OnboardingState = { error: null };
 const OPTIONS = [
   {
     value: "personal",
-    title: "Nur fuer mich",
-    description: "Deine eigenen Vorgaenge, Fristen und Unterlagen.",
+    title: "Nur für mich",
+    description: "Deine eigenen Vorgänge, Fristen und Unterlagen.",
     Icon: User,
   },
   {
     value: "family",
-    title: "Fuer meine Familie",
-    description: "Auch Post, die Kinder oder Angehoerige betrifft.",
+    title: "Für meine Familie",
+    description: "Auch Post, die Kinder oder Angehörige betrifft.",
     Icon: Users,
   },
 ] as const;

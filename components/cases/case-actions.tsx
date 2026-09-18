@@ -34,7 +34,7 @@ export function CaseActions({ caseId, status }: { caseId: string; status: CaseSt
               startTransition(async () => {
                 const result = await reopenCaseAction(caseId);
                 if (!result.ok) {
-                  setError(result.error?.message ?? "Der Vorgang konnte nicht geoeffnet werden.");
+                  setError(result.error?.message ?? "Der Vorgang konnte nicht geöffnet werden.");
                   return;
                 }
                 router.refresh();
@@ -42,7 +42,7 @@ export function CaseActions({ caseId, status }: { caseId: string; status: CaseSt
             }
           >
             <RotateCcw className="size-4" aria-hidden />
-            Wieder oeffnen
+            Wieder öffnen
           </Button>
         ) : (
           <Button
@@ -60,7 +60,7 @@ export function CaseActions({ caseId, status }: { caseId: string; status: CaseSt
             }
           >
             <CheckCircle2 className="size-4" aria-hidden />
-            Vorgang abschliessen
+            Vorgang abschließen
           </Button>
         )}
 
@@ -68,15 +68,15 @@ export function CaseActions({ caseId, status }: { caseId: string; status: CaseSt
           <DialogTrigger asChild>
             <Button variant="ghost" className="text-destructive hover:text-destructive">
               <Trash2 className="size-4" aria-hidden />
-              Loeschen
+              Löschen
             </Button>
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Vorgang wirklich loeschen?</DialogTitle>
+              <DialogTitle>Vorgang wirklich löschen?</DialogTitle>
               <DialogDescription>
-                Alle Dokumente, Aufgaben, Fristen und Entwuerfe dieses Vorgangs werden
-                unwiderruflich geloescht - auch die hochgeladenen Dateien.
+                Alle Dokumente, Aufgaben, Fristen und Entwürfe dieses Vorgangs werden
+                unwiderruflich gelöscht - auch die hochgeladenen Dateien.
               </DialogDescription>
             </DialogHeader>
             <DialogFooter>
@@ -90,7 +90,7 @@ export function CaseActions({ caseId, status }: { caseId: string; status: CaseSt
                   startTransition(async () => {
                     const result = await deleteCaseAction(caseId);
                     if (!result.ok) {
-                      setError(result.error?.message ?? "Der Vorgang konnte nicht geloescht werden.");
+                      setError(result.error?.message ?? "Der Vorgang konnte nicht gelöscht werden.");
                       return;
                     }
                     router.push("/cases");
@@ -98,7 +98,7 @@ export function CaseActions({ caseId, status }: { caseId: string; status: CaseSt
                   })
                 }
               >
-                Endgueltig loeschen
+                Endgültig löschen
               </Button>
             </DialogFooter>
           </DialogContent>

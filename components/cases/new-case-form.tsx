@@ -19,7 +19,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-/** Vorgang ohne Dokument anlegen - z.B. fuer telefonische Auskuenfte. */
+/** Vorgang ohne Dokument anlegen - z.B. für telefonische Auskünfte. */
 export function NewCaseForm() {
   const router = useRouter();
   const [pending, startTransition] = useTransition();
@@ -38,7 +38,7 @@ export function NewCaseForm() {
         <DialogHeader>
           <DialogTitle>Neuen Vorgang anlegen</DialogTitle>
           <DialogDescription>
-            Du kannst spaeter jederzeit Dokumente hinzufuegen.
+            Du kannst später jederzeit Dokumente hinzufügen.
           </DialogDescription>
         </DialogHeader>
 
@@ -71,7 +71,7 @@ export function NewCaseForm() {
           </div>
 
           <div className="space-y-1.5">
-            <Label htmlFor="case-authority">Behoerde (optional)</Label>
+            <Label htmlFor="case-authority">Behörde (optional)</Label>
             <Input
               id="case-authority"
               name="authorityName"

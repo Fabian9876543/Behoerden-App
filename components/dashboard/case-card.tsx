@@ -30,7 +30,7 @@ export function CaseCard({ caseRow }: { caseRow: CaseWithCounts }) {
           <div className="flex items-start gap-2.5">
             <ListTodo className="mt-0.5 size-4 shrink-0 text-muted-foreground" aria-hidden />
             <div className="min-w-0">
-              <p className="text-xs text-muted-foreground">Naechste Aufgabe</p>
+              <p className="text-xs text-muted-foreground">Nächste Aufgabe</p>
               <p className="font-medium">{caseRow.nextTask.title}</p>
               {caseRow.openTaskCount > 1 ? (
                 <p className="text-xs text-muted-foreground">
@@ -63,7 +63,7 @@ export function CaseCard({ caseRow }: { caseRow: CaseWithCounts }) {
       <CardFooter>
         <Button asChild variant="outline" className="w-full">
           <Link href={`/cases/${caseRow.id}`}>
-            Vorgang oeffnen
+            Vorgang öffnen
             <ArrowRight className="size-4" aria-hidden />
           </Link>
         </Button>

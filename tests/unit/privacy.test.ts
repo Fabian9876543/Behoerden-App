@@ -20,11 +20,11 @@ describe("Logging-Datenschutz", () => {
     expect(result.street).toBe("[redacted]");
   });
 
-  it("kuerzt lange Freitexte, auch unter unbekannten Schluesseln", () => {
+  it("kürzt lange Freitexte, auch unter unbekannten Schlüsseln", () => {
     expect(sanitize({ irgendwas: "x".repeat(300) }).irgendwas).toBe("[redacted:long-string]");
   });
 
-  it("laesst unkritische Metadaten durch", () => {
+  it("lässt unkritische Metadaten durch", () => {
     const result = sanitize({ caseId: "c1", taskCount: 3, ok: true });
     expect(result).toEqual({ caseId: "c1", taskCount: 3, ok: true });
   });
@@ -46,7 +46,7 @@ describe("Fehlerbehandlung", () => {
     expect(new AppError("ai_unavailable").status).toBe(503);
   });
 
-  it("verschweigt unbekannte Fehler gegenueber dem Nutzer", () => {
+  it("verschweigt unbekannte Fehler gegenüber dem Nutzer", () => {
     const leaky = new Error("Connection refused at 10.0.0.5:5432 password=hunter2");
     expect(toUserMessage(leaky)).toBe(userMessageFor("unknown"));
     expect(toUserMessage(leaky)).not.toContain("hunter2");
@@ -70,8 +70,8 @@ describe("buildLetterContext", () => {
       summary: "Unterlagen nachreichen.",
     },
     tasks: [
-      { title: "Kontoauszuege hochladen", status: "open" as const, due_date: "2026-10-15" },
-      { title: "Antrag ausfuellen", status: "completed" as const, due_date: null },
+      { title: "Kontoauszüge hochladen", status: "open" as const, due_date: "2026-10-15" },
+      { title: "Antrag ausfüllen", status: "completed" as const, due_date: null },
     ],
     deadlines: [
       { title: "Antrag einreichen", due_date: "2026-10-15", status: "due_soon" as const },
@@ -79,21 +79,21 @@ describe("buildLetterContext", () => {
     profile: null,
   };
 
-  it("enthaelt nur strukturierte Vorgangsdaten", () => {
+  it("enthält nur strukturierte Vorgangsdaten", () => {
     const context = buildLetterContext(base);
     expect(context).toContain("Jobcenter");
     expect(context).toContain("12345");
-    expect(context).toContain("Kontoauszuege hochladen");
+    expect(context).toContain("Kontoauszüge hochladen");
     expect(context).toContain("Bereits erledigt");
   });
 
   it("setzt Platzhalter, wenn das Profil leer ist", () => {
     const context = buildLetterContext(base);
-    expect(context).toContain("[Name ergaenzen]");
-    expect(context).toContain("[Anschrift ergaenzen]");
+    expect(context).toContain("[Name ergänzen]");
+    expect(context).toContain("[Anschrift ergänzen]");
   });
 
-  it("uebernimmt vorhandene Profildaten", () => {
+  it("übernimmt vorhandene Profildaten", () => {
     const context = buildLetterContext({
       ...base,
       profile: {
@@ -112,7 +112,7 @@ describe("buildLetterContext", () => {
 describe("buildIcsCalendar", () => {
   const now = new Date("2026-09-18T10:00:00Z");
 
-  it("erzeugt ein gueltiges Kalendergeruest", () => {
+  it("erzeugt ein gültiges Kalendergerüst", () => {
     const ics = buildIcsCalendar(
       [{ uid: "abc", date: "2026-10-15", title: "Antrag einreichen" }],
       now,

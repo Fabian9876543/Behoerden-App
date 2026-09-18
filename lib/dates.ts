@@ -44,7 +44,7 @@ export function startOfToday(now: Date = new Date()): Date {
   return new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()));
 }
 
-/** Ganze Tage bis zum Stichtag. Negativ = ueberfaellig. */
+/** Ganze Tage bis zum Stichtag. Negativ = überfällig. */
 export function daysUntil(dueDate: string, now: Date = new Date()): number | null {
   const due = parseIsoDate(dueDate);
   if (!due) return null;
@@ -54,7 +54,7 @@ export function daysUntil(dueDate: string, now: Date = new Date()): number | nul
 
 /**
  * Leitet den Anzeigestatus einer Frist ab.
- * `met` und `dismissed` sind Nutzerentscheidungen und werden nie ueberschrieben.
+ * `met` und `dismissed` sind Nutzerentscheidungen und werden nie überschrieben.
  */
 export function deriveDeadlineStatus(
   dueDate: string,
@@ -69,15 +69,15 @@ export function deriveDeadlineStatus(
   return "upcoming";
 }
 
-/** "in 12 Tagen", "heute", "seit 3 Tagen ueberfaellig" */
+/** "in 12 Tagen", "heute", "seit 3 Tagen überfällig" */
 export function describeDueDate(dueDate: string, now: Date = new Date()): string {
   const days = daysUntil(dueDate, now);
   if (days === null) return "";
-  if (days === 0) return "heute faellig";
-  if (days === 1) return "morgen faellig";
+  if (days === 0) return "heute fällig";
+  if (days === 1) return "morgen fällig";
   if (days > 1) return `in ${days} Tagen`;
-  if (days === -1) return "seit gestern ueberfaellig";
-  return `seit ${Math.abs(days)} Tagen ueberfaellig`;
+  if (days === -1) return "seit gestern überfällig";
+  return `seit ${Math.abs(days)} Tagen überfällig`;
 }
 
 export function greeting(now: Date = new Date()): string {

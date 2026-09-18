@@ -80,7 +80,7 @@ export async function setTaskStatusAction(
         userId: user.id,
         caseId: task.case_id,
         type: "task_reopened",
-        title: "Aufgabe wieder geoeffnet",
+        title: "Aufgabe wieder geöffnet",
         description: task.title,
         metadata: { taskId: task.id },
       });

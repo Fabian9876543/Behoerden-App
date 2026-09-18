@@ -11,13 +11,13 @@ import { makeAnalysis } from "../fixtures/analysis";
  *
  *   Analyse -> Bereinigung -> Vorgangsform -> Fristen/Aufgaben/Formulare
  *
- * Genau diese Kette laeuft in lib/db/analysis-pipeline.ts, bevor geschrieben
+ * Genau diese Kette läuft in lib/db/analysis-pipeline.ts, bevor geschrieben
  * wird. Sie muss deterministisch und nachvollziehbar sein.
  */
 describe("Analyse zu Vorgang", () => {
   const NOW = new Date("2026-09-18T10:00:00Z");
 
-  it("erzeugt aus einem Jobcenter-Schreiben einen vollstaendigen Vorgang", () => {
+  it("erzeugt aus einem Jobcenter-Schreiben einen vollständigen Vorgang", () => {
     const analysis = sanitizeAnalysis(makeAnalysis(), NOW);
     const shape = generateCaseShape(analysis, NOW);
     const authorityKey = matchAuthorityKey(analysis.authority?.name);
@@ -32,13 +32,13 @@ describe("Analyse zu Vorgang", () => {
     expect(forms).toHaveLength(1);
     expect(forms[0]?.sourceKind).toBe("official_catalog");
 
-    // Jede Pflichtaufgabe traegt einen Beleg oder ist als unsicher erkennbar.
+    // Jede Pflichtaufgabe trägt einen Beleg oder ist als unsicher erkennbar.
     for (const task of shape.tasks.filter((t) => t.isRequired)) {
       expect(task.sourceText ?? task.confidence).toBeTruthy();
     }
   });
 
-  it("markiert eine ueberfaellige Frist korrekt", () => {
+  it("markiert eine überfällige Frist korrekt", () => {
     const analysis = sanitizeAnalysis(makeAnalysis(), NOW);
     const shape = generateCaseShape(analysis, NOW);
     const status = deriveDeadlineStatus(

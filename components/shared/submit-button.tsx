@@ -6,7 +6,7 @@ import { Button, type ButtonProps } from "@/components/ui/button";
 
 /**
  * Submit-Button, der den Formularstatus selbst kennt.
- * Verhindert Doppelklicks und zeigt verstaendliches Feedback.
+ * Verhindert Doppelklicks und zeigt verständliches Feedback.
  */
 export function SubmitButton({
   children,

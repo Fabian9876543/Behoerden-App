@@ -21,9 +21,9 @@ import { formatDateTime } from "@/lib/dates";
 import type { GeneratedLetterRow } from "@/lib/types/database";
 
 /**
- * Antwortentwuerfe.
+ * Antwortentwürfe.
  *
- * Der Entwurf ist immer bearbeitbar und muss ausdruecklich bestaetigt werden.
+ * Der Entwurf ist immer bearbeitbar und muss ausdrücklich bestätigt werden.
  * Es wird nie automatisch etwas versendet - das Kopieren und Absenden bleibt
  * in der Hand des Nutzers.
  */
@@ -75,7 +75,7 @@ export function LetterComposer({
         </div>
 
         <div className="space-y-1.5">
-          <Label htmlFor="note">Hinweis fuer den Entwurf (optional)</Label>
+          <Label htmlFor="note">Hinweis für den Entwurf (optional)</Label>
           <Textarea
             id="note"
             name="note"
@@ -95,7 +95,7 @@ export function LetterComposer({
 
       {openPoints.length > 0 ? (
         <Alert variant="warning">
-          <AlertTitle>Bitte vor dem Absenden ergaenzen</AlertTitle>
+          <AlertTitle>Bitte vor dem Absenden ergänzen</AlertTitle>
           <ul className="list-disc space-y-1 pl-5">
             {openPoints.map((point, index) => (
               <li key={index}>{point}</li>
@@ -106,7 +106,7 @@ export function LetterComposer({
 
       {letters.length === 0 ? (
         <p className="text-sm text-muted-foreground">
-          Noch kein Entwurf vorhanden. Waehle ein Anliegen und erstelle einen Vorschlag.
+          Noch kein Entwurf vorhanden. Wähle ein Anliegen und erstelle einen Vorschlag.
         </p>
       ) : (
         <ul className="space-y-4">
@@ -146,13 +146,13 @@ export function LetterComposer({
                     <Button
                       variant="ghost"
                       size="icon"
-                      aria-label="Entwurf loeschen"
+                      aria-label="Entwurf löschen"
                       disabled={pending}
                       onClick={() =>
                         startTransition(async () => {
                           const result = await deleteLetterAction(letter.id);
                           if (!result.ok) {
-                            setError(result.error?.message ?? "Loeschen fehlgeschlagen.");
+                            setError(result.error?.message ?? "Löschen fehlgeschlagen.");
                             return;
                           }
                           router.refresh();
@@ -237,7 +237,7 @@ export function LetterComposer({
                           }
                         >
                           <Check className="size-4" aria-hidden />
-                          Geprueft und freigeben
+                          Geprüft und freigeben
                         </Button>
                       ) : null}
                     </div>
@@ -250,7 +250,7 @@ export function LetterComposer({
       )}
 
       <p className="text-xs text-muted-foreground">
-        Entwuerfe werden nicht automatisch versendet. Pruefe den Text, ergaenze fehlende
+        Entwürfe werden nicht automatisch versendet. Prüfe den Text, ergänze fehlende
         Angaben und verschicke ihn selbst.
       </p>
     </div>

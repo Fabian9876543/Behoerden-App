@@ -1,8 +1,8 @@
 /**
- * Handgepflegte Typen fuer das Supabase-Schema.
+ * Handgepflegte Typen für das Supabase-Schema.
  *
  * Bewusst nicht generiert, damit das Repository ohne laufende Datenbank
- * typcheckbar bleibt. Bei Schemaaenderungen hier nachziehen
+ * typcheckbar bleibt. Bei Schemaänderungen hier nachziehen
  * (oder `supabase gen types typescript` verwenden).
  */
 
@@ -191,9 +191,9 @@ export interface CaseEventRow {
  * Wandelt einen Interface-Typ in einen anonymen Objekttyp um.
  *
  * Hintergrund: supabase-js verlangt, dass jede Tabelle `GenericSchema`
- * erfuellt - also `Record<string, unknown>`. Type-Aliase und Mapped Types
- * bekommen dafuer eine implizite Index-Signatur, Interfaces nicht. Ohne
- * diese Umwandlung faellt der Client stillschweigend auf `never` zurueck
+ * erfüllt - also `Record<string, unknown>`. Type-Aliase und Mapped Types
+ * bekommen dafür eine implizite Index-Signatur, Interfaces nicht. Ohne
+ * diese Umwandlung fällt der Client stillschweigend auf `never` zurück
  * und jede Query verliert ihre Typen.
  */
 type AsRecord<T> = { [K in keyof T]: T[K] };

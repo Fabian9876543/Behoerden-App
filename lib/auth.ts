@@ -21,7 +21,7 @@ export async function getSessionUser(): Promise<SessionUser | null> {
 }
 
 /**
- * Erzwingt eine Session. Fuer Server Actions und Route Handler - wirft,
+ * Erzwingt eine Session. Für Server Actions und Route Handler - wirft,
  * statt zu redirecten, damit der Aufrufer sauber antworten kann.
  */
 export async function requireUser(): Promise<SessionUser> {
@@ -30,7 +30,7 @@ export async function requireUser(): Promise<SessionUser> {
   return user;
 }
 
-/** Fuer Pages: leitet zum Login um. */
+/** Für Pages: leitet zum Login um. */
 export async function requireUserOrRedirect(): Promise<SessionUser> {
   const user = await getSessionUser();
   if (!user) redirect("/login");

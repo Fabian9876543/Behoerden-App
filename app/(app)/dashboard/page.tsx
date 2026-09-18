@@ -38,10 +38,10 @@ export default async function DashboardPage() {
         </h1>
         <p className="mt-1 text-sm text-muted-foreground">
           {cases.length === 0
-            ? "Lade deinen ersten Behoerdenbrief hoch - du erfaehrst sofort, was zu tun ist."
+            ? "Lade deinen ersten Behördenbrief hoch - du erfährst sofort, was zu tun ist."
             : cases.length === 1
               ? "Du hast einen aktiven Vorgang."
-              : `Du hast ${cases.length} aktive Vorgaenge.`}
+              : `Du hast ${cases.length} aktive Vorgänge.`}
         </p>
       </div>
 
@@ -50,7 +50,7 @@ export default async function DashboardPage() {
           <AlertTitle>Analyse noch nicht konfiguriert</AlertTitle>
           Setze <code className="font-mono text-xs">ANTHROPIC_API_KEY</code> in{" "}
           <code className="font-mono text-xs">.env.local</code>, damit hochgeladene Dokumente
-          analysiert werden koennen.
+          analysiert werden können.
         </Alert>
       ) : null}
 
@@ -58,7 +58,7 @@ export default async function DashboardPage() {
 
       <section aria-labelledby="upload-heading" className="space-y-3">
         <h2 id="upload-heading" className="sr-only">
-          Behoerdenbrief hinzufuegen
+          Behördenbrief hinzufügen
         </h2>
         <UploadDropzone />
       </section>
@@ -66,7 +66,7 @@ export default async function DashboardPage() {
       <section aria-labelledby="cases-heading" className="space-y-4">
         <div className="flex items-center justify-between gap-4">
           <h2 id="cases-heading" className="text-lg font-semibold tracking-tight">
-            Deine Vorgaenge
+            Deine Vorgänge
           </h2>
           {cases.length > 0 ? (
             <Button asChild variant="ghost" size="sm">
@@ -81,8 +81,8 @@ export default async function DashboardPage() {
         {cases.length === 0 ? (
           <EmptyState
             icon={<Inbox className="size-8" />}
-            title="Noch keine Vorgaenge"
-            description="Sobald du einen Brief hochlaedst, entsteht daraus automatisch ein Vorgang mit Fristen und Aufgaben."
+            title="Noch keine Vorgänge"
+            description="Sobald du einen Brief hochlädst, entsteht daraus automatisch ein Vorgang mit Fristen und Aufgaben."
             action={<DemoCaseButton />}
           />
         ) : (

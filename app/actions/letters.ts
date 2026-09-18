@@ -82,7 +82,7 @@ export async function generateLetterAction(
   }
 }
 
-/** Speichert die vom Nutzer bearbeitete Fassung. Setzt den Status zurueck auf Entwurf. */
+/** Speichert die vom Nutzer bearbeitete Fassung. Setzt den Status zurück auf Entwurf. */
 export async function updateLetterAction(formData: FormData): Promise<ActionResult> {
   try {
     const user = await requireUser();
@@ -110,9 +110,9 @@ export async function updateLetterAction(formData: FormData): Promise<ActionResu
 }
 
 /**
- * Ausdrueckliche Freigabe durch den Nutzer.
+ * Ausdrückliche Freigabe durch den Nutzer.
  * Es wird dabei nichts versendet - die Freigabe dokumentiert nur, dass der
- * Entwurf geprueft wurde.
+ * Entwurf geprüft wurde.
  */
 export async function approveLetterAction(letterId: string): Promise<ActionResult> {
   try {

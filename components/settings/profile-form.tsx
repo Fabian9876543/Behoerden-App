@@ -39,7 +39,7 @@ export function ProfileForm({ profile }: { profile: Profile | null }) {
       </div>
 
       <div className="space-y-1.5">
-        <Label htmlFor="street">Strasse und Hausnummer</Label>
+        <Label htmlFor="street">Straße und Hausnummer</Label>
         <Input
           id="street"
           name="street"
@@ -91,8 +91,8 @@ export function ProfileForm({ profile }: { profile: Profile | null }) {
       <SubmitButton pendingText="Wird gespeichert...">Speichern</SubmitButton>
 
       <p className="text-xs text-muted-foreground">
-        Diese Angaben werden nur genutzt, um Antwortschreiben und Formulare fuer dich
-        vorzubereiten. Sie verlassen deine Vorgaenge nicht.
+        Diese Angaben werden nur genutzt, um Antwortschreiben und Formulare für dich
+        vorzubereiten. Sie verlassen deine Vorgänge nicht.
       </p>
     </form>
   );

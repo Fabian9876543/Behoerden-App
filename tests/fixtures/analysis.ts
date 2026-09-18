@@ -1,6 +1,6 @@
 import type { DocumentAnalysis } from "@/lib/ai/schemas";
 
-/** Eine vollstaendige, realistische Analyse - Basis fuer alle Tests. */
+/** Eine vollständige, realistische Analyse - Basis für alle Tests. */
 export function makeAnalysis(overrides: Partial<DocumentAnalysis> = {}): DocumentAnalysis {
   return {
     documentType: "Mitwirkungsaufforderung",
@@ -8,7 +8,7 @@ export function makeAnalysis(overrides: Partial<DocumentAnalysis> = {}): Documen
     caseType: "weiterbewilligung",
     referenceNumber: "12345/2026",
     documentDate: "2026-09-18",
-    suggestedCaseTitle: "Weiterbewilligung Buergergeld",
+    suggestedCaseTitle: "Weiterbewilligung Bürgergeld",
     deadlines: [
       {
         date: "2026-10-15",
@@ -21,11 +21,11 @@ export function makeAnalysis(overrides: Partial<DocumentAnalysis> = {}): Documen
     ],
     requiredActions: [
       {
-        title: "Kontoauszuege der letzten drei Monate hochladen",
+        title: "Kontoauszüge der letzten drei Monate hochladen",
         description: null,
         deadline: "2026-10-15",
         required: true,
-        sourceText: "Kontoauszuege der letzten drei Monate",
+        sourceText: "Kontoauszüge der letzten drei Monate",
         page: 2,
         confidence: 0.92,
       },
@@ -39,7 +39,7 @@ export function makeAnalysis(overrides: Partial<DocumentAnalysis> = {}): Documen
         confidence: 0.88,
       },
       {
-        title: "Kontaktdaten pruefen",
+        title: "Kontaktdaten prüfen",
         description: null,
         deadline: null,
         required: false,
@@ -49,7 +49,7 @@ export function makeAnalysis(overrides: Partial<DocumentAnalysis> = {}): Documen
       },
     ],
     requiredDocuments: [
-      { name: "Kontoauszuege", description: null, required: true },
+      { name: "Kontoauszüge", description: null, required: true },
       { name: "Mietbescheinigung", description: null, required: true },
     ],
     mentionedForms: [{ name: "Weiterbewilligungsantrag", formNumber: "WBA" }],

@@ -3,11 +3,11 @@ import type { MentionedForm } from "@/lib/ai/schemas";
 import type { Profile } from "@/lib/types/database";
 
 /**
- * Formularunterstuetzung.
+ * Formularunterstützung.
  *
  * Im MVP keine freie Websuche: Ein von der KI genanntes Formular wird gegen
- * den hinterlegten Katalog aufgeloest. Gibt es keinen Treffer, wird das
- * Formular ohne Quelle gespeichert und in der UI als ungeprueft markiert.
+ * den hinterlegten Katalog aufgelöst. Gibt es keinen Treffer, wird das
+ * Formular ohne Quelle gespeichert und in der UI als ungeprüft markiert.
  * Es wird niemals eine beliebige Drittquelle als offiziell dargestellt.
  */
 
@@ -45,9 +45,9 @@ export interface PrefillField {
 }
 
 /**
- * Felder, die sich aus dem Profil vorbefuellen lassen.
+ * Felder, die sich aus dem Profil vorbefüllen lassen.
  *
- * Vorbereitung fuer die spaetere Ausfuellhilfe: Die Anwendung fuellt
+ * Vorbereitung für die spätere Ausfüllhilfe: Die Anwendung füllt
  * Formulare nie automatisch aus, sondern bietet die Werte zum Uebernehmen an.
  */
 export function prefillFieldsFromProfile(profile: Profile | null): PrefillField[] {
@@ -59,7 +59,7 @@ export function prefillFieldsFromProfile(profile: Profile | null): PrefillField[
 
   push("Vorname", profile.first_name);
   push("Nachname", profile.last_name);
-  push("Strasse und Hausnummer", profile.street);
+  push("Straße und Hausnummer", profile.street);
   push("Postleitzahl", profile.postal_code);
   push("Ort", profile.city);
   push("E-Mail", profile.email);

@@ -15,9 +15,9 @@ import type { TaskRow } from "@/lib/types/database";
 
 export interface TaskItemProps {
   task: TaskRow;
-  /** Dateiname des Quelldokuments - fuer die Quellenanzeige. */
+  /** Dateiname des Quelldokuments - für die Quellenanzeige. */
   sourceDocumentName?: string | null;
-  /** Vorgangsinfo, wenn die Aufgabe ausserhalb des Vorgangs gezeigt wird. */
+  /** Vorgangsinfo, wenn die Aufgabe außerhalb des Vorgangs gezeigt wird. */
   caseInfo?: { id: string; title: string } | null;
   onError?: (message: string) => void;
 }
@@ -29,7 +29,7 @@ export function TaskItem({ task, sourceDocumentName, caseInfo, onError }: TaskIt
 
   const isDone = optimisticDone;
   const overdue =
-    !isDone && task.due_date ? (describeDueDate(task.due_date).includes("ueberfaellig")) : false;
+    !isDone && task.due_date ? (describeDueDate(task.due_date).includes("überfällig")) : false;
 
   const toggle = (checked: boolean) => {
     setOptimisticDone(checked);
@@ -97,13 +97,13 @@ export function TaskItem({ task, sourceDocumentName, caseInfo, onError }: TaskIt
       <Button
         variant="ghost"
         size="icon"
-        aria-label={`Aufgabe "${task.title}" loeschen`}
+        aria-label={`Aufgabe "${task.title}" löschen`}
         disabled={pending}
         onClick={() =>
           startTransition(async () => {
             const result = await deleteTaskAction(task.id);
             if (!result.ok) {
-              onError?.(result.error?.message ?? "Die Aufgabe konnte nicht geloescht werden.");
+              onError?.(result.error?.message ?? "Die Aufgabe konnte nicht gelöscht werden.");
               return;
             }
             router.refresh();

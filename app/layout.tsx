@@ -3,11 +3,11 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: {
-    default: "BehoerdenBuddy",
-    template: "%s | BehoerdenBuddy",
+    default: "BehördenBuddy",
+    template: "%s | BehördenBuddy",
   },
   description:
-    "Behoerdenpost verstehen und organisieren: Fristen, Aufgaben und Vorgaenge an einem Ort.",
+    "Behördenpost verstehen und organisieren: Fristen, Aufgaben und Vorgänge an einem Ort.",
   robots: { index: false, follow: false },
 };
 

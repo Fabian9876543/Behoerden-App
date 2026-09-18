@@ -109,14 +109,14 @@ export function DocumentList({
               <Button
                 variant="ghost"
                 size="icon"
-                aria-label={`Dokument "${document.file_name}" loeschen`}
+                aria-label={`Dokument "${document.file_name}" löschen`}
                 disabled={pending}
                 onClick={() =>
                   startTransition(async () => {
                     setError(null);
                     const result = await deleteDocumentAction(document.id);
                     if (!result.ok) {
-                      setError(result.error?.message ?? "Das Dokument konnte nicht geloescht werden.");
+                      setError(result.error?.message ?? "Das Dokument konnte nicht gelöscht werden.");
                       return;
                     }
                     router.refresh();

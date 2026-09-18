@@ -21,7 +21,7 @@ export interface TextExtractionResult {
  *   PDF   -> eingebetteten Text lesen; bei reinem Scan auf OCR ausweichen.
  *   Bild  -> direkt OCR.
  *
- * Die Funktion wirft nur AppError; Aufrufer koennen die Meldung direkt zeigen.
+ * Die Funktion wirft nur AppError; Aufrufer können die Meldung direkt zeigen.
  */
 export async function extractText(params: {
   bytes: Uint8Array;

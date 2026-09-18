@@ -137,7 +137,7 @@ export default async function CaseDetailPage({
       <div className="grid gap-6 lg:grid-cols-2">
         <Card>
           <CardHeader>
-            <CardTitle>Benoetigte Unterlagen</CardTitle>
+            <CardTitle>Benötigte Unterlagen</CardTitle>
           </CardHeader>
           <CardContent>
             <RequiredDocumentsList items={requiredDocuments} />

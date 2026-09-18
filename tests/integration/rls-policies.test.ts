@@ -3,9 +3,9 @@ import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 
 /**
- * Statische Sicherheitspruefung der Migrationen.
+ * Statische Sicherheitsprüfung der Migrationen.
  *
- * Laeuft ohne Datenbank und schuetzt vor dem gefaehrlichsten Fehler in
+ * Läuft ohne Datenbank und schützt vor dem gefährlichsten Fehler in
  * diesem Projekt: eine Tabelle mit personenbezogenen Daten ohne RLS.
  */
 
@@ -42,13 +42,13 @@ describe("Datenbankmigrationen", () => {
   });
 
   it.each(USER_SCOPED_TABLES.filter((t) => t !== "profiles"))(
-    "%s traegt eine user_id mit Fremdschluessel auf auth.users",
+    "%s trägt eine user_id mit Fremdschlüssel auf auth.users",
     (table) => {
       const createStatement = new RegExp(
         `create\\s+table\\s+public\\.${table}\\s*\\(([\\s\\S]*?)\\n\\);`,
         "i",
       ).exec(sql);
-      expect(createStatement, `CREATE TABLE fuer ${table} nicht gefunden`).not.toBeNull();
+      expect(createStatement, `CREATE TABLE für ${table} nicht gefunden`).not.toBeNull();
       expect(createStatement![1]).toMatch(
         /user_id\s+uuid\s+not\s+null\s+references\s+auth\.users\(id\)\s+on\s+delete\s+cascade/i,
       );
@@ -56,12 +56,12 @@ describe("Datenbankmigrationen", () => {
   );
 
   it("bindet jede Policy an auth.uid()", () => {
-    // Policies werden teils in einer Schleife erzeugt; beide Formen pruefen.
+    // Policies werden teils in einer Schleife erzeugt; beide Formen prüfen.
     expect(sql).toMatch(/auth\.uid\(\)\s*=\s*user_id/i);
     expect(sql).toMatch(/auth\.uid\(\)\s*=\s*id/i);
   });
 
-  it("enthaelt keine Policy, die alle Zeilen freigibt", () => {
+  it("enthält keine Policy, die alle Zeilen freigibt", () => {
     expect(sql).not.toMatch(/using\s*\(\s*true\s*\)/i);
     expect(sql).not.toMatch(/with\s+check\s*\(\s*true\s*\)/i);
     expect(sql).not.toMatch(/to\s+anon/i);
@@ -69,7 +69,7 @@ describe("Datenbankmigrationen", () => {
 
   it("legt den Dokumentbucket als privat an", () => {
     expect(sql).toMatch(/insert\s+into\s+storage\.buckets[\s\S]*?'case-documents'/i);
-    // Der Bucket darf nie oeffentlich werden - auch nicht beim erneuten Anlegen.
+    // Der Bucket darf nie öffentlich werden - auch nicht beim erneuten Anlegen.
     expect(sql).toMatch(/set\s+public\s*=\s*false/i);
     expect(sql).not.toMatch(/'case-documents',\s*true/i);
   });
@@ -83,19 +83,19 @@ describe("Datenbankmigrationen", () => {
     }
   });
 
-  it("erlaubt nur unterstuetzte Dateitypen im Bucket", () => {
+  it("erlaubt nur unterstützte Dateitypen im Bucket", () => {
     expect(sql).toMatch(/allowed_mime_types/i);
     expect(sql).toMatch(/application\/pdf/i);
     expect(sql).not.toMatch(/application\/x-msdownload/i);
   });
 
-  it("stellt die Loeschfunktion nur Angemeldeten zur Verfuegung", () => {
+  it("stellt die Löschfunktion nur Angemeldeten zur Verfügung", () => {
     expect(sql).toMatch(/create\s+or\s+replace\s+function\s+public\.delete_my_data/i);
     expect(sql).toMatch(/revoke\s+all\s+on\s+function\s+public\.delete_my_data\(\)\s+from\s+public/i);
     expect(sql).toMatch(/grant\s+execute\s+on\s+function\s+public\.delete_my_data\(\)\s+to\s+authenticated/i);
   });
 
-  it("laesst delete_my_data als aufrufenden Nutzer laufen, damit RLS greift", () => {
+  it("lässt delete_my_data als aufrufenden Nutzer laufen, damit RLS greift", () => {
     const fn = /create\s+or\s+replace\s+function\s+public\.delete_my_data[\s\S]*?\$\$;/i.exec(sql);
     expect(fn).not.toBeNull();
     expect(fn![0]).toMatch(/security\s+invoker/i);

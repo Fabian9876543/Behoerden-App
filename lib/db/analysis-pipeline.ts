@@ -23,7 +23,7 @@ import type { SupportedMimeType } from "@/lib/documents/mime";
  * Der zentrale Produkt-Loop:
  *
  *   Datei lesen -> Text extrahieren -> Claude-Analyse -> Vorgang aktualisieren
- *   -> Fristen -> Aufgaben -> benoetigte Unterlagen -> Formulare -> Timeline
+ *   -> Fristen -> Aufgaben -> benötigte Unterlagen -> Formulare -> Timeline
  *
  * Jeder Schritt schreibt seinen Status ans Dokument, damit die UI den
  * Fortschritt nachvollziehbar anzeigen kann.
@@ -136,10 +136,10 @@ export async function runDocumentAnalysis(params: {
         userId,
         caseId,
         type: "authority_detected",
-        title: `Behoerde erkannt: ${analysis.authority.name}`,
+        title: `Behörde erkannt: ${analysis.authority.name}`,
         description:
           analysis.authority.confidence < 0.6
-            ? "Nicht eindeutig erkannt. Bitte ueberpruefe diese Angabe."
+            ? "Nicht eindeutig erkannt. Bitte überprüfe diese Angabe."
             : null,
         metadata: { confidence: analysis.authority.confidence },
       });
@@ -222,7 +222,7 @@ export async function runDocumentAnalysis(params: {
       });
     }
 
-    // --- 6. Benoetigte Unterlagen ------------------------------------------
+    // --- 6. Benötigte Unterlagen ------------------------------------------
     if (analysis.requiredDocuments.length > 0) {
       const { error } = await supabase.from("required_documents").insert(
         analysis.requiredDocuments.map((required) => ({
@@ -241,7 +241,7 @@ export async function runDocumentAnalysis(params: {
           userId,
           caseId,
           type: "documents_required",
-          title: `${analysis.requiredDocuments.length} benoetigte Unterlage(n) erkannt`,
+          title: `${analysis.requiredDocuments.length} benötigte Unterlage(n) erkannt`,
           metadata: { count: analysis.requiredDocuments.length },
         });
       }

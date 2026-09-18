@@ -25,7 +25,7 @@ export default async function SettingsPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Persoenliche Angaben</CardTitle>
+          <CardTitle>Persönliche Angaben</CardTitle>
           <CardDescription>
             Werden genutzt, um Antwortschreiben und Formulare vorzubereiten.
           </CardDescription>
@@ -39,7 +39,7 @@ export default async function SettingsPage() {
         <CardHeader>
           <CardTitle>Erinnerungen</CardTitle>
           <CardDescription>
-            Im Moment erinnert dich BehoerdenBuddy direkt in der App - kritische Fristen
+            Im Moment erinnert dich BehördenBuddy direkt in der App - kritische Fristen
             stehen oben auf dem Dashboard.
           </CardDescription>
         </CardHeader>
@@ -73,14 +73,14 @@ export default async function SettingsPage() {
             <Badge variant={isAdminClientConfigured() ? "success" : "muted"}>
               {isAdminClientConfigured() ? "Konfiguriert" : "Optional"}
             </Badge>
-            Kontoloeschung (SUPABASE_SERVICE_ROLE_KEY)
+            Kontolöschung (SUPABASE_SERVICE_ROLE_KEY)
           </p>
         </CardContent>
       </Card>
 
       <Card className="border-destructive/30">
         <CardHeader>
-          <CardTitle className="text-destructive">Daten loeschen</CardTitle>
+          <CardTitle className="text-destructive">Daten löschen</CardTitle>
           <CardDescription>
             Du kannst jederzeit alle bei uns gespeicherten Daten entfernen.
           </CardDescription>

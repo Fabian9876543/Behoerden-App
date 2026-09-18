@@ -11,7 +11,7 @@ import type { Database } from "@/lib/types/database";
  *
  * Voraussetzung: lokale Supabase-Instanz (`supabase start`) mit
  * NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY und
- * SUPABASE_SERVICE_ROLE_KEY. Ohne diese Variablen wird der Test uebersprungen.
+ * SUPABASE_SERVICE_ROLE_KEY. Ohne diese Variablen wird der Test übersprungen.
  */
 
 const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -103,7 +103,7 @@ suite("Row Level Security gegen eine echte Datenbank", () => {
     expect(data).toEqual([]);
   });
 
-  it("B kann den Vorgang von A nicht aendern", async () => {
+  it("B kann den Vorgang von A nicht ändern", async () => {
     const { data } = await clientB
       .from("cases")
       .update({ title: "Uebernommen" })
@@ -115,7 +115,7 @@ suite("Row Level Security gegen eine echte Datenbank", () => {
     expect(unchanged?.[0]?.title).toBe("Vertraulicher Vorgang von A");
   });
 
-  it("B kann den Vorgang von A nicht loeschen", async () => {
+  it("B kann den Vorgang von A nicht löschen", async () => {
     await clientB.from("cases").delete().eq("id", caseIdA);
     const { data } = await clientA.from("cases").select("id").eq("id", caseIdA);
     expect(data).toHaveLength(1);
@@ -146,7 +146,7 @@ suite("Row Level Security gegen eine echte Datenbank", () => {
     await clientA.storage.from("case-documents").remove([path]);
   }, 30_000);
 
-  it("delete_my_data loescht nur die eigenen Daten", async () => {
+  it("delete_my_data löscht nur die eigenen Daten", async () => {
     const { data: caseB } = await clientB
       .from("cases")
       .insert({ user_id: userIdB, title: "Vorgang von B" })

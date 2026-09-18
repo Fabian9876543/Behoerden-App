@@ -111,7 +111,7 @@ export async function deleteDocumentRecord(documentId: string): Promise<void> {
   }
 }
 
-/** Alle Storage-Pfade eines Vorgangs - wird vor dem Loeschen gebraucht. */
+/** Alle Storage-Pfade eines Vorgangs - wird vor dem Löschen gebraucht. */
 export async function listStoragePathsForCase(caseId: string): Promise<string[]> {
   const supabase = await createSupabaseServerClient();
   const { data } = await supabase.from("documents").select("storage_path").eq("case_id", caseId);

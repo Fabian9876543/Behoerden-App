@@ -37,7 +37,7 @@ export function DeadlineItem({
           </div>
 
           <p className="text-sm text-muted-foreground">
-            Faellig am {formatDate(deadline.due_date)}
+            Fällig am {formatDate(deadline.due_date)}
           </p>
 
           {deadline.description ? (
@@ -86,13 +86,13 @@ export function DeadlineItem({
           <Button
             variant="ghost"
             size="icon"
-            aria-label={`Frist "${deadline.title}" loeschen`}
+            aria-label={`Frist "${deadline.title}" löschen`}
             disabled={pending}
             onClick={() =>
               startTransition(async () => {
                 const result = await deleteDeadlineAction(deadline.id);
                 if (!result.ok) {
-                  setError(result.error?.message ?? "Die Frist konnte nicht geloescht werden.");
+                  setError(result.error?.message ?? "Die Frist konnte nicht gelöscht werden.");
                   return;
                 }
                 router.refresh();
