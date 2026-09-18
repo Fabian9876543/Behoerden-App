@@ -19,6 +19,7 @@ import {
   requireDocument,
 } from "@/lib/db/documents";
 import { recordCaseEvent } from "@/lib/db/events";
+import { firstIssueMessage, uploadMetadataSchema } from "@/lib/validation/schemas";
 import { runDocumentAnalysis, type AnalysisOutcome } from "@/lib/db/analysis-pipeline";
 
 export interface UploadResult {
@@ -49,11 +50,19 @@ export async function uploadDocumentAction(
     // Der gemeldete MIME-Typ ist nicht vertrauenswürdig - Magic Bytes entscheiden.
     const mimeType = assertMimeMatchesContent(file.type, bytes);
 
+    // Die Vorgangs-ID kommt aus dem Formular und wird erst als UUID geprüft,
+    // bevor sie überhaupt an die Datenbank geht.
     const rawCaseId = formData.get("caseId");
-    const caseId =
-      typeof rawCaseId === "string" && rawCaseId.length > 0
-        ? (await requireCase(rawCaseId, user.id)).id
-        : (
+    const metadata = uploadMetadataSchema.safeParse({
+      caseId: typeof rawCaseId === "string" && rawCaseId.length > 0 ? rawCaseId : null,
+    });
+    if (!metadata.success) {
+      throw new AppError("validation_failed", firstIssueMessage(metadata.error));
+    }
+
+    const caseId = metadata.data.caseId
+      ? (await requireCase(metadata.data.caseId, user.id)).id
+      : (
             await createCase({
               userId: user.id,
               title: "Neues Dokument wird analysiert",

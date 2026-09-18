@@ -111,6 +111,21 @@ export const updateLetterSchema = z.object({
 
 export const idSchema = z.object({ id: uuid });
 
+/**
+ * Bestätigung für "Alle meine Daten löschen".
+ *
+ * Das Wort bleibt bewusst ASCII: Es muss abgetippt werden, und ein Umlaut
+ * wäre je nach Tastatur eine unnötige Hürde.
+ */
+export const deleteAllDataSchema = z.object({
+  confirmation: z
+    .string()
+    .trim()
+    .transform((value) => value.toUpperCase())
+    .refine((value) => value === "LOESCHEN", 'Bitte gib zur Bestätigung "LOESCHEN" ein.'),
+  deleteAccount: z.boolean(),
+});
+
 export const uploadMetadataSchema = z.object({
   /** Leer/undefined = neuen Vorgang anlegen. */
   caseId: uuid.optional().nullable(),

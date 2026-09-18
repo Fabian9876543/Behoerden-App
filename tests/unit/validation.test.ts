@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   createCaseSchema,
+  deleteAllDataSchema,
   createDeadlineSchema,
   createTaskSchema,
   credentialsSchema,
@@ -113,5 +114,29 @@ describe("emptyToNull", () => {
     expect(emptyToNull("   ")).toBeNull();
     expect(emptyToNull(undefined)).toBeNull();
     expect(emptyToNull(" Text ")).toBe("Text");
+  });
+});
+
+describe("deleteAllDataSchema", () => {
+  it("akzeptiert die Bestätigung unabhängig von der Schreibweise", () => {
+    for (const confirmation of ["LOESCHEN", "loeschen", " Loeschen "]) {
+      expect(deleteAllDataSchema.safeParse({ confirmation, deleteAccount: false }).success).toBe(
+        true,
+      );
+    }
+  });
+
+  it("lehnt eine falsche oder leere Bestätigung ab", () => {
+    for (const confirmation of ["", "ja", "delete", "LOESCHE"]) {
+      expect(deleteAllDataSchema.safeParse({ confirmation, deleteAccount: false }).success).toBe(
+        false,
+      );
+    }
+  });
+
+  it("nennt das erwartete Wort in der Fehlermeldung", () => {
+    const result = deleteAllDataSchema.safeParse({ confirmation: "x", deleteAccount: false });
+    expect(result.success).toBe(false);
+    if (!result.success) expect(firstIssueMessage(result.error)).toContain("LOESCHEN");
   });
 });

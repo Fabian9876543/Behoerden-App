@@ -9,7 +9,12 @@ import { ensureProfile, updateProfile } from "@/lib/db/profiles";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { createSupabaseAdminClient, isAdminClientConfigured } from "@/lib/supabase/admin";
 import { deleteAllUserFiles } from "@/lib/storage/documents";
-import { emptyToNull, firstIssueMessage, profileSchema } from "@/lib/validation/schemas";
+import {
+  deleteAllDataSchema,
+  emptyToNull,
+  firstIssueMessage,
+  profileSchema,
+} from "@/lib/validation/schemas";
 
 export interface ProfileFormState {
   error: string | null;
@@ -59,15 +64,14 @@ export async function deleteAllDataAction(formData: FormData): Promise<ActionRes
   try {
     const user = await requireUser();
 
-    const confirmation = String(formData.get("confirmation") ?? "").trim().toUpperCase();
-    if (confirmation !== "LOESCHEN") {
-      throw new AppError(
-        "validation_failed",
-        'Bitte gib zur Bestätigung "LOESCHEN" ein.',
-      );
+    const parsed = deleteAllDataSchema.safeParse({
+      confirmation: String(formData.get("confirmation") ?? ""),
+      deleteAccount: formData.get("deleteAccount") === "on",
+    });
+    if (!parsed.success) {
+      throw new AppError("validation_failed", firstIssueMessage(parsed.error));
     }
-
-    const deleteAccount = formData.get("deleteAccount") === "on";
+    const { deleteAccount } = parsed.data;
 
     // 1. Dateien zuerst - solange die Storage-Policy den Nutzer noch kennt.
     const removedFiles = await deleteAllUserFiles(user.id);
