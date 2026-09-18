@@ -52,9 +52,10 @@ select assert(current_user = 'authenticated', 'Rolle ist authenticated (kein Sup
 select assert(auth.uid() = 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa'::uuid, 'auth.uid() liefert Nutzer A');
 
 \echo '--- Nutzer A legt Daten an ---'
-insert into public.cases (id, user_id, title)
+insert into public.cases (id, user_id, title, concerns)
 values ('11111111-1111-4111-8111-111111111111',
-        'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa', 'Vertraulicher Vorgang von A');
+        'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa', 'Vertraulicher Vorgang von A',
+        'Tochter von A');
 insert into public.tasks (user_id, case_id, title)
 values ('aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',
         '11111111-1111-4111-8111-111111111111', 'Geheime Aufgabe von A');
@@ -84,6 +85,8 @@ select assert_denied(
 set request.jwt.claim.sub = 'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb';
 
 select assert((select count(*) from public.cases) = 0, 'B sieht den Vorgang von A nicht');
+select assert((select count(*) from public.cases where concerns is not null) = 0,
+              'B sieht nicht, wen der Vorgang von A betrifft');
 select assert((select count(*) from public.tasks) = 0, 'B sieht die Aufgaben von A nicht');
 select assert((select count(*) from public.deadlines) = 0, 'B sieht die Fristen von A nicht');
 select assert((select count(*) from public.profiles

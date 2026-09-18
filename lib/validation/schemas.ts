@@ -42,8 +42,12 @@ export const profileSchema = z.object({
   city: z.string().trim().max(120).optional().or(z.literal("")),
 });
 
+/** Wen ein Vorgang betrifft - nur im Familienmodus erhoben. */
+const concerns = z.string().trim().max(80).optional().or(z.literal(""));
+
 export const createCaseSchema = z.object({
   title: z.string().trim().min(3, "Bitte einen Titel angeben.").max(120),
+  concerns,
   authorityName: z.string().trim().max(160).optional().or(z.literal("")),
   caseType: z.string().trim().max(120).optional().or(z.literal("")),
   referenceNumber: z.string().trim().max(120).optional().or(z.literal("")),
@@ -51,6 +55,7 @@ export const createCaseSchema = z.object({
 
 export const updateCaseSchema = z.object({
   caseId: uuid,
+  concerns,
   title: z.string().trim().min(3).max(120).optional(),
   authorityName: z.string().trim().max(160).optional().or(z.literal("")),
   caseType: z.string().trim().max(120).optional().or(z.literal("")),

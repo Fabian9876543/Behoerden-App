@@ -119,7 +119,7 @@ fi
 grep -E 'OK {4}' "$WORKDIR/rls.log" | sed 's/^psql:[^ ]* //;s/^NOTICE:  //' | tail -18
 
 ASSERTIONS="$(grep -cE 'OK {4}' "$WORKDIR/rls.log" || true)"
-EXPECTED="${PGTEST_MIN_ASSERTIONS:-44}"
+EXPECTED="${PGTEST_MIN_ASSERTIONS:-45}"
 if [ "$ASSERTIONS" -lt "$EXPECTED" ]; then
   echo "Nur $ASSERTIONS von mindestens $EXPECTED Zusicherungen gelaufen - Test unvollständig." >&2
   exit 1

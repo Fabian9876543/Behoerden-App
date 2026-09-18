@@ -45,6 +45,8 @@ export interface CaseRow {
   authority_key: string | null;
   case_type: string | null;
   reference_number: string | null;
+  /** Freitext im Familienmodus: wen der Vorgang betrifft. */
+  concerns: string | null;
   status: CaseStatus;
   priority: CasePriority;
   summary: string | null;

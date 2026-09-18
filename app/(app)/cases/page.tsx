@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { FolderKanban } from "lucide-react";
-import { requireUserOrRedirect } from "@/lib/auth";
+import { getProfile, requireUserOrRedirect } from "@/lib/auth";
 import { listCasesWithContext } from "@/lib/db/cases";
 import { CaseCard } from "@/components/dashboard/case-card";
 import { EmptyState } from "@/components/ui/empty-state";
@@ -11,7 +11,10 @@ export const dynamic = "force-dynamic";
 
 export default async function CasesPage() {
   const user = await requireUserOrRedirect();
-  const cases = await listCasesWithContext(user.id);
+  const [cases, profile] = await Promise.all([
+    listCasesWithContext(user.id),
+    getProfile(user.id),
+  ]);
 
   const active = cases.filter((c) => c.status !== "completed");
   const completed = cases.filter((c) => c.status === "completed");
@@ -25,7 +28,7 @@ export default async function CasesPage() {
             Alle Behördenangelegenheiten an einem Ort.
           </p>
         </div>
-        <NewCaseForm />
+        <NewCaseForm familyMode={profile?.household_mode === "family"} />
       </div>
 
       {cases.length === 0 ? (

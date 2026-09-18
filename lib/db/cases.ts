@@ -39,6 +39,7 @@ export async function createCase(params: {
   authorityKey?: string | null;
   caseType?: string | null;
   referenceNumber?: string | null;
+  concerns?: string | null;
   status?: CaseStatus;
   priority?: CasePriority;
   summary?: string | null;
@@ -54,6 +55,7 @@ export async function createCase(params: {
       authority_key: params.authorityKey ?? null,
       case_type: params.caseType ?? null,
       reference_number: params.referenceNumber ?? null,
+      concerns: params.concerns ?? null,
       status: params.status ?? "in_progress",
       priority: params.priority ?? "normal",
       summary: params.summary ?? null,
@@ -93,6 +95,7 @@ export async function updateCase(
       | "authority_key"
       | "case_type"
       | "reference_number"
+      | "concerns"
       | "status"
       | "priority"
       | "summary"

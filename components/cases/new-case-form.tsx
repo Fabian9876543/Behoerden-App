@@ -20,7 +20,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 /** Vorgang ohne Dokument anlegen - z.B. für telefonische Auskünfte. */
-export function NewCaseForm() {
+export function NewCaseForm({ familyMode = false }: { familyMode?: boolean }) {
   const router = useRouter();
   const [pending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
@@ -84,6 +84,18 @@ export function NewCaseForm() {
             <Label htmlFor="case-reference">Aktenzeichen (optional)</Label>
             <Input id="case-reference" name="referenceNumber" maxLength={120} />
           </div>
+
+          {familyMode ? (
+            <div className="space-y-1.5">
+              <Label htmlFor="case-concerns">Betrifft (optional)</Label>
+              <Input
+                id="case-concerns"
+                name="concerns"
+                maxLength={80}
+                placeholder="z.B. Tochter Lena"
+              />
+            </div>
+          ) : null}
 
           {error ? <Alert variant="critical">{error}</Alert> : null}
 

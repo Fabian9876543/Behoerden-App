@@ -140,3 +140,22 @@ describe("deleteAllDataSchema", () => {
     if (!result.success) expect(firstIssueMessage(result.error)).toContain("LOESCHEN");
   });
 });
+
+describe("Familienmodus: Betrifft-Feld", () => {
+  it("ist optional und darf leer bleiben", () => {
+    expect(createCaseSchema.safeParse({ title: "Wohngeld" }).success).toBe(true);
+    expect(createCaseSchema.safeParse({ title: "Wohngeld", concerns: "" }).success).toBe(true);
+  });
+
+  it("nimmt einen Namen entgegen", () => {
+    const result = createCaseSchema.safeParse({ title: "Kindergeld", concerns: " Tochter Lena " });
+    expect(result.success).toBe(true);
+    if (result.success) expect(result.data.concerns).toBe("Tochter Lena");
+  });
+
+  it("begrenzt die Länge", () => {
+    expect(
+      createCaseSchema.safeParse({ title: "Kindergeld", concerns: "x".repeat(200) }).success,
+    ).toBe(false);
+  });
+});

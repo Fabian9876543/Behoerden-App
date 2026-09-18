@@ -34,7 +34,13 @@ const STATUSES: CaseStatus[] = [
  * Die Analyse erkennt Behörde und Aktenzeichen nicht immer eindeutig.
  * Deshalb muss sich beides von Hand korrigieren lassen.
  */
-export function CaseEditDialog({ caseRow }: { caseRow: CaseRow }) {
+export function CaseEditDialog({
+  caseRow,
+  familyMode = false,
+}: {
+  caseRow: CaseRow;
+  familyMode?: boolean;
+}) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [pending, startTransition] = useTransition();
@@ -116,6 +122,19 @@ export function CaseEditDialog({ caseRow }: { caseRow: CaseRow }) {
               />
             </div>
           </div>
+
+          {familyMode ? (
+            <div className="space-y-1.5">
+              <Label htmlFor="case-edit-concerns">Betrifft</Label>
+              <Input
+                id="case-edit-concerns"
+                name="concerns"
+                defaultValue={caseRow.concerns ?? ""}
+                maxLength={80}
+                placeholder="z.B. Tochter Lena"
+              />
+            </div>
+          ) : null}
 
           <div className="space-y-1.5">
             <Label htmlFor="case-edit-status">Status</Label>

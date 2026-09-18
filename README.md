@@ -201,8 +201,9 @@ lokale Entwicklung deaktiviert, damit die Registrierung im Test durchläuft.
 
 - Erinnerungen nur in der App (kein Mail-/Push-Versand).
 - Kein Formularkatalog mit Volltextsuche – nur der handgepflegte Katalog.
-- Keine Familienfreigabe: `household_mode` wird erfasst, aber noch nicht für
-  geteilte Vorgänge genutzt.
+- Familienmodus: Wer ihn wählt, kann bei jedem Vorgang vermerken, wen er
+  betrifft. Echte Freigaben an andere Konten gibt es nicht - ein Vorgang
+  gehört weiterhin ausschließlich dem anlegenden Nutzer.
 - Die Analyse läuft synchron im Request. Für größere Dokumentmengen gehört sie
   in eine Queue; `runDocumentAnalysis()` ist dafür bereits als eigenständiger,
   wiederholbarer Schritt geschnitten.

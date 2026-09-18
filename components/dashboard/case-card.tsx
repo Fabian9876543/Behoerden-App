@@ -17,6 +17,9 @@ export function CaseCard({ caseRow }: { caseRow: CaseWithCounts }) {
               {caseRow.authority_name}
             </span>
           ) : null}
+          {caseRow.concerns ? (
+            <Badge variant="outline">Betrifft: {caseRow.concerns}</Badge>
+          ) : null}
           {caseRow.is_demo ? <Badge variant="muted">Demo</Badge> : null}
         </div>
         <h3 className="text-base font-semibold leading-snug">{caseRow.title}</h3>

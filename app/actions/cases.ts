@@ -31,6 +31,7 @@ export async function createCaseAction(
       authorityName: formData.get("authorityName") ?? "",
       caseType: formData.get("caseType") ?? "",
       referenceNumber: formData.get("referenceNumber") ?? "",
+      concerns: formData.get("concerns") ?? "",
     });
     if (!parsed.success) {
       throw new AppError("validation_failed", firstIssueMessage(parsed.error));
@@ -44,6 +45,7 @@ export async function createCaseAction(
       authorityKey: matchAuthorityKey(authorityName),
       caseType: emptyToNull(parsed.data.caseType),
       referenceNumber: emptyToNull(parsed.data.referenceNumber),
+      concerns: emptyToNull(parsed.data.concerns),
       status: "in_progress",
     });
 
@@ -72,6 +74,7 @@ export async function updateCaseAction(formData: FormData): Promise<ActionResult
       authorityName: formData.get("authorityName") ?? "",
       caseType: formData.get("caseType") ?? "",
       referenceNumber: formData.get("referenceNumber") ?? "",
+      concerns: formData.get("concerns") ?? "",
       status: formData.get("status") ?? undefined,
     });
     if (!parsed.success) {
@@ -87,6 +90,7 @@ export async function updateCaseAction(formData: FormData): Promise<ActionResult
       authority_key: matchAuthorityKey(authorityName),
       case_type: emptyToNull(parsed.data.caseType),
       reference_number: emptyToNull(parsed.data.referenceNumber),
+      concerns: emptyToNull(parsed.data.concerns),
       ...(parsed.data.status ? { status: parsed.data.status } : {}),
       ...(parsed.data.status === "completed"
         ? { closed_at: new Date().toISOString() }

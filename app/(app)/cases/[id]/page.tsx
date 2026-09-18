@@ -76,13 +76,19 @@ export default async function CaseDetailPage({
           {caseRow.reference_number ? (
             <Badge variant="outline">Aktenzeichen: {caseRow.reference_number}</Badge>
           ) : null}
+          {caseRow.concerns ? (
+            <Badge variant="outline">Betrifft: {caseRow.concerns}</Badge>
+          ) : null}
         </div>
 
         <div className="flex flex-wrap items-center justify-between gap-3 pt-1">
           <p className="text-xs text-muted-foreground">
             Angelegt am {formatDate(caseRow.created_at)}
           </p>
-          <CaseEditDialog caseRow={caseRow} />
+          <CaseEditDialog
+            caseRow={caseRow}
+            familyMode={profile?.household_mode === "family"}
+          />
         </div>
       </header>
 
