@@ -20,6 +20,12 @@ PostgreSQL-Binaries. Es startet einen Wegwerf-Cluster, spielt Migrationen und
 Seed ein und prüft die Row Level Security im Betrieb. Bei Änderungen an
 `supabase/migrations/` immer mitlaufen lassen.
 
+Die KI-Anbindung wird ohne Zugangsdaten getestet: `claude-client.test.ts` und
+`analysis-flow.test.ts` starten einen lokalen Server und setzen
+`ANTHROPIC_BASE_URL` darauf. Das SDK ist echt, nur der Gegenüber nicht - so
+lassen sich auch die Fehlerpfade prüfen, die man im Betrieb nie absichtlich
+auslöst.
+
 ## Architektur in einem Satz
 
 UI ruft ausschließlich Server Actions in `app/actions/`; die rufen Repositories
@@ -47,6 +53,29 @@ Teil in ein eigenes Modul - siehe `lib/ai/letter-intents.ts` neben
 **Zod 4.** `zodOutputFormat` aus dem Anthropic-SDK erwartet die v4-Typen.
 Also `z.uuid()` statt `z.string().uuid()`, `z.email()` hinter `.pipe()` und
 `error:` statt `errorMap:`.
+
+**Structured Outputs erzwingt weder `maxLength` noch `pattern`.** Der
+SDK-Helper verschiebt beides in die `description` des JSON-Schemas. Geprüft
+wird erst beim Parsen - was im Schema steht, ist also eine Regel für *uns*,
+kein Auftrag an das Modell. Was das Modell einhalten soll, gehört zusätzlich
+in den Prompt (siehe Datumsformat).
+
+**Keine `.transform()` und keine dynamischen `.catch()` im Analyseschema.**
+Beides bricht die Umwandlung in ein JSON-Schema, und zwar erst zur Laufzeit -
+jede Analyse schlägt dann fehl. Längen werden darum in `sanitizeAnalysis`
+über `TEXT_LIMITS` gekürzt, nicht im Schema. Für "nicht nur Leerraum" eine
+Regex statt `.trim()`. `tests/integration/structured-output.test.ts` nagelt
+das fest.
+
+**Kürzen statt verwerfen - aber nur bei Fließtext.** Eine um Zeichen zu lange
+Zusammenfassung darf nicht die ganze Analyse samt Fristen mitreißen. Streng
+bleiben Datumsformat und die Obergrenzen der Fristen- und Aufgabenlisten:
+Lieber sichtbar scheitern, als still eine Frist unterschlagen.
+
+**SDK-Fehler unterscheiden.** Ein `AnthropicError`, der *kein* `APIError` ist,
+entsteht clientseitig (vor allem beim Parsen) und ist ein Schemafehler, kein
+Ausfall - sonst liest die Person "derzeit nicht erreichbar" und wartet,
+obwohl ein erneuter Versuch sofort hilft.
 
 **Deutsch mit Umlauten.** Oberflächentexte, Fehlermeldungen und Prompts nutzen
 echte Umlaute. ASCII bleiben nur technische Bezeichner: Paketname,
