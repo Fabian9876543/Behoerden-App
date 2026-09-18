@@ -29,9 +29,19 @@ import { TaskList } from "@/components/tasks/task-list";
 import { DeadlineItem } from "@/components/deadlines/deadline-item";
 import { DocumentList } from "@/components/documents/document-list";
 import { UploadDropzone } from "@/components/documents/upload-dropzone";
+import { resolveMaxUploadBytes } from "@/lib/env";
 
 export const metadata: Metadata = { title: "Vorgang" };
 export const dynamic = "force-dynamic";
+
+/**
+ * Die Analyse ruft Claude synchron im Request auf. Das Standard-Timeout einer
+ * Serverless Function reicht dafür bei mehrseitigen Bescheiden nicht; 60
+ * Sekunden sind auf dem Hobby-Plan die Obergrenze. Läuft die Anwendung
+ * woanders, ist dieser Export wirkungslos.
+ */
+export const maxDuration = 60;
+
 
 export default async function CaseDetailPage({
   params,
@@ -208,7 +218,7 @@ export default async function CaseDetailPage({
           Dokumente
         </h2>
         <DocumentList documents={documents} />
-        <UploadDropzone caseId={caseRow.id} compact />
+        <UploadDropzone caseId={caseRow.id} compact maxBytes={resolveMaxUploadBytes()} />
       </section>
 
       <Card>

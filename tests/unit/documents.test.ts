@@ -1,12 +1,16 @@
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it } from "vitest";
 import {
+  DEFAULT_MAX_UPLOAD_BYTES,
+  VERCEL_MAX_UPLOAD_BYTES,
   assertMimeMatchesContent,
   assertUploadable,
+  describeMaxUploadSize,
   extensionFor,
   isImageMimeType,
   isSupportedMimeType,
   sniffMimeType,
 } from "@/lib/documents/mime";
+import { resolveMaxUploadBytes } from "@/lib/env";
 import { hasUsableText, joinPages, splitPages } from "@/lib/documents/text";
 import { buildStoragePath, userIdFromStoragePath } from "@/lib/storage/paths";
 import { AppError } from "@/lib/errors";
@@ -131,5 +135,52 @@ describe("Storage-Pfade", () => {
 
   it("gibt null bei fremdem Pfadschema", () => {
     expect(userIdFromStoragePath("public/irgendwas.pdf")).toBeNull();
+  });
+});
+
+describe("resolveMaxUploadBytes", () => {
+  const saved = { vercel: process.env.VERCEL, max: process.env.MAX_UPLOAD_BYTES };
+
+  afterEach(() => {
+    if (saved.vercel === undefined) delete process.env.VERCEL;
+    else process.env.VERCEL = saved.vercel;
+    if (saved.max === undefined) delete process.env.MAX_UPLOAD_BYTES;
+    else process.env.MAX_UPLOAD_BYTES = saved.max;
+  });
+
+  it("erlaubt ohne Vorgabe 10 MB", () => {
+    delete process.env.VERCEL;
+    delete process.env.MAX_UPLOAD_BYTES;
+    expect(resolveMaxUploadBytes()).toBe(DEFAULT_MAX_UPLOAD_BYTES);
+  });
+
+  it("senkt die Grenze auf Vercel", () => {
+    // Sonst stirbt ein 6-MB-Scan an der Plattformgrenze, bevor die Anwendung
+    // ihn mit einer verständlichen Meldung ablehnen kann.
+    process.env.VERCEL = "1";
+    delete process.env.MAX_UPLOAD_BYTES;
+    expect(resolveMaxUploadBytes()).toBe(VERCEL_MAX_UPLOAD_BYTES);
+    expect(VERCEL_MAX_UPLOAD_BYTES).toBeLessThan(4.5 * 1024 * 1024);
+  });
+
+  it("eine eigene Vorgabe schlägt die Plattform", () => {
+    process.env.VERCEL = "1";
+    process.env.MAX_UPLOAD_BYTES = "2097152";
+    expect(resolveMaxUploadBytes()).toBe(2 * 1024 * 1024);
+  });
+
+  it("ignoriert Unsinn und nimmt den Plattformwert", () => {
+    process.env.VERCEL = "1";
+    process.env.MAX_UPLOAD_BYTES = "viel";
+    expect(resolveMaxUploadBytes()).toBe(VERCEL_MAX_UPLOAD_BYTES);
+    process.env.MAX_UPLOAD_BYTES = "-1";
+    expect(resolveMaxUploadBytes()).toBe(VERCEL_MAX_UPLOAD_BYTES);
+  });
+});
+
+describe("describeMaxUploadSize", () => {
+  it("nennt die Grenze in MB", () => {
+    expect(describeMaxUploadSize(DEFAULT_MAX_UPLOAD_BYTES)).toBe("10 MB");
+    expect(describeMaxUploadSize(VERCEL_MAX_UPLOAD_BYTES)).toBe("4 MB");
   });
 });

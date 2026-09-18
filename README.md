@@ -233,6 +233,55 @@ lokale Entwicklung deaktiviert, damit die Registrierung im Test durchläuft.
 
 ---
 
+## Deployment auf Vercel
+
+Ein gewöhnliches Next.js-Projekt - `vercel.json` setzt nur die Region. Vier
+Dinge weichen aber vom Standardfall ab, weil diese Anwendung Dateien
+entgegennimmt, Claude synchron aufruft und Behördenunterlagen hält.
+
+**1. Supabase muss die Cloud-Instanz sein.** Eine lokal per `supabase start`
+gestartete Instanz ist von Vercel aus nicht erreichbar. In den
+Projekt-Einstellungen gehören:
+
+| Variable | sichtbar |
+|---|---|
+| `NEXT_PUBLIC_SUPABASE_URL` | Client |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Client |
+| `NEXT_PUBLIC_SITE_URL` | Client - die Deployment-URL |
+| `SUPABASE_SERVICE_ROLE_KEY` | **nur Server** |
+| `ANTHROPIC_API_KEY` | **nur Server** |
+
+Die beiden letzten dürfen nie ein `NEXT_PUBLIC_`-Präfix bekommen. Im Code
+liegen sie hinter `server-only`; das Präfix würde sie trotzdem ins
+Client-Bundle inlinen.
+
+**2. Der Upload-Deckel folgt der Plattform.** Vercel begrenzt den Request-Body
+einer Serverless Function auf rund 4,5 MB, und `serverActions.bodySizeLimit`
+hebt das nicht an. `resolveMaxUploadBytes()` schaltet darum auf 4 MB um, sobald
+`VERCEL` gesetzt ist - so lehnt die Anwendung einen größeren Scan selbst ab,
+mit deutscher Meldung statt eines nackten 413. Die Dropzone bekommt denselben
+Wert und verspricht nichts, was der Server ablehnt. Wer mehr braucht, lädt
+besser per Signed URL direkt in Supabase Storage und lässt den Server außen vor
+- das ist ein echter Umbau, kein Konfigurationsschalter.
+
+**3. Die Analyse braucht Zeit.** Sie ruft Claude synchron im Request auf. Die
+Seiten, von denen aus analysiert wird, setzen deshalb `maxDuration = 60` - die
+Obergrenze des Hobby-Plans. Reicht das für sehr lange Bescheide nicht, gehört
+die Analyse in eine Queue; `runDocumentAnalysis()` ist als eigenständiger,
+wiederholbarer Schritt dafür schon geschnitten.
+
+**4. Region.** `vercel.json` setzt `fra1`, und das Supabase-Projekt gehört in
+dieselbe Region. Bei Behördenunterlagen ist das kein Feintuning, sondern Teil
+des Datenschutzversprechens weiter oben - und spart nebenbei den Atlantik pro
+Query.
+
+Nicht mit nach Vercel gehen `npm run test:db`, `npm run check:links` und die
+E2E-Tests: Die laufen in CI bzw. lokal. Der Build selbst kommt ohne Secrets
+aus, damit ein Preview-Deployment nicht an fehlenden Runtime-Variablen
+scheitert.
+
+---
+
 ## Erweiterung
 
 - **Neue Behörde:** Eintrag in `lib/authorities/registry.ts`. Kein Code.

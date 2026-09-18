@@ -10,7 +10,11 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Select } from "@/components/ui/select";
 import { UploadProgress, type AnalysisStep } from "@/components/documents/upload-progress";
-import { DEFAULT_MAX_UPLOAD_BYTES, SUPPORTED_MIME_TYPES } from "@/lib/documents/mime";
+import {
+  DEFAULT_MAX_UPLOAD_BYTES,
+  SUPPORTED_MIME_TYPES,
+  describeMaxUploadSize,
+} from "@/lib/documents/mime";
 import { cn } from "@/lib/utils";
 
 const INITIAL_STEPS: AnalysisStep[] = [
@@ -36,12 +40,19 @@ export function UploadDropzone({
   caseId,
   compact = false,
   openCases = [],
+  maxBytes = DEFAULT_MAX_UPLOAD_BYTES,
 }: {
   /** Fest vorgegebener Vorgang - dann entfällt die Auswahl. */
   caseId?: string;
   compact?: boolean;
   /** Offene Vorgänge, denen das Dokument zugeordnet werden kann. */
   openCases?: UploadTarget[];
+  /**
+   * Serverseitig geltende Obergrenze. Wird durchgereicht, damit hier keine
+   * Größe versprochen wird, die der Server danach ablehnt - auf Vercel liegt
+   * sie niedriger als der Standard.
+   */
+  maxBytes?: number;
 }) {
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
@@ -63,8 +74,10 @@ export function UploadDropzone({
     async (file: File) => {
       setError(null);
 
-      if (file.size > DEFAULT_MAX_UPLOAD_BYTES) {
-        setError("Die Datei ist zu groß. Erlaubt sind maximal 10 MB.");
+      if (file.size > maxBytes) {
+        setError(
+          `Die Datei ist zu groß. Erlaubt sind maximal ${describeMaxUploadSize(maxBytes)}.`,
+        );
         return;
       }
       if (!(SUPPORTED_MIME_TYPES as readonly string[]).includes(file.type)) {
@@ -133,7 +146,7 @@ export function UploadDropzone({
       router.push(`/cases/${result.caseId}?analyzed=1`);
       router.refresh();
     },
-    [caseId, targetCaseId, patch, router],
+    [caseId, targetCaseId, maxBytes, patch, router],
   );
 
   const onDrop = useCallback(

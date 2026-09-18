@@ -1,3 +1,8 @@
+import {
+  DEFAULT_MAX_UPLOAD_BYTES,
+  VERCEL_MAX_UPLOAD_BYTES,
+} from "@/lib/documents/mime";
+
 /**
  * Zentraler, validierter Zugriff auf Environment-Variablen.
  *
@@ -39,8 +44,28 @@ export function serverEnv() {
     anthropicApiKey: required("ANTHROPIC_API_KEY", process.env.ANTHROPIC_API_KEY),
     anthropicModel: process.env.ANTHROPIC_MODEL ?? "claude-opus-5",
     supabaseServiceRoleKey: process.env.SUPABASE_SERVICE_ROLE_KEY ?? "",
-    maxUploadBytes: Number(process.env.MAX_UPLOAD_BYTES ?? 10 * 1024 * 1024),
+    maxUploadBytes: resolveMaxUploadBytes(),
   };
+}
+
+/**
+ * Maximale Uploadgröße - auch ohne vollständige Serverkonfiguration lesbar.
+ *
+ * Ohne eigene Vorgabe richtet sie sich nach der Plattform: Auf Vercel gilt die
+ * niedrigere Grenze, weil dort der Request-Body gedeckelt ist. Die Oberfläche
+ * liest denselben Wert, damit sie keine Größe verspricht, die der Server
+ * ablehnt.
+ */
+export function resolveMaxUploadBytes(): number {
+  const platformDefault = process.env.VERCEL
+    ? VERCEL_MAX_UPLOAD_BYTES
+    : DEFAULT_MAX_UPLOAD_BYTES;
+
+  const configured = process.env.MAX_UPLOAD_BYTES;
+  if (!configured) return platformDefault;
+
+  const value = Number(configured);
+  return Number.isFinite(value) && value > 0 ? value : platformDefault;
 }
 
 /** Prüft ohne Exception, ob die KI-Integration konfiguriert ist. */

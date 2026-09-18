@@ -5,6 +5,23 @@ export type SupportedMimeType = (typeof SUPPORTED_MIME_TYPES)[number];
 
 export const DEFAULT_MAX_UPLOAD_BYTES = 10 * 1024 * 1024; // 10 MB
 
+/**
+ * Obergrenze auf Vercel.
+ *
+ * Eine Serverless Function bekommt dort höchstens rund 4,5 MB Request-Body -
+ * eine Plattformgrenze, die `serverActions.bodySizeLimit` nicht anhebt. Ohne
+ * eigene Grenze darunter stirbt ein größerer Scan an der Plattform, bevor die
+ * Anwendung ihn ablehnen kann: Die Person sähe einen nackten 413 statt einer
+ * deutschen Meldung. `lib/env.ts` schaltet darauf um, sobald `VERCEL` gesetzt
+ * ist.
+ */
+export const VERCEL_MAX_UPLOAD_BYTES = 4 * 1024 * 1024; // 4 MB
+
+/** "10 MB" - eine Zahl, die Meldung und Oberfläche gemeinsam nutzen. */
+export function describeMaxUploadSize(maxBytes: number): string {
+  return `${Math.floor(maxBytes / (1024 * 1024))} MB`;
+}
+
 export function isSupportedMimeType(value: string): value is SupportedMimeType {
   return (SUPPORTED_MIME_TYPES as readonly string[]).includes(value);
 }
@@ -31,8 +48,10 @@ export function assertUploadable(params: {
     throw new AppError("validation_failed", "Die Datei ist leer.");
   }
   if (params.sizeBytes > maxBytes) {
-    const mb = Math.floor(maxBytes / (1024 * 1024));
-    throw new AppError("file_too_large", `Die Datei ist zu groß. Erlaubt sind maximal ${mb} MB.`);
+    throw new AppError(
+      "file_too_large",
+      `Die Datei ist zu groß. Erlaubt sind maximal ${describeMaxUploadSize(maxBytes)}.`,
+    );
   }
 }
 

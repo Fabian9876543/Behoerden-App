@@ -13,10 +13,20 @@ import { CaseCard } from "@/components/dashboard/case-card";
 import { CriticalDeadlines } from "@/components/dashboard/critical-deadlines";
 import { DemoCaseButton } from "@/components/dashboard/demo-case-button";
 import { UploadDropzone } from "@/components/documents/upload-dropzone";
+import { resolveMaxUploadBytes } from "@/lib/env";
 import { LegalNotice } from "@/components/shared/legal-notice";
 
 export const metadata: Metadata = { title: "Dashboard" };
 export const dynamic = "force-dynamic";
+
+/**
+ * Die Analyse ruft Claude synchron im Request auf. Das Standard-Timeout einer
+ * Serverless Function reicht dafür bei mehrseitigen Bescheiden nicht; 60
+ * Sekunden sind auf dem Hobby-Plan die Obergrenze. Läuft die Anwendung
+ * woanders, ist dieser Export wirkungslos.
+ */
+export const maxDuration = 60;
+
 
 export default async function DashboardPage() {
   const user = await requireUserOrRedirect();
@@ -62,6 +72,7 @@ export default async function DashboardPage() {
         </h2>
         <UploadDropzone
           openCases={cases.map((entry) => ({ id: entry.id, title: entry.title }))}
+          maxBytes={resolveMaxUploadBytes()}
         />
 
         {/* Zweiter Einstieg: Es gibt Dinge, für die kein Brief kommt. */}

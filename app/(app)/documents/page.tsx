@@ -4,10 +4,20 @@ import { listDocuments } from "@/lib/db/documents";
 import { listCasesWithContext } from "@/lib/db/cases";
 import { DocumentList } from "@/components/documents/document-list";
 import { UploadDropzone } from "@/components/documents/upload-dropzone";
+import { resolveMaxUploadBytes } from "@/lib/env";
 import { LegalNotice } from "@/components/shared/legal-notice";
 
 export const metadata: Metadata = { title: "Dokumente" };
 export const dynamic = "force-dynamic";
+
+/**
+ * Die Analyse ruft Claude synchron im Request auf. Das Standard-Timeout einer
+ * Serverless Function reicht dafür bei mehrseitigen Bescheiden nicht; 60
+ * Sekunden sind auf dem Hobby-Plan die Obergrenze. Läuft die Anwendung
+ * woanders, ist dieser Export wirkungslos.
+ */
+export const maxDuration = 60;
+
 
 export default async function DocumentsPage() {
   const user = await requireUserOrRedirect();
@@ -30,7 +40,10 @@ export default async function DocumentsPage() {
         </p>
       </div>
 
-      <UploadDropzone openCases={cases.map((entry) => ({ id: entry.id, title: entry.title }))} />
+      <UploadDropzone
+        openCases={cases.map((entry) => ({ id: entry.id, title: entry.title }))}
+        maxBytes={resolveMaxUploadBytes()}
+      />
 
       <section className="space-y-4">
         <h2 className="text-lg font-semibold tracking-tight">

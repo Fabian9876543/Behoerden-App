@@ -94,6 +94,17 @@ Zielort - dort wird angemeldet. `planPlace()` entscheidet das, und es nimmt
 die alte PLZ bewusst nicht mit: Sie würde einen mehrdeutigen Ortsnamen falsch
 bestätigen.
 
+**Vercel deckelt den Request-Body bei ~4,5 MB.** `bodySizeLimit` in
+`next.config.ts` hebt das nicht an. `resolveMaxUploadBytes()` schaltet darum
+auf 4 MB um, sobald `VERCEL` gesetzt ist, und die Dropzone bekommt den Wert als
+Prop - sonst verspricht die Oberfläche 10 MB und die Plattform antwortet mit
+einem nackten 413. Wer die Grenze anfasst, fasst beide Seiten an.
+
+**Seiten, von denen aus Claude aufgerufen wird, brauchen `maxDuration`.**
+Die Analyse läuft synchron im Request. Ohne den Export greift das
+Standard-Timeout der Function; 60 Sekunden sind auf dem Hobby-Plan das Maximum.
+Betroffen sind Dashboard, Dokumente und Vorgangsdetail.
+
 **Deutsch mit Umlauten.** Oberflächentexte, Fehlermeldungen und Prompts nutzen
 echte Umlaute. ASCII bleiben nur technische Bezeichner: Paketname,
 Supabase-Projekt-ID, iCalendar-PRODID/UID und der Name der Exportdatei.

@@ -3,7 +3,7 @@
 import { randomUUID } from "node:crypto";
 import { revalidatePath } from "next/cache";
 import { requireUser } from "@/lib/auth";
-import { serverEnv } from "@/lib/env";
+import { resolveMaxUploadBytes } from "@/lib/env";
 import { AppError, fail, ok, type ActionResult } from "@/lib/errors";
 import { log } from "@/lib/logging";
 import {
@@ -192,8 +192,7 @@ export async function deleteDocumentAction(documentId: string): Promise<ActionRe
 
 function safeMaxUploadBytes(): number {
   try {
-    const value = serverEnv().maxUploadBytes;
-    return Number.isFinite(value) && value > 0 ? value : DEFAULT_MAX_UPLOAD_BYTES;
+    return resolveMaxUploadBytes();
   } catch {
     return DEFAULT_MAX_UPLOAD_BYTES;
   }
