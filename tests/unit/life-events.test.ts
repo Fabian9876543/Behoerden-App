@@ -1,6 +1,12 @@
 import { describe, expect, it } from "vitest";
 import { getLifeEvent, LIFE_EVENTS } from "@/lib/life-events/catalog";
-import { buildPlan, missingRequiredAnswers, selectSteps, shiftDate } from "@/lib/life-events/plan";
+import {
+  buildPlan,
+  missingRequiredAnswers,
+  planPlace,
+  selectSteps,
+  shiftDate,
+} from "@/lib/life-events/plan";
 import { AUTHORITIES, isOfficialAuthorityUrl } from "@/lib/authorities/registry";
 
 /**
@@ -205,5 +211,40 @@ describe("Geburt", () => {
   it("rechnet die Anzeigefrist beim Standesamt aus dem Geburtsdatum", () => {
     const plan = buildPlan(geburt, { birthDate: "2026-09-01" });
     expect(plan.steps.find((step) => step.key === "standesamt")?.dueDate).toBe("2026-09-08");
+  });
+});
+
+describe("planPlace", () => {
+  const home = { city: "Dresden", postalCode: "01067" };
+
+  it("nimmt beim Umzug den Zielort, nicht die gemeldete Adresse", () => {
+    // Angemeldet wird beim Bürgeramt der neuen Gemeinde - dorthin muss der
+    // Link zeigen, nicht auf die Stadt, aus der man wegzieht.
+    expect(planPlace(umzug, { newCity: "Leipzig" }, home)).toEqual({
+      city: "Leipzig",
+      postalCode: null,
+    });
+  });
+
+  it("nimmt die neue PLZ mit, wenn sie angegeben ist", () => {
+    expect(planPlace(umzug, { newCity: "Frankfurt", newPostalCode: "60313" }, home)).toEqual({
+      city: "Frankfurt",
+      postalCode: "60313",
+    });
+  });
+
+  it("schleppt die alte PLZ nicht zum neuen Ort mit", () => {
+    // Sonst würde "Frankfurt" mit der Dresdner PLZ geprüft - und entweder
+    // falsch bestätigt oder grundlos verworfen.
+    expect(planPlace(umzug, { newCity: "Frankfurt" }, home).postalCode).toBeNull();
+  });
+
+  it("fällt ohne Zielort auf die gemeldete Adresse zurück", () => {
+    expect(planPlace(umzug, {}, home)).toEqual(home);
+    expect(planPlace(umzug, { newCity: "   " }, home)).toEqual(home);
+  });
+
+  it("andere Lebenslagen bleiben bei der gemeldeten Adresse", () => {
+    expect(planPlace(getLifeEvent("geburt")!, { childName: "Mia" }, home)).toEqual(home);
   });
 });

@@ -202,6 +202,7 @@ npm run lint
 npm test              # Unit- und Integrationstests (Vitest)
 npm run test:db       # Migrationen + RLS gegen echtes PostgreSQL
 npm run test:e2e      # End-to-End (Playwright)
+npm run check:links   # ruft jede hinterlegte URL auf (braucht Netz)
 npm run build
 ```
 
@@ -212,6 +213,14 @@ npm run build
 | **Datenbank** | `npm run test:db` startet einen temporären PostgreSQL-Cluster, spielt die echten Migrationen ein und prüft RLS **im Betrieb**: A legt Daten an, B sieht/ändert/löscht sie nicht, B kann nichts in A's Namen anlegen, Storage-Ordner sind getrennt, `delete_my_data` trifft nur den Aufrufer, Kaskaden räumen auf, anonym sieht nichts. Danach wird der Demo-Seed eingespielt und nachgerechnet, dass die CTE-Kette alle Daten schreibt und verknüpft. 44 Zusicherungen. | PostgreSQL-Binaries (kein Docker) |
 | **Autorisierung** | `tests/integration/authorization.test.ts` macht dasselbe gegen eine echte Supabase-Instanz, inklusive Auth und Storage-API. Wird ohne Konfiguration übersprungen. | laufende Supabase-Instanz |
 | **E2E** | Registrierung → Onboarding → Upload → Analyse → Vorgang → Aufgaben → Frist → Abhaken → Löschen; dazu abgelehnte Dateiformate und der Schutz der App-Routen. | Supabase + `ANTHROPIC_API_KEY` |
+
+`npm run check:links` ruft jede URL aus Behörden-Registry, Formularkatalog,
+Gemeindekatalog und Lebenslagen auf. Es unterscheidet drei Ausgänge:
+erreichbar, **unklar** (403 vom Bot-Schutz, Zeitüberschreitung, gesperrtes
+Netz) und **falsch** (Host nicht auflösbar, 404, kaputtes Zertifikat). Nur der
+dritte Fall macht den Lauf rot – sonst löscht irgendwann jemand einen
+richtigen Eintrag, weil ein Portal gerade keine Roboter mochte. Das Skript
+läuft bewusst nicht in `npm test` mit: Tests dürfen nicht vom Netz abhängen.
 
 `npm run test:db` braucht weder Docker noch Supabase und läuft darum in CI
 (`.github/workflows/ci.yml`) bei jedem Push mit — zusammen mit Typecheck,
@@ -229,6 +238,11 @@ lokale Entwicklung deaktiviert, damit die Registrierung im Test durchläuft.
 - **Neue Behörde:** Eintrag in `lib/authorities/registry.ts`. Kein Code.
 - **Neues Formular:** Eintrag in `lib/forms/catalog.ts`. Nur HTTPS-URLs
   offizieller Stellen – `isOfficialAuthorityUrl()` prüft das, ein Test sichert es ab.
+- **Neue Gemeinde:** Eintrag in `lib/authorities/municipalities.ts`, danach
+  `npm run check:links`. Nur die Domain-Wurzel (`https://www.leipzig.de`),
+  niemals eine Unterseite – Pfade veralten, Domains kaum. Ein Ortsname, den es
+  in Deutschland mehrfach gibt, gehört unter `ambiguousAliases` und zählt dann
+  nur mit passender PLZ.
 - **Anderer OCR-Anbieter:** `OcrProvider` implementieren, in
   `lib/ocr/index.ts` registrieren.
 - **Weitere Erinnerungskanäle:** `deadlines.reminder_channels` und
@@ -245,6 +259,10 @@ lokale Entwicklung deaktiviert, damit die Registrierung im Test durchläuft.
 
 - Erinnerungen nur in der App (kein Mail-/Push-Versand).
 - Kein Formularkatalog mit Volltextsuche – nur der handgepflegte Katalog.
+- Der Gemeindekatalog deckt die größeren Städte ab, nicht alle rund 11.000
+  Gemeinden, und verlinkt deren Startseite statt der Anmeldeseite. Für alles
+  andere zeigt die App die bundesweite Behördensuche und sagt offen, dass für
+  diesen Ort nichts hinterlegt ist. Geraten wird nicht.
 - Familienmodus: Wer ihn wählt, kann bei jedem Vorgang vermerken, wen er
   betrifft. Echte Freigaben an andere Konten gibt es nicht - ein Vorgang
   gehört weiterhin ausschließlich dem anlegenden Nutzer.

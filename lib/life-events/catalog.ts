@@ -40,7 +40,14 @@ const UMZUG: LifeEventDefinition = {
       type: "text",
       label: "Wohin ziehst du?",
       placeholder: "z.B. Leipzig",
-      help: "Nur für den Titel des Vorgangs.",
+      help: "Bestimmt den Titel des Vorgangs - und, wenn deine Gemeinde hinterlegt ist, die Links zu den zuständigen Ämtern.",
+    },
+    {
+      key: "newPostalCode",
+      type: "text",
+      label: "Postleitzahl am neuen Wohnort",
+      placeholder: "z.B. 04103",
+      help: "Nur zur Unterscheidung gleichnamiger Orte - etwa Frankfurt am Main und Frankfurt (Oder).",
     },
     {
       key: "sameMunicipality",

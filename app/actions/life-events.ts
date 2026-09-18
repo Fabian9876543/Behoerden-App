@@ -1,16 +1,17 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { requireUser } from "@/lib/auth";
+import { getProfile, requireUser } from "@/lib/auth";
 import { AppError, fail, ok, type ActionResult } from "@/lib/errors";
 import { log } from "@/lib/logging";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { createCase } from "@/lib/db/cases";
 import { recordCaseEvents } from "@/lib/db/events";
 import { getAuthority } from "@/lib/authorities/registry";
+import { stepAuthorityLinks, type AuthorityLink } from "@/lib/authorities/links";
 import { findForm } from "@/lib/forms/catalog";
 import { getLifeEvent } from "@/lib/life-events/catalog";
-import { buildPlan, missingRequiredAnswers } from "@/lib/life-events/plan";
+import { buildPlan, missingRequiredAnswers, planPlace } from "@/lib/life-events/plan";
 import { lifeEventAnswersSchema } from "@/lib/validation/schemas";
 import type { LifeEventAnswers } from "@/lib/life-events/types";
 import type { CasePriority } from "@/lib/types/database";
@@ -58,6 +59,14 @@ export async function createCaseFromLifeEventAction(
       );
     }
 
+    // Wohnort bestimmt, welches Amt gemeint ist. Fehlt er, bleiben die
+    // Schritte trotzdem vollständig - nur ohne Direktlink.
+    const profile = await getProfile(user.id);
+    const place = planPlace(definition, answers, {
+      city: profile?.city ?? null,
+      postalCode: profile?.postal_code ?? null,
+    });
+
     const caseRow = await createCase({
       userId: user.id,
       title: plan.caseTitle,
@@ -102,7 +111,7 @@ export async function createCaseFromLifeEventAction(
         case_id: caseRow.id,
         deadline_id: deadlineIdByStep.get(step.key) ?? null,
         title: step.title,
-        description: buildTaskDescription(step),
+        description: buildTaskDescription(step, stepAuthorityLinks(step, place)),
         is_required: step.required,
         due_date: step.dueDate,
         position: step.position,
@@ -200,14 +209,17 @@ export async function createCaseFromLifeEventAction(
   }
 }
 
-/** Baut aus Ort, Unterlagen und Hinweis eine lesbare Aufgabenbeschreibung. */
-function buildTaskDescription(step: {
-  description: string;
-  where: string;
-  authorityKey?: string;
-  note?: string;
-  officialUrl?: string;
-}): string {
+/** Baut aus Ort, Unterlagen, Hinweis und Links eine lesbare Aufgabenbeschreibung. */
+function buildTaskDescription(
+  step: {
+    description: string;
+    where: string;
+    authorityKey?: string;
+    note?: string;
+    officialUrl?: string;
+  },
+  links: AuthorityLink[],
+): string {
   const parts = [step.description, `Wo: ${step.where}`];
 
   const authority = getAuthority(step.authorityKey ?? null);
@@ -215,7 +227,10 @@ function buildTaskDescription(step: {
     parts.push(`Zuständig: ${authority.name}`);
   }
   if (step.note) parts.push(`Hinweis: ${step.note}`);
-  if (step.officialUrl) parts.push(`Offizielle Quelle: ${step.officialUrl}`);
+
+  if (links.length > 0) {
+    parts.push(links.map((link) => `${link.label}: ${link.url}`).join("\n"));
+  }
 
   return parts.join("\n\n");
 }

@@ -10,6 +10,8 @@
  * wird dann unverändert übernommen und `authorityKey` bleibt null.
  */
 
+import { MUNICIPAL_DOMAINS } from "@/lib/authorities/municipalities";
+
 export interface AuthorityDefinition {
   key: string;
   /** Anzeigename */
@@ -226,7 +228,11 @@ export function isOfficialAuthorityUrl(url: string): boolean {
     }
   }
 
-  // 3. Verwaltungsdomains: .bund.de sowie die Landes-Verwaltungsdomains.
+  // 3. Stadtportale aus dem Gemeindekatalog. Bewusst eine Positivliste: Eine
+  //    beliebige `.de`-Adresse mit einem Stadtnamen darin ist keine Behörde.
+  if (MUNICIPAL_DOMAINS.some(isOn)) return true;
+
+  // 4. Verwaltungsdomains: .bund.de sowie die Landes-Verwaltungsdomains.
   if (isOn("bund.de")) return true;
   if (/\.(?:[a-z-]+\.)?(?:de)$/.test(host) && /(?:^|\.)(?:verwaltung|service)\.[a-z-]+\.de$/.test(host)) {
     return true;

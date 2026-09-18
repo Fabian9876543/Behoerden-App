@@ -7,6 +7,7 @@ import { getCaseTimeline } from "@/lib/db/events";
 import { listAnalysesForCase } from "@/lib/db/analysis";
 import { prefillFieldsFromProfile } from "@/lib/ai/form-assistance";
 import { getLifeEvent } from "@/lib/life-events/catalog";
+import { authorityLinks } from "@/lib/authorities/links";
 import { AppError } from "@/lib/errors";
 import { formatDate } from "@/lib/dates";
 import { Alert, AlertTitle } from "@/components/ui/alert";
@@ -14,6 +15,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CaseStatusBadge, PriorityBadge } from "@/components/shared/status";
 import { LegalNotice } from "@/components/shared/legal-notice";
+import { AuthorityLinks } from "@/components/shared/authority-links";
 import { NextSteps } from "@/components/cases/next-steps";
 import { AnalysisSummary } from "@/components/cases/analysis-summary";
 import { CaseEditDialog } from "@/components/cases/case-edit-dialog";
@@ -56,6 +58,10 @@ export default async function CaseDetailPage({
 
   const documentNames = new Map(documents.map((doc) => [doc.id, doc.file_name]));
   const lifeEvent = getLifeEvent(caseRow.case_type ?? "");
+  const links = authorityLinks(caseRow.authority_key, {
+    city: profile?.city ?? null,
+    postalCode: profile?.postal_code ?? null,
+  });
   const failedDocuments = documents.filter((doc) => doc.status === "failed");
 
   return (
@@ -161,6 +167,21 @@ export default async function CaseDetailPage({
           </ul>
         )}
       </section>
+
+      {links.length > 0 ? (
+        <Card>
+          <CardHeader>
+            <CardTitle>Zuständige Stelle</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            <AuthorityLinks links={links} />
+            <p className="text-xs text-muted-foreground">
+              Die Anwendung verlinkt die Startseite - welches Amt in deiner Gemeinde genau
+              zuständig ist und ob du einen Termin brauchst, steht dort.
+            </p>
+          </CardContent>
+        </Card>
+      ) : null}
 
       <div className="grid gap-6 lg:grid-cols-2">
         <Card>

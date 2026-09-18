@@ -73,6 +73,12 @@ export function ProfileForm({ profile }: { profile: Profile | null }) {
         </div>
       </div>
 
+      <p className="text-xs text-muted-foreground">
+        PLZ und Ort verwendet die Anwendung, um dir die Ämter deiner Gemeinde zu verlinken.
+        Ist deine Gemeinde nicht hinterlegt, bekommst du stattdessen die bundesweite
+        Behördensuche - geraten wird nichts.
+      </p>
+
       <div className="space-y-1.5">
         <Label htmlFor="phone">Telefon (optional)</Label>
         <Input

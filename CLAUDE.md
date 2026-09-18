@@ -12,6 +12,7 @@ npm run lint          # ESLint-CLI (nicht `next lint`, ab Next 16 entfernt)
 npm test              # Vitest: Unit + Integration
 npm run test:db       # Migrationen, RLS und Demo-Seed gegen echtes PostgreSQL
 npm run test:e2e      # Playwright (braucht Supabase + ANTHROPIC_API_KEY)
+npm run check:links   # ruft jede hinterlegte URL auf (braucht Netz)
 npm run build
 ```
 
@@ -88,6 +89,11 @@ entsteht clientseitig (vor allem beim Parsen) und ist ein Schemafehler, kein
 Ausfall - sonst liest die Person "derzeit nicht erreichbar" und wartet,
 obwohl ein erneuter Versuch sofort hilft.
 
+**Der Ort einer Lebenslage ist nicht immer das Profil.** Beim Umzug zählt der
+Zielort - dort wird angemeldet. `planPlace()` entscheidet das, und es nimmt
+die alte PLZ bewusst nicht mit: Sie würde einen mehrdeutigen Ortsnamen falsch
+bestätigen.
+
 **Deutsch mit Umlauten.** Oberflächentexte, Fehlermeldungen und Prompts nutzen
 echte Umlaute. ASCII bleiben nur technische Bezeichner: Paketname,
 Supabase-Projekt-ID, iCalendar-PRODID/UID und der Name der Exportdatei.
@@ -105,6 +111,10 @@ Supabase-Projekt-ID, iCalendar-PRODID/UID und der Name der Exportdatei.
   aus der Vergangenheit.
 - **Keine erfundenen Quellen.** Ein Formular gilt nur als offiziell, wenn es
   aus `lib/forms/catalog.ts` kommt und `isOfficialAuthorityUrl()` besteht.
+  Dasselbe für Gemeinden: Nur was in `lib/authorities/municipalities.ts` steht,
+  wird verlinkt. Steht der Ort nicht drin, zeigt die Oberfläche die
+  bundesweite Behördensuche und sagt, dass nichts hinterlegt ist - eine
+  geratene Stadt-URL wäre schlimmer als gar keine.
 - **Keine Rechtsberatung** und keine automatisch versendeten Schreiben.
 - **Fehler erreichen die UI nur als verständliche deutsche Meldung**
   (`lib/errors.ts`), nie als Stacktrace.
@@ -114,6 +124,11 @@ Supabase-Projekt-ID, iCalendar-PRODID/UID und der Name der Exportdatei.
 - Behörde: Eintrag in `lib/authorities/registry.ts`, kein Code.
 - Formular: Eintrag in `lib/forms/catalog.ts`, nur HTTPS-URLs offizieller
   Stellen (ein Test sichert das ab).
+- Gemeinde: Eintrag in `lib/authorities/municipalities.ts`, danach
+  `npm run check:links`. Nur Domain-Wurzeln, keine Unterseiten. Mehrfach
+  vergebene Ortsnamen ("Frankfurt", "Halle") gehören unter
+  `ambiguousAliases` plus `postalPrefixes` - sonst bekommt jemand das Amt
+  einer gleichnamigen Stadt.
 - OCR-Anbieter: `OcrProvider` implementieren, in `lib/ocr/index.ts` registrieren.
 - Analyseschema ändern: `documentAnalysisSchema` anpassen **und**
   `DOCUMENT_ANALYSIS_SCHEMA_VERSION` erhöhen.

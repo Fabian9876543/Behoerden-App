@@ -11,7 +11,14 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { buildPlan } from "@/lib/life-events/plan";
+import { buildPlan, planPlace } from "@/lib/life-events/plan";
+import { isLocalAuthority, stepAuthorityLinks } from "@/lib/authorities/links";
+import {
+  AUTHORITY_FINDER,
+  resolveMunicipality,
+  type PlaceInput,
+} from "@/lib/authorities/municipalities";
+import { AuthorityLinks } from "@/components/shared/authority-links";
 import { describeDueDate, formatDate } from "@/lib/dates";
 import type { LifeEventAnswers, LifeEventDefinition } from "@/lib/life-events/types";
 
@@ -22,13 +29,29 @@ import type { LifeEventAnswers, LifeEventDefinition } from "@/lib/life-events/ty
  * Vorgang baut. Die Person sieht damit vor dem Anlegen genau das, was sie
  * bekommt.
  */
-export function LifeEventForm({ definition }: { definition: LifeEventDefinition }) {
+export function LifeEventForm({
+  definition,
+  home,
+}: {
+  definition: LifeEventDefinition;
+  /** Adresse aus dem Profil - Ausgangspunkt, wenn die Antworten keine nennen. */
+  home: PlaceInput;
+}) {
   const router = useRouter();
   const [answers, setAnswers] = useState<LifeEventAnswers>({});
   const [pending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
 
   const plan = useMemo(() => buildPlan(definition, answers), [definition, answers]);
+
+  // Der Ort entscheidet, welches Amt gemeint ist. Beim Umzug ist das der
+  // Zielort, sonst die gemeldete Adresse.
+  const place = useMemo(
+    () => planPlace(definition, answers, home),
+    [definition, answers, home],
+  );
+  const municipality = useMemo(() => resolveMunicipality(place), [place]);
+  const needsLocalAuthority = plan.steps.some((step) => isLocalAuthority(step.authorityKey));
 
   const missing = definition.questions
     .filter((question) => question.required)
@@ -174,9 +197,38 @@ export function LifeEventForm({ definition }: { definition: LifeEventDefinition 
               {step.note ? (
                 <p className="mt-2 rounded-lg bg-muted/60 px-3 py-2 text-xs">{step.note}</p>
               ) : null}
+
+              {/*
+                Die Behördensuche gehört nicht an jeden einzelnen Schritt -
+                sie steht einmal unter der Liste.
+              */}
+              <AuthorityLinks
+                links={stepAuthorityLinks(step, place).filter(
+                  (link) => link.kind !== "behoerdensuche",
+                )}
+                className="mt-3 space-y-2 border-t pt-3"
+              />
             </li>
           ))}
         </ol>
+
+        {needsLocalAuthority && !municipality ? (
+          <Alert variant="warning">
+            {place.city
+              ? `Für ${place.city} ist kein Stadtportal hinterlegt. `
+              : "Ohne Ort können wir die zuständige Stelle nicht verlinken. "}
+            Die zuständige Stelle findest du über die{" "}
+            <a
+              href={AUTHORITY_FINDER.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-medium text-primary hover:underline"
+            >
+              bundesweite Behördensuche
+            </a>
+            . Geraten wird hier nichts.
+          </Alert>
+        ) : null}
 
         <Alert variant="info">{definition.localNote}</Alert>
       </div>

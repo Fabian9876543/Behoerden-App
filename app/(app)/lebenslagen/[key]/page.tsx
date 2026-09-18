@@ -2,13 +2,10 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
-import { getLifeEvent, LIFE_EVENTS } from "@/lib/life-events/catalog";
+import { getLifeEvent } from "@/lib/life-events/catalog";
+import { getProfile, requireUserOrRedirect } from "@/lib/auth";
 import { LifeEventForm } from "@/components/life-events/life-event-form";
 import { LegalNotice } from "@/components/shared/legal-notice";
-
-export function generateStaticParams() {
-  return LIFE_EVENTS.map((event) => ({ key: event.key }));
-}
 
 export async function generateMetadata({
   params,
@@ -19,10 +16,16 @@ export async function generateMetadata({
   return { title: getLifeEvent(key)?.title ?? "Lebenslage" };
 }
 
+// Liest das Profil, um die Ämter am Wohnort zu verlinken.
+export const dynamic = "force-dynamic";
+
 export default async function LifeEventPage({ params }: { params: Promise<{ key: string }> }) {
   const { key } = await params;
   const definition = getLifeEvent(key);
   if (!definition) notFound();
+
+  const user = await requireUserOrRedirect();
+  const profile = await getProfile(user.id);
 
   return (
     <div className="space-y-8">
@@ -40,7 +43,10 @@ export default async function LifeEventPage({ params }: { params: Promise<{ key:
         </p>
       </div>
 
-      <LifeEventForm definition={definition} />
+      <LifeEventForm
+        definition={definition}
+        home={{ city: profile?.city ?? null, postalCode: profile?.postal_code ?? null }}
+      />
 
       <LegalNotice />
     </div>

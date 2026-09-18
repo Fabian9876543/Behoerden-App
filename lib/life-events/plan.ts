@@ -1,4 +1,5 @@
 import { parseIsoDate, toIsoDate } from "@/lib/dates";
+import type { PlaceInput } from "@/lib/authorities/municipalities";
 import type {
   LifeEventAnswers,
   LifeEventDefinition,
@@ -155,6 +156,28 @@ function buildSummary(
   }
   parts.push(definition.localNote);
   return parts.join(" ");
+}
+
+/**
+ * Der Ort, auf den sich die Schritte beziehen.
+ *
+ * Beim Umzug ist das nicht die gemeldete Adresse, sondern der Zielort: Das
+ * Bürgeramt, bei dem angemeldet wird, sitzt in der neuen Gemeinde. Ist ein
+ * Zielort genannt, wird die alte Postleitzahl bewusst nicht mitgenommen -
+ * sie würde sonst einen mehrdeutigen Ortsnamen falsch bestätigen.
+ */
+export function planPlace(
+  definition: LifeEventDefinition,
+  answers: LifeEventAnswers,
+  fallback: PlaceInput,
+): PlaceInput {
+  if (definition.key === "umzug") {
+    const city = textAnswer(answers, "newCity");
+    if (city) {
+      return { city, postalCode: textAnswer(answers, "newPostalCode") };
+    }
+  }
+  return fallback;
 }
 
 /** Fehlende Pflichtantworten - für die Validierung im Formular. */
