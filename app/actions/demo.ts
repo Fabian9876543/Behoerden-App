@@ -170,7 +170,7 @@ export async function createDemoCaseAction(): Promise<ActionResult<{ caseId: str
       name: "Weiterbewilligungsantrag Bürgergeld",
       form_number: "WBA",
       description: "Antrag auf Weiterbewilligung der Leistungen nach dem SGB II.",
-      official_url: "https://www.arbeitsagentur.de/arbeitslos-arbeit-finden/bürgergeld",
+      official_url: "https://www.arbeitsagentur.de/arbeitslos-arbeit-finden/buergergeld",
       source_kind: "official_catalog",
       source_label: "Bundesagentur für Arbeit",
       authority_key: "jobcenter",

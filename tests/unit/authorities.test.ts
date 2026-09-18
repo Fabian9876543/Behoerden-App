@@ -16,7 +16,7 @@ describe("matchAuthorityKey", () => {
     expect(matchAuthorityKey("Bürgergeld-Stelle")).toBe("jobcenter");
     expect(matchAuthorityKey("Deutsche Rentenversicherung Bund")).toBe("rentenversicherung");
     expect(matchAuthorityKey("Ausländerbehörde der Stadt Musterstadt")).toBe(
-      "ausländerbehörde",
+      "auslaenderbehoerde",
     );
   });
 
@@ -44,7 +44,7 @@ describe("getAuthority", () => {
 
 describe("isOfficialAuthorityUrl", () => {
   it("akzeptiert bekannte offizielle Quellen", () => {
-    expect(isOfficialAuthorityUrl("https://www.arbeitsagentur.de/bürgergeld")).toBe(true);
+    expect(isOfficialAuthorityUrl("https://www.arbeitsagentur.de/buergergeld")).toBe(true);
     expect(isOfficialAuthorityUrl("https://www.elster.de")).toBe(true);
     expect(isOfficialAuthorityUrl("https://service.bund.de/formulare")).toBe(true);
   });
@@ -63,7 +63,7 @@ describe("isOfficialAuthorityUrl", () => {
   });
 
   it("lässt sich nicht durch angehängte Domains täuschen", () => {
-    expect(isOfficialAuthorityUrl("https://elster.de.böse.example")).toBe(false);
+    expect(isOfficialAuthorityUrl("https://elster.de.boese.example")).toBe(false);
     expect(isOfficialAuthorityUrl("https://bund.de.evil.com")).toBe(false);
   });
 });

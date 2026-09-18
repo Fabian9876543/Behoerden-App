@@ -146,7 +146,7 @@ demo_form as (
     'Weiterbewilligungsantrag Bürgergeld',
     'WBA',
     'Antrag auf Weiterbewilligung der Leistungen nach dem SGB II.',
-    'https://www.arbeitsagentur.de/arbeitslos-arbeit-finden/bürgergeld',
+    'https://www.arbeitsagentur.de/arbeitslos-arbeit-finden/buergergeld',
     'official_catalog',
     'Bundesagentur für Arbeit',
     'jobcenter'

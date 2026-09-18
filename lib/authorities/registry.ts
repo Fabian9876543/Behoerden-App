@@ -29,16 +29,16 @@ export const AUTHORITIES: readonly AuthorityDefinition[] = [
     key: "jobcenter",
     name: "Jobcenter",
     level: "kommune",
-    officialUrl: "https://www.arbeitsagentur.de/arbeitslos-arbeit-finden/bürgergeld",
-    aliases: ["jobcenter", "job-center", "bürgergeld", "bürgergeld", "sgb ii", "sgb 2", "grundsicherung für arbeitsuchende"],
+    officialUrl: "https://www.arbeitsagentur.de/arbeitslos-arbeit-finden/buergergeld",
+    aliases: ["jobcenter", "job-center", "bürgergeld", "sgb ii", "sgb 2", "grundsicherung für arbeitsuchende"],
     commonCaseTypes: ["weiterbewilligung", "erstantrag", "bescheid", "mitwirkungsaufforderung", "eingliederungsvereinbarung"],
   },
   {
-    key: "agentur_für_arbeit",
+    key: "agentur_fuer_arbeit",
     name: "Agentur für Arbeit",
     level: "bund",
     officialUrl: "https://www.arbeitsagentur.de",
-    aliases: ["agentur für arbeit", "agentur für arbeit", "arbeitsagentur", "arbeitslosengeld i", "alg i"],
+    aliases: ["agentur für arbeit", "arbeitsagentur", "arbeitslosengeld i", "alg i"],
     commonCaseTypes: ["arbeitslosengeld", "bescheid", "meldeaufforderung"],
   },
   {
@@ -65,10 +65,10 @@ export const AUTHORITIES: readonly AuthorityDefinition[] = [
     commonCaseTypes: ["wohngeld", "weiterbewilligung", "bescheid"],
   },
   {
-    key: "bürgeramt",
+    key: "buergeramt",
     name: "Bürgeramt",
     level: "kommune",
-    aliases: ["bürgeramt", "bürgeramt", "bürgerbüro", "einwohnermeldeamt", "meldebehörde", "anmeldung wohnsitz"],
+    aliases: ["bürgeramt", "bürgerbüro", "einwohnermeldeamt", "meldebehörde", "anmeldung wohnsitz"],
     commonCaseTypes: ["anmeldung", "ummeldung", "ausweis", "führungszeugnis"],
   },
   {
@@ -87,17 +87,17 @@ export const AUTHORITIES: readonly AuthorityDefinition[] = [
     commonCaseTypes: ["rentenbescheid", "kontenklärung", "reha-antrag", "erwerbsminderung"],
   },
   {
-    key: "ausländerbehörde",
+    key: "auslaenderbehoerde",
     name: "Ausländerbehörde",
     level: "kommune",
-    aliases: ["ausländerbehörde", "ausländerbehörde", "aufenthaltstitel", "aufenthaltserlaubnis", "niederlassungserlaubnis"],
+    aliases: ["ausländerbehörde", "aufenthaltstitel", "aufenthaltserlaubnis", "niederlassungserlaubnis"],
     commonCaseTypes: ["aufenthaltstitel", "verlängerung", "einbürgerung"],
   },
   {
-    key: "führerscheinstelle",
+    key: "fuehrerscheinstelle",
     name: "Führerscheinstelle",
     level: "kommune",
-    aliases: ["führerscheinstelle", "führerscheinstelle", "fahrerlaubnisbehörde", "führerschein"],
+    aliases: ["führerscheinstelle", "fahrerlaubnisbehörde", "führerschein"],
     commonCaseTypes: ["fahrerlaubnis", "umtausch", "eignungsüberprüfung"],
   },
   {
@@ -116,11 +116,11 @@ export const AUTHORITIES: readonly AuthorityDefinition[] = [
     commonCaseTypes: ["beitragsbescheid", "befreiung", "anmeldung", "widerspruch"],
   },
   {
-    key: "bafög_amt",
+    key: "bafoeg_amt",
     name: "BAföG-Amt",
     level: "land",
-    officialUrl: "https://www.bafög-digital.de",
-    aliases: ["bafög", "bafög", "amt für ausbildungsförderung", "studierendenwerk"],
+    officialUrl: "https://www.bafoeg-digital.de",
+    aliases: ["bafög", "amt für ausbildungsförderung", "studierendenwerk"],
     commonCaseTypes: ["bafög-antrag", "weiterförderung", "bescheid"],
   },
   {
@@ -190,7 +190,7 @@ export const OFFICIAL_SOURCE_PRIORITY = [
   "deutsche-rentenversicherung.de",
   "elster.de",
   "rundfunkbeitrag.de",
-  "bafög-digital.de",
+  "bafoeg-digital.de",
   "service.bund.de",
 ] as const;
 
