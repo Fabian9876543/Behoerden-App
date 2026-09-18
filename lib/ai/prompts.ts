@@ -17,6 +17,8 @@ Verbindliche Regeln:
 - Wenn du dir bei einer Angabe unsicher bist, setze eine niedrige "confidence"
   (unter 0.6) und beschreibe die Unsicherheit in "uncertaintyNotes".
 - Lieber ein Feld null lassen als raten.
+- Jedes Datum ausschließlich im Format YYYY-MM-DD (z.B. 2026-10-15).
+  Ein anders formatiertes Datum macht die gesamte Analyse unbrauchbar.
 - Schreibe in klarem, einfachem Deutsch. Duze die Nutzerin/den Nutzer.
   Vermeide Behördendeutsch, erkläre Fachbegriffe.
 `.trim();

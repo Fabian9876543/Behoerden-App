@@ -1,4 +1,9 @@
-import type { DocumentAnalysis } from "@/lib/ai/schemas";
+import {
+  capNullable,
+  capText,
+  TEXT_LIMITS,
+  type DocumentAnalysis,
+} from "@/lib/ai/schemas";
 
 /**
  * Nachbearbeitung der Modellausgabe.
@@ -7,10 +12,60 @@ import type { DocumentAnalysis } from "@/lib/ai/schemas";
  * offensichtlich unbrauchbare Angaben verworfen, statt sie dem Nutzer als
  * Tatsache zu zeigen - inklusive Hinweis in den Unsicherheitsnotizen.
  */
+/**
+ * Kürzt allen Fließtext auf die Speichergrenzen.
+ *
+ * Bewusst kürzen statt ablehnen: Ein paar Zeichen zu viel dürfen nicht dazu
+ * führen, dass eine sonst gute Analyse samt aller Fristen verworfen wird.
+ * Siehe TEXT_LIMITS in lib/ai/schemas.ts.
+ */
+function capAnalysisText(analysis: DocumentAnalysis): DocumentAnalysis {
+  const L = TEXT_LIMITS;
+  return {
+    ...analysis,
+    documentType: capText(analysis.documentType, L.documentType),
+    authority: analysis.authority
+      ? { ...analysis.authority, name: capText(analysis.authority.name, L.authorityName) }
+      : null,
+    caseType: capNullable(analysis.caseType, L.caseType),
+    referenceNumber: capNullable(analysis.referenceNumber, L.referenceNumber),
+    suggestedCaseTitle: capText(analysis.suggestedCaseTitle, L.caseTitle),
+    summary: capText(analysis.summary, L.summary),
+    deadlines: analysis.deadlines.map((deadline) => ({
+      ...deadline,
+      title: capText(deadline.title, L.title),
+      description: capNullable(deadline.description, L.description),
+      sourceText: capNullable(deadline.sourceText, L.sourceText),
+    })),
+    requiredActions: analysis.requiredActions.map((action) => ({
+      ...action,
+      title: capText(action.title, L.title),
+      description: capNullable(action.description, L.description),
+      sourceText: capNullable(action.sourceText, L.sourceText),
+    })),
+    requiredDocuments: analysis.requiredDocuments.map((document) => ({
+      ...document,
+      name: capText(document.name, L.name),
+      description: capNullable(document.description, L.description),
+    })),
+    mentionedForms: analysis.mentionedForms.map((form) => ({
+      ...form,
+      name: capText(form.name, L.name),
+      formNumber: capNullable(form.formNumber, L.formNumber),
+    })),
+    importantTerms: analysis.importantTerms.map((term) => ({
+      term: capText(term.term, L.term),
+      explanation: capText(term.explanation, L.explanation),
+    })),
+    uncertaintyNotes: analysis.uncertaintyNotes.map((note) => capText(note, L.note)),
+  };
+}
+
 export function sanitizeAnalysis(
-  analysis: DocumentAnalysis,
+  rawAnalysis: DocumentAnalysis,
   now: Date = new Date(),
 ): DocumentAnalysis {
+  const analysis = capAnalysisText(rawAnalysis);
   const notes = [...analysis.uncertaintyNotes];
 
   const currentYear = now.getUTCFullYear();
@@ -57,6 +112,8 @@ export function sanitizeAnalysis(
     authority,
     deadlines,
     requiredActions,
-    uncertaintyNotes: [...new Set(notes)].slice(0, 15),
+    uncertaintyNotes: [...new Set(notes)]
+      .map((note) => capText(note, TEXT_LIMITS.note))
+      .slice(0, 15),
   };
 }
