@@ -165,7 +165,7 @@ npm run build
 |---|---|---|
 | **Unit** | Analyse-Schema, Fristenextraktion, Aufgabengenerierung, Datumslogik, Behörden-Matching, Formularkatalog, Upload-Validierung, Logging-Datenschutz, iCalendar | keine |
 | **Integration** | Ableitungskette Analyse → Vorgang; statische RLS- und Storage-Policy-Prüfung der Migrationen | keine |
-| **Datenbank** | `npm run test:db` startet einen temporären PostgreSQL-Cluster, spielt die echten Migrationen ein und prüft RLS **im Betrieb**: A legt Daten an, B sieht/ändert/löscht sie nicht, B kann nichts in A's Namen anlegen, Storage-Ordner sind getrennt, `delete_my_data` trifft nur den Aufrufer, Kaskaden räumen auf, anonym sieht nichts. 26 Zusicherungen. | PostgreSQL-Binaries (kein Docker) |
+| **Datenbank** | `npm run test:db` startet einen temporären PostgreSQL-Cluster, spielt die echten Migrationen ein und prüft RLS **im Betrieb**: A legt Daten an, B sieht/ändert/löscht sie nicht, B kann nichts in A's Namen anlegen, Storage-Ordner sind getrennt, `delete_my_data` trifft nur den Aufrufer, Kaskaden räumen auf, anonym sieht nichts. Danach wird der Demo-Seed eingespielt und nachgerechnet, dass die CTE-Kette alle Daten schreibt und verknüpft. 44 Zusicherungen. | PostgreSQL-Binaries (kein Docker) |
 | **Autorisierung** | `tests/integration/authorization.test.ts` macht dasselbe gegen eine echte Supabase-Instanz, inklusive Auth und Storage-API. Wird ohne Konfiguration übersprungen. | laufende Supabase-Instanz |
 | **E2E** | Registrierung → Onboarding → Upload → Analyse → Vorgang → Aufgaben → Frist → Abhaken → Löschen; dazu abgelehnte Dateiformate und der Schutz der App-Routen. | Supabase + `ANTHROPIC_API_KEY` |
 
