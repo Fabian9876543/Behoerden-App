@@ -129,6 +129,28 @@ export const deleteAllDataSchema = z.object({
   deleteAccount: z.boolean(),
 });
 
+/**
+ * Antworten zu einer Lebenslage.
+ *
+ * Die Antworten kommen als JSON im Formular, weil die Fragen je Lebenslage
+ * unterschiedlich sind. Erlaubt sind nur flache Werte - nichts, was tiefer
+ * verschachtelt in die Anwendung gereicht würde.
+ */
+export const lifeEventAnswersSchema = z.object({
+  eventKey: z.string().trim().min(1).max(60),
+  answers: z
+    .string()
+    .transform((raw, ctx) => {
+      try {
+        return JSON.parse(raw) as unknown;
+      } catch {
+        ctx.addIssue({ code: "custom", message: "Die Angaben sind unlesbar." });
+        return z.NEVER;
+      }
+    })
+    .pipe(z.record(z.string().max(60), z.union([z.string().max(200), z.boolean()]))),
+});
+
 export const uploadMetadataSchema = z.object({
   /** Leer/undefined = neuen Vorgang anlegen. */
   caseId: uuid.optional().nullable(),

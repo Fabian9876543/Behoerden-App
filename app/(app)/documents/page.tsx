@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { requireUserOrRedirect } from "@/lib/auth";
 import { listDocuments } from "@/lib/db/documents";
+import { listCasesWithContext } from "@/lib/db/cases";
 import { DocumentList } from "@/components/documents/document-list";
 import { UploadDropzone } from "@/components/documents/upload-dropzone";
 import { LegalNotice } from "@/components/shared/legal-notice";
@@ -10,7 +11,10 @@ export const dynamic = "force-dynamic";
 
 export default async function DocumentsPage() {
   const user = await requireUserOrRedirect();
-  const documents = await listDocuments(user.id);
+  const [documents, cases] = await Promise.all([
+    listDocuments(user.id),
+    listCasesWithContext(user.id, { onlyActive: true }),
+  ]);
 
   const caseTitles = new Map<string, string>();
   for (const document of documents) {
@@ -26,7 +30,7 @@ export default async function DocumentsPage() {
         </p>
       </div>
 
-      <UploadDropzone />
+      <UploadDropzone openCases={cases.map((entry) => ({ id: entry.id, title: entry.title }))} />
 
       <section className="space-y-4">
         <h2 className="text-lg font-semibold tracking-tight">

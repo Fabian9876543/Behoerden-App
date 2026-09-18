@@ -12,7 +12,12 @@ import {
   DEFAULT_MAX_UPLOAD_BYTES,
 } from "@/lib/documents/mime";
 import { buildStoragePath, deleteDocuments, uploadDocument } from "@/lib/storage/documents";
-import { createCase, requireCase, refreshCaseStatus } from "@/lib/db/cases";
+import {
+  createCase,
+  PLACEHOLDER_CASE_TITLE,
+  refreshCaseStatus,
+  requireCase,
+} from "@/lib/db/cases";
 import {
   createDocumentRecord,
   deleteDocumentRecord,
@@ -65,7 +70,7 @@ export async function uploadDocumentAction(
       : (
             await createCase({
               userId: user.id,
-              title: "Neues Dokument wird analysiert",
+              title: PLACEHOLDER_CASE_TITLE,
               status: "in_progress",
             })
           ).id;

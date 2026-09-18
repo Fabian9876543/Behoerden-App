@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   CalendarClock,
+  Compass,
   FileText,
   FolderKanban,
   LayoutDashboard,
@@ -14,6 +15,7 @@ import { cn } from "@/lib/utils";
 
 export const NAV_ITEMS = [
   { href: "/dashboard", label: "Dashboard", Icon: LayoutDashboard },
+  { href: "/lebenslagen", label: "Lebenslagen", Icon: Compass },
   { href: "/cases", label: "Vorgänge", Icon: FolderKanban },
   { href: "/documents", label: "Dokumente", Icon: FileText },
   { href: "/tasks", label: "Aufgaben", Icon: ListTodo },
@@ -89,7 +91,9 @@ export function BottomNav() {
       aria-label="Hauptnavigation"
       className="fixed inset-x-0 bottom-0 z-40 flex border-t bg-card/95 backdrop-blur md:hidden print:hidden"
     >
-      {NAV_ITEMS.filter((item) => item.href !== "/settings").map((item) => (
+      {NAV_ITEMS.filter(
+        (item) => item.href !== "/settings" && item.href !== "/documents",
+      ).map((item) => (
         <NavLink key={item.href} {...item} variant="bottom" />
       ))}
     </nav>

@@ -32,6 +32,17 @@ UI ruft ausschließlich Server Actions in `app/actions/`; die rufen Repositories
 in `lib/db/`; die KI-Schicht in `lib/ai/` liefert nur Daten und schreibt nie
 selbst. Reine Funktionen liegen getrennt von I/O, damit sie testbar bleiben.
 
+**Zwei Einstiege, ein Vorgang.** Hochgeladener Brief (`lib/ai/`) und Lebenslage
+(`lib/life-events/`) erzeugen beide einen ganz normalen Vorgang mit denselben
+Aufgaben, Fristen und Formularen. Wer an einem der beiden Wege etwas ändert,
+prüft, ob der andere davon betroffen ist - `tests/integration/case-merge.test.ts`
+hält die Nahtstelle fest.
+
+Wichtig dabei: Eine Dokumentanalyse kennt immer nur das eine Schreiben, nie das
+Vorhaben dahinter. Sie darf einen bestehenden Vorgang deshalb **ergänzen**, aber
+nie umbenennen oder herabstufen. Überschrieben wird nur, was noch leer ist; der
+Status kommt aus `refreshCaseStatus` über alle Aufgaben, nicht aus den neuen.
+
 ## Fallstricke
 
 **Supabase-Typen kollabieren zu `never`.** `supabase-js` verlangt, dass jede

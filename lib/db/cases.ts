@@ -16,6 +16,12 @@ import type {
   TaskRow,
 } from "@/lib/types/database";
 
+/**
+ * Titel eines Vorgangs, der beim Hochladen automatisch entsteht und dessen
+ * richtigen Namen erst die Analyse liefert.
+ */
+export const PLACEHOLDER_CASE_TITLE = "Neues Dokument wird analysiert";
+
 export interface CaseWithCounts extends CaseRow {
   openTaskCount: number;
   nextTask: Pick<TaskRow, "id" | "title" | "due_date"> | null;

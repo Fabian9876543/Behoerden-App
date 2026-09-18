@@ -6,6 +6,7 @@ import { getCaseDetail, type CaseDetail } from "@/lib/db/cases";
 import { getCaseTimeline } from "@/lib/db/events";
 import { listAnalysesForCase } from "@/lib/db/analysis";
 import { prefillFieldsFromProfile } from "@/lib/ai/form-assistance";
+import { getLifeEvent } from "@/lib/life-events/catalog";
 import { AppError } from "@/lib/errors";
 import { formatDate } from "@/lib/dates";
 import { Alert, AlertTitle } from "@/components/ui/alert";
@@ -54,6 +55,7 @@ export default async function CaseDetailPage({
   const { caseRow, tasks, deadlines, documents, requiredDocuments, forms, letters } = detail;
 
   const documentNames = new Map(documents.map((doc) => [doc.id, doc.file_name]));
+  const lifeEvent = getLifeEvent(caseRow.case_type ?? "");
   const failedDocuments = documents.filter((doc) => doc.status === "failed");
 
   return (
@@ -106,6 +108,13 @@ export default async function CaseDetailPage({
       ) : null}
 
       <NextSteps tasks={tasks} deadlines={deadlines} summary={caseRow.summary} />
+
+      {lifeEvent ? (
+        <Alert variant="info">
+          <AlertTitle>Aus der Lebenslage &bdquo;{lifeEvent.title}&ldquo;</AlertTitle>
+          {lifeEvent.localNote}
+        </Alert>
+      ) : null}
 
       <AnalysisSummary analyses={analyses} />
 

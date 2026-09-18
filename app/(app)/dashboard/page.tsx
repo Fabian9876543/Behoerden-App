@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight, Inbox } from "lucide-react";
+import { ArrowRight, Compass, Inbox } from "lucide-react";
 import { getProfile, requireUserOrRedirect } from "@/lib/auth";
 import { listCasesWithContext } from "@/lib/db/cases";
 import { criticalDeadlines, listDeadlines } from "@/lib/db/deadlines";
@@ -60,7 +60,18 @@ export default async function DashboardPage() {
         <h2 id="upload-heading" className="sr-only">
           Behördenbrief hinzufügen
         </h2>
-        <UploadDropzone />
+        <UploadDropzone
+          openCases={cases.map((entry) => ({ id: entry.id, title: entry.title }))}
+        />
+
+        {/* Zweiter Einstieg: Es gibt Dinge, für die kein Brief kommt. */}
+        <div className="flex flex-wrap items-center justify-center gap-2 rounded-xl border bg-card px-4 py-3 text-sm">
+          <Compass className="size-4 shrink-0 text-muted-foreground" aria-hidden />
+          <span className="text-muted-foreground">Kein Brief, aber etwas steht an?</span>
+          <Button asChild variant="link" className="h-auto p-0">
+            <Link href="/lebenslagen">Umzug, Geburt und weitere Lebenslagen</Link>
+          </Button>
+        </div>
       </section>
 
       <section aria-labelledby="cases-heading" className="space-y-4">

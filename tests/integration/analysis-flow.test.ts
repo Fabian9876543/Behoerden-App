@@ -193,3 +193,32 @@ describe("Produkt-Loop vom PDF bis zum Vorgang", () => {
     expect(shape.deadlines).toHaveLength(0);
   });
 });
+
+describe("Zusammenspiel der beiden Einstiege", () => {
+  // Beide Wege - hochgeladener Brief und geplante Lebenslage - münden im
+  // selben Vorgang. Die Analyse kennt aber immer nur das eine Schreiben,
+  // nicht das Vorhaben dahinter. Diese Regeln halten das auseinander.
+
+  it("die Analyse liefert einen Titelvorschlag, überschreibt aber nichts selbst", async () => {
+    reply = makeAnalysis({ suggestedCaseTitle: "Anmeldung Wohnsitz" });
+    const { analysis } = await runAnalysis({ text: "Ein Schreiben. ".repeat(50) });
+
+    // Ob der Vorschlag genommen wird, entscheidet die Pipeline anhand des
+    // bestehenden Vorgangs - nicht die Analyse.
+    expect(analysis.suggestedCaseTitle).toBe("Anmeldung Wohnsitz");
+  });
+
+  it("Aufgaben aus einem Brief tragen dieselbe Form wie Schritte aus einer Lebenslage", async () => {
+    reply = makeAnalysis();
+    const { analysis } = await runAnalysis({ text: "Ein Schreiben. ".repeat(50) });
+    const shape = generateCaseShape(analysis, NOW);
+
+    // Beide erzeugen Aufgaben mit Titel, Pflichtkennzeichen und Position -
+    // deshalb lassen sie sich in einem Vorgang mischen.
+    for (const task of shape.tasks) {
+      expect(typeof task.title).toBe("string");
+      expect(typeof task.isRequired).toBe("boolean");
+      expect(typeof task.position).toBe("number");
+    }
+  });
+});

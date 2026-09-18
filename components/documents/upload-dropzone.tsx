@@ -7,6 +7,8 @@ import { analyzeDocumentAction, uploadDocumentAction } from "@/app/actions/docum
 import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { Select } from "@/components/ui/select";
 import { UploadProgress, type AnalysisStep } from "@/components/documents/upload-progress";
 import { DEFAULT_MAX_UPLOAD_BYTES, SUPPORTED_MIME_TYPES } from "@/lib/documents/mime";
 import { cn } from "@/lib/utils";
@@ -25,16 +27,26 @@ const INITIAL_STEPS: AnalysisStep[] = [
  * Nach dem Upload startet die Analyse sofort. Der Nutzer wird anschliessend
  * auf den Vorgang geleitet - dort steht direkt, was zu tun ist.
  */
+export interface UploadTarget {
+  id: string;
+  title: string;
+}
+
 export function UploadDropzone({
   caseId,
   compact = false,
+  openCases = [],
 }: {
+  /** Fest vorgegebener Vorgang - dann entfällt die Auswahl. */
   caseId?: string;
   compact?: boolean;
+  /** Offene Vorgänge, denen das Dokument zugeordnet werden kann. */
+  openCases?: UploadTarget[];
 }) {
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
   const [isDragging, setIsDragging] = useState(false);
+  const [targetCaseId, setTargetCaseId] = useState("");
   const [steps, setSteps] = useState<AnalysisStep[] | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
@@ -66,7 +78,8 @@ export function UploadDropzone({
 
       const formData = new FormData();
       formData.append("file", file);
-      if (caseId) formData.append("caseId", caseId);
+      const target = caseId ?? targetCaseId;
+      if (target) formData.append("caseId", target);
 
       const uploaded = await uploadDocumentAction(formData);
       if (!uploaded.ok || !uploaded.data) {
@@ -120,7 +133,7 @@ export function UploadDropzone({
       router.push(`/cases/${result.caseId}?analyzed=1`);
       router.refresh();
     },
-    [caseId, patch, router],
+    [caseId, targetCaseId, patch, router],
   );
 
   const onDrop = useCallback(
@@ -157,8 +170,32 @@ export function UploadDropzone({
     );
   }
 
+  const canChooseCase = !caseId && openCases.length > 0;
+
   return (
-    <div>
+    <div className="space-y-3">
+      {canChooseCase ? (
+        <div className="space-y-1.5 rounded-xl border bg-card px-4 py-3">
+          <Label htmlFor="upload-target">Gehört zu</Label>
+          <Select
+            id="upload-target"
+            value={targetCaseId}
+            onChange={(event) => setTargetCaseId(event.target.value)}
+          >
+            <option value="">Neuer Vorgang</option>
+            {openCases.map((entry) => (
+              <option key={entry.id} value={entry.id}>
+                {entry.title}
+              </option>
+            ))}
+          </Select>
+          <p className="text-xs text-muted-foreground">
+            Post zu einem Vorhaben, das du schon angelegt hast? Dann landet das Schreiben dort -
+            samt Fristen und Aufgaben daraus.
+          </p>
+        </div>
+      ) : null}
+
       <div
         onDragOver={(event) => {
           event.preventDefault();

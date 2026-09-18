@@ -15,9 +15,12 @@ import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { downloadDocument } from "@/lib/storage/documents";
 import { recordCaseEvent, recordCaseEvents, type RecordEventInput } from "@/lib/db/events";
 import { setDocumentStatus, updateDocument } from "@/lib/db/documents";
-import { updateCase } from "@/lib/db/cases";
+import { PLACEHOLDER_CASE_TITLE, refreshCaseStatus, requireCase, updateCase } from "@/lib/db/cases";
 import type { DocumentRow } from "@/lib/types/database";
 import type { SupportedMimeType } from "@/lib/documents/mime";
+
+/** Rangfolge der Prioritäten, um die höhere zu behalten. */
+const CASE_PRIORITY_ORDER = { low: 0, normal: 1, high: 2, critical: 3 } as const;
 
 /**
  * Der zentrale Produkt-Loop:
@@ -112,15 +115,26 @@ export async function runDocumentAnalysis(params: {
     const shape = generateCaseShape(analysis, now);
     const authorityKey = matchAuthorityKey(analysis.authority?.name);
 
+    // Ein Dokument kann zu einem Vorgang gehören, den es schon gibt - etwa zu
+    // einem aus einer Lebenslage geplanten Umzug. Dann darf die Analyse den
+    // Vorgang ergänzen, aber nicht umbenennen: Sie kennt nur dieses eine
+    // Schreiben, nicht das Vorhaben dahinter. Überschrieben wird deshalb nur,
+    // was noch leer ist.
+    const existing = await requireCase(caseId, userId);
+    const isPlaceholder = existing.title === PLACEHOLDER_CASE_TITLE;
+
     await updateCase(caseId, {
-      title: analysis.suggestedCaseTitle,
-      authority_name: analysis.authority?.name ?? null,
-      authority_key: authorityKey,
-      case_type: analysis.caseType,
-      reference_number: analysis.referenceNumber,
-      summary: analysis.summary,
-      status: shape.status,
-      priority: shape.priority,
+      ...(isPlaceholder ? { title: analysis.suggestedCaseTitle } : {}),
+      ...(existing.authority_name
+        ? {}
+        : { authority_name: analysis.authority?.name ?? null, authority_key: authorityKey }),
+      ...(existing.case_type ? {} : { case_type: analysis.caseType }),
+      ...(existing.reference_number ? {} : { reference_number: analysis.referenceNumber }),
+      ...(existing.summary ? {} : { summary: analysis.summary }),
+      // Die Priorität richtet sich nach der dringendsten bekannten Frist.
+      ...(CASE_PRIORITY_ORDER[shape.priority] > CASE_PRIORITY_ORDER[existing.priority]
+        ? { priority: shape.priority }
+        : {}),
     });
 
     await updateDocument(document.id, {
@@ -277,6 +291,10 @@ export async function runDocumentAnalysis(params: {
     }
 
     await recordCaseEvents(events);
+
+    // Der Status ergibt sich aus allen offenen Aufgaben des Vorgangs - auch
+    // aus denen, die vor diesem Dokument schon da waren.
+    await refreshCaseStatus(caseId);
 
     log.info("document_analysis_completed", {
       documentId: document.id,

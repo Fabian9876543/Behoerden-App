@@ -11,6 +11,36 @@ Kein Chatbot. Die primäre UX ist Case-Management.
 
 ---
 
+## Zwei Einstiege, ein Vorgang
+
+Die App hat zwei Wege hinein - und beide enden am selben Ort.
+
+**Ein Brief ist da.** Du lädst ihn hoch, die Analyse liest ihn und macht daraus
+einen Vorgang mit Fristen und Aufgaben.
+
+**Es steht etwas an, aber es kam kein Brief.** Du wählst deine Lebenslage
+("Ich ziehe um"), beantwortest ein paar Fragen und bekommst dieselbe Art von
+Vorgang - nur stammen die Schritte aus einem gepflegten Katalog statt aus
+einem Dokument.
+
+Beides erzeugt einen ganz normalen Vorgang: dieselben Aufgaben, Fristen,
+benötigten Unterlagen, Formulare und dieselbe Timeline. Deshalb lassen sie
+sich mischen: Kommt zu deinem geplanten Umzug später Post vom Bürgeramt,
+lädst du sie in denselben Vorgang. Die Analyse **ergänzt** ihn dann - sie
+kennt nur das eine Schreiben, nicht dein Vorhaben, und benennt den Vorgang
+deshalb nicht um.
+
+### Lebenslagen
+
+Die Schritte kommen bewusst aus `lib/life-events/catalog.ts` und nicht aus
+einem Modellaufruf. Bei "Was muss ich wo abgeben?" wären erfundene Pflichten
+oder Quellen der schlimmste Fehler - genau das schließt die Produktregel aus.
+Ein Katalog ist nachvollziehbar, testbar und braucht keinen API-Schlüssel.
+
+Fristen entstehen daraus rechnerisch: Der Katalog kennt die Regel
+("zwei Wochen nach dem Einzug, § 17 Abs. 1 BMG"), dein Einzugsdatum macht
+daraus ein Datum. Eine neue Lebenslage ist ein Eintrag im Katalog, kein Code.
+
 ## Der Produkt-Loop
 
 ```
