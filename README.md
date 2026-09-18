@@ -156,15 +156,22 @@ Behördenpost ist hochsensibel. Entsprechend:
 npm run typecheck     # TypeScript strict
 npm run lint
 npm test              # Unit- und Integrationstests (Vitest)
+npm run test:db       # Migrationen + RLS gegen echtes PostgreSQL
 npm run test:e2e      # End-to-End (Playwright)
+npm run build
 ```
 
-| Ebene | Umfang |
-|---|---|
-| **Unit** | Analyse-Schema, Fristenextraktion, Aufgabengenerierung, Datumslogik, Behörden-Matching, Formularkatalog, Upload-Validierung, Logging-Datenschutz, iCalendar |
-| **Integration** | Ableitungskette Analyse → Vorgang; statische RLS- und Storage-Policy-Prüfung der Migrationen |
-| **Autorisierung** | `tests/integration/authorization.test.ts` legt zwei echte Nutzer an und weist nach, dass B nichts von A lesen, ändern, löschen oder unterschieben kann – inklusive Storage und `delete_my_data`. Läuft gegen eine echte Supabase-Instanz und wird ohne Konfiguration übersprungen. |
-| **E2E** | Registrierung → Onboarding → Upload → Analyse → Vorgang → Aufgaben → Frist → Abhaken → Löschen; dazu abgelehnte Dateiformate und der Schutz der App-Routen. |
+| Ebene | Umfang | Voraussetzung |
+|---|---|---|
+| **Unit** | Analyse-Schema, Fristenextraktion, Aufgabengenerierung, Datumslogik, Behörden-Matching, Formularkatalog, Upload-Validierung, Logging-Datenschutz, iCalendar | keine |
+| **Integration** | Ableitungskette Analyse → Vorgang; statische RLS- und Storage-Policy-Prüfung der Migrationen | keine |
+| **Datenbank** | `npm run test:db` startet einen temporären PostgreSQL-Cluster, spielt die echten Migrationen ein und prüft RLS **im Betrieb**: A legt Daten an, B sieht/ändert/löscht sie nicht, B kann nichts in A's Namen anlegen, Storage-Ordner sind getrennt, `delete_my_data` trifft nur den Aufrufer, Kaskaden räumen auf, anonym sieht nichts. 26 Zusicherungen. | PostgreSQL-Binaries (kein Docker) |
+| **Autorisierung** | `tests/integration/authorization.test.ts` macht dasselbe gegen eine echte Supabase-Instanz, inklusive Auth und Storage-API. Wird ohne Konfiguration übersprungen. | laufende Supabase-Instanz |
+| **E2E** | Registrierung → Onboarding → Upload → Analyse → Vorgang → Aufgaben → Frist → Abhaken → Löschen; dazu abgelehnte Dateiformate und der Schutz der App-Routen. | Supabase + `ANTHROPIC_API_KEY` |
+
+`npm run test:db` braucht weder Docker noch Supabase und läuft darum in CI
+(`.github/workflows/ci.yml`) bei jedem Push mit — zusammen mit Typecheck,
+Lint, Unit-Tests und Build.
 
 Die Autorisierungs- und E2E-Tests brauchen eine laufende Supabase-Instanz mit
 angewendeten Migrationen; der E2E-Flow zusätzlich einen gültigen

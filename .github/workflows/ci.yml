@@ -1,0 +1,42 @@
+name: CI
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+
+# Der Build darf keine Secrets brauchen: Alle Routen, die Supabase lesen,
+# sind force-dynamic. Schlaegt das fehl, ist das ein echter Fehler.
+jobs:
+  check:
+    name: Typecheck, Lint, Tests, Build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Abhaengigkeiten installieren
+        run: npm ci
+
+      - name: TypeScript pruefen
+        run: npm run typecheck
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Unit- und Integrationstests
+        run: npm test
+
+      - name: Datenbank- und RLS-Tests
+        # Startet einen temporaeren PostgreSQL-Cluster aus den auf dem Runner
+        # vorinstallierten Binaries - kein Docker, keine Supabase-Instanz.
+        run: npm run test:db
+
+      - name: Production-Build
+        run: npm run build
